@@ -39,11 +39,11 @@ Self-hosted voice cloning & TTS server with an OpenAI-compatible API. Supports m
 
 ```bash
 git clone <your-repo-url> voice-cloning-server
-cd voice-cloning-server
+cd voice-cloning-server    # All commands below assume you're in this root directory
 
 # Run the full setup script (installs system deps, creates venv, installs PyTorch)
 chmod +x setup/setup_environment.sh
-./setup/setup_environment.sh
+bash setup/setup_environment.sh
 ```
 
 ### 2. Install a TTS Backend
