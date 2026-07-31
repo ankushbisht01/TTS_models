@@ -15,6 +15,25 @@ from .base import TTSBackend, TTSRequest, TTSResult
 
 logger = logging.getLogger(__name__)
 
+# f5-tts >=1.0 selects a model by config name (f5_tts/configs/*.yaml) via the
+# `model` kwarg. Older releases used `model_type` with these friendly names, so
+# translate them rather than breaking existing .env files.
+_LEGACY_MODEL_NAMES = {
+    "F5-TTS": "F5TTS_v1_Base",
+    "F5TTS": "F5TTS_v1_Base",
+    "E2-TTS": "E2TTS_Base",
+    "E2TTS": "E2TTS_Base",
+}
+
+_KNOWN_MODELS = {
+    "F5TTS_v1_Base",
+    "F5TTS_v1_Small",
+    "F5TTS_Base",
+    "F5TTS_Small",
+    "E2TTS_Base",
+    "E2TTS_Small",
+}
+
 
 class F5TTSBackend(TTSBackend):
     """F5-TTS: Flow-matching based text-to-speech with voice cloning."""
@@ -28,15 +47,31 @@ class F5TTSBackend(TTSBackend):
 
     def __init__(
         self,
-        model_type: str = "F5-TTS",
+        model_type: str = "F5TTS_v1_Base",
         ckpt_file: str = "",
         vocab_file: str = "",
         device: str = "cuda",
+        hf_cache_dir: str | None = None,
     ):
-        self.model_type = model_type
+        self.model_type = _LEGACY_MODEL_NAMES.get(model_type, model_type)
+        if self.model_type != model_type:
+            logger.warning(
+                "F5-TTS model name '%s' is from the pre-1.0 API; using '%s'. "
+                "Set F5TTS_MODEL_TYPE=%s to silence this.",
+                model_type,
+                self.model_type,
+                self.model_type,
+            )
+        if self.model_type not in _KNOWN_MODELS:
+            raise ValueError(
+                f"Unknown F5-TTS model '{self.model_type}'. "
+                f"Expected one of: {', '.join(sorted(_KNOWN_MODELS))}"
+            )
+
         self.ckpt_file = ckpt_file
         self.vocab_file = vocab_file
         self.device = device
+        self.hf_cache_dir = hf_cache_dir
         self._model = None
         self._loaded = False
 
@@ -50,15 +85,21 @@ class F5TTSBackend(TTSBackend):
                 "or: pip install f5-tts"
             )
 
-        logger.info("Loading F5-TTS model (type=%s)...", self.model_type)
+        logger.info("Loading F5-TTS model (%s)...", self.model_type)
         start = time.time()
 
-        self._model = F5TTS(
-            model_type=self.model_type,
-            ckpt_file=self.ckpt_file or "",
-            vocab_file=self.vocab_file or "",
-            device=self.device,
-        )
+        # NB: the kwarg is `model`, not `model_type` — it was renamed in
+        # f5-tts 1.0. Weights auto-download from HuggingFace on first load.
+        kwargs = {
+            "model": self.model_type,
+            "ckpt_file": self.ckpt_file or "",
+            "vocab_file": self.vocab_file or "",
+            "device": self.device,
+        }
+        if self.hf_cache_dir:
+            kwargs["hf_cache_dir"] = self.hf_cache_dir
+
+        self._model = F5TTS(**kwargs)
 
         elapsed = time.time() - start
         self._loaded = True
@@ -103,12 +144,14 @@ class F5TTSBackend(TTSBackend):
 
         start = time.time()
 
-        # F5-TTS infer returns (wav_numpy, sample_rate, spectrogram)
+        # F5-TTS infer returns (wav_numpy, sample_rate, spectrogram).
+        # seed must be None for "random" — passing -1 pins the RNG and makes
+        # every generation byte-identical.
         wav, sr, _ = self._model.infer(
             ref_file=str(ref_path),
             ref_text=request.ref_text or "",
             gen_text=request.text,
-            seed=request.seed if request.seed >= 0 else -1,
+            seed=request.seed if request.seed >= 0 else None,
             speed=request.speed,
         )
 
@@ -140,6 +183,7 @@ class F5TTSBackend(TTSBackend):
                 "backend": self.name,
                 "model_type": self.model_type,
                 "ref_audio": ref_path.name,
-                "seed": request.seed,
+                # The model records the seed it actually used when we pass None
+                "seed": getattr(self._model, "seed", request.seed),
             },
         )

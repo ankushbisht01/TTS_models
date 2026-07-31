@@ -38,7 +38,10 @@ class Settings(BaseSettings):
     output_dir: Path | None = None
 
     # ── F5-TTS specific ──────────────────────────────────────────────
-    f5tts_model_type: str = "F5-TTS"  # or "E2-TTS"
+    # Config name from f5_tts/configs/*.yaml — NOT the old "F5-TTS" label.
+    # Options: F5TTS_v1_Base, F5TTS_v1_Small, F5TTS_Base, F5TTS_Small,
+    #          E2TTS_Base, E2TTS_Small
+    f5tts_model_type: str = "F5TTS_v1_Base"
     f5tts_ckpt_file: str = ""  # empty = auto-download from HuggingFace
     f5tts_vocab_file: str = ""
 

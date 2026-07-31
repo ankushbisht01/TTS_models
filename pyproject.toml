@@ -42,7 +42,9 @@ dependencies = [
 
 [project.optional-dependencies]
 f5tts = [
-    "f5-tts>=0.4.0",
+    # >=1.0 required: F5TTS.__init__ renamed `model_type` -> `model` and
+    # switched to config names (F5TTS_v1_Base). f5tts_backend targets that API.
+    "f5-tts>=1.0.0",
 ]
 chatterbox = [
     # ⚠️ On Python < 3.14 this pins torch==2.6.0, which has no Blackwell

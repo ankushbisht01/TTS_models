@@ -51,6 +51,7 @@ def _load_backend(name: str) -> TTSBackend:
                 ckpt_file=settings.f5tts_ckpt_file,
                 vocab_file=settings.f5tts_vocab_file,
                 device=settings.device,
+                hf_cache_dir=str(settings.models_cache_dir),
             )
         case "chatterbox":
             from .models.chatterbox_backend import ChatterboxBackend
