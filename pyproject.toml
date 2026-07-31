@@ -7,10 +7,10 @@ name = "voice-cloning-server"
 version = "1.0.0"
 description = "Self-hosted voice cloning & TTS server with OpenAI-compatible API"
 readme = "README.md"
-# Upper bound is deliberate: librosa/numba and the TTS backends (f5-tts,
-# chatterbox-tts) have no wheels for 3.14 yet. Without this cap, pip on a
-# 3.14 interpreter fails deep in dependency resolution with a confusing error.
-requires-python = ">=3.11,<3.14"
+# 3.14 is supported and preferred on Blackwell: chatterbox-tts pins
+# torch==2.6.0 on python_version < "3.14" (no sm_120 kernels), but torch>=2.9.0
+# on 3.14. Installing it under 3.12 silently downgrades torch and breaks the GPU.
+requires-python = ">=3.11"
 license = "MIT"
 
 dependencies = [
@@ -45,6 +45,9 @@ f5tts = [
     "f5-tts>=0.4.0",
 ]
 chatterbox = [
+    # ⚠️ On Python < 3.14 this pins torch==2.6.0, which has no Blackwell
+    # (sm_120) kernels and will downgrade a working CUDA 12.8 install.
+    # Run `make check-gpu` after installing. On 3.14 it requires torch>=2.9.0.
     "chatterbox-tts>=0.1.0",
 ]
 qwen3tts = [

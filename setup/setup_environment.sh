@@ -35,11 +35,11 @@ cd "$PROJECT_ROOT"
 VENV_DIR="${PROJECT_ROOT}/.venv"
 CUDA_VERSION="${CUDA_VERSION:-cu128}"
 
-# Supported interpreter range. Keep in sync with `requires-python` in
-# pyproject.toml. 3.14 is excluded: numba (pulled in by librosa) and the TTS
-# backends have no 3.14 wheels, so installs die mid-resolution.
+# Supported interpreter range (inclusive). Keep in sync with `requires-python`
+# in pyproject.toml. 3.14 works: numba/llvmlite ship cp314 wheels, librosa and
+# both TTS backends are pure-Python, and torch>=2.9 has cu128 cp314 builds.
 PY_MIN_MINOR=11
-PY_MAX_MINOR=13   # inclusive
+PY_MAX_MINOR=14
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"
@@ -112,8 +112,9 @@ if [ -n "${PYTHON_BIN:-}" ]; then
         exit 1
     fi
 else
-    # 3.12 first: best wheel coverage for torch + f5-tts + chatterbox today.
-    for candidate in python3.12 python3.11 python3.13 python3 python; do
+    # Prefer the system default; fall back to explicit versions. 3.14 is fine
+    # and is the better choice on Blackwell (see the chatterbox note above).
+    for candidate in python3 python3.14 python3.13 python3.12 python3.11 python; do
         if command -v "$candidate" &>/dev/null && python_is_supported "$candidate"; then
             PYTHON_BIN="$(command -v "$candidate")"
             break
@@ -123,9 +124,9 @@ fi
 
 # Nothing suitable on PATH — try uv, which can fetch a standalone CPython.
 if [ -z "${PYTHON_BIN:-}" ] && command -v uv &>/dev/null; then
-    info "No supported system Python found; provisioning 3.12 via uv..."
-    uv python install 3.12
-    PYTHON_BIN="$(uv python find 3.12)"
+    info "No supported system Python found; provisioning 3.13 via uv..."
+    uv python install 3.13
+    PYTHON_BIN="$(uv python find 3.13)"
 fi
 
 if [ -z "${PYTHON_BIN:-}" ]; then
@@ -133,14 +134,11 @@ if [ -z "${PYTHON_BIN:-}" ]; then
     err "No supported Python interpreter found."
     if [ -n "$SYSTEM_PY" ]; then
         err "  System python3 is $(python_version_of "$SYSTEM_PY") — this project needs 3.${PY_MIN_MINOR}–3.${PY_MAX_MINOR}."
-        err "  (librosa/numba, f5-tts and chatterbox-tts have no wheels for 3.14.)"
     fi
     echo ""
     err "Install one of these, then re-run:"
-    err "  uv:     curl -LsSf https://astral.sh/uv/install.sh | sh && uv python install 3.12"
-    err "  Arch:   paru -S python312          # AUR"
-    err "  Ubuntu: sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt install python3.12 python3.12-venv"
-    err "  pyenv:  pyenv install 3.12 && PYTHON_BIN=\"\$(pyenv prefix 3.12)/bin/python\" bash setup/setup_environment.sh"
+    err "  uv:     curl -LsSf https://astral.sh/uv/install.sh | sh && uv python install 3.13"
+    err "  pyenv:  pyenv install 3.13 && PYTHON_BIN=\"\$(pyenv prefix 3.13)/bin/python\" bash setup/setup_environment.sh"
     exit 1
 fi
 
@@ -191,8 +189,14 @@ fi
 
 VENV_PY="${VENV_DIR}/bin/python"
 
-info "Upgrading pip / setuptools / wheel..."
-$VENV_PY -m pip install --upgrade pip setuptools wheel
+info "Upgrading pip and wheel..."
+$VENV_PY -m pip install --upgrade pip wheel
+
+# Deliberately NOT `--upgrade setuptools`: torch pins an upper bound (torch
+# 2.11 requires setuptools<82), and unconditionally jumping to the latest
+# breaks an already-installed torch with a resolver conflict. Install only if
+# the build-system floor in pyproject.toml isn't already satisfied.
+$VENV_PY -m pip install 'setuptools>=77'
 
 # ── 5. Install PyTorch ───────────────────────────────────────────────
 
@@ -242,6 +246,12 @@ import fastapi, uvicorn, librosa, soundfile, transformers
 from server.api_server import app
 print('  server.api_server imports cleanly')
 "
+
+info "Checking for dependency conflicts..."
+if ! $VENV_PY -m pip check; then
+    warn "pip reports conflicts (see above). These are usually harmless, but if"
+    warn "torch was downgraded, re-run: make check-gpu"
+fi
 ok "Verification passed"
 
 # ── 7. Done ──────────────────────────────────────────────────────────
