@@ -53,11 +53,9 @@ chatterbox = [
     "chatterbox-tts>=0.1.0",
 ]
 qwen3tts = [
-    # There is no `qwen-tts` distribution on PyPI. qwen3tts_backend falls back
-    # to loading the model through transformers directly, so install what that
-    # path actually needs.
-    "transformers>=4.46.0",
-    "accelerate>=1.0.0",
+    # ⚠️ qwen-tts pins transformers==4.57.3 exactly, while chatterbox-tts pins
+    # transformers==5.2.0 — the two backends cannot share a venv.
+    "qwen-tts>=0.1.1",
 ]
 all = [
     "voice-cloning-server[f5tts,chatterbox]",

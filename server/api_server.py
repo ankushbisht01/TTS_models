@@ -65,8 +65,11 @@ def _load_backend(name: str) -> TTSBackend:
 
             backend = Qwen3TTSBackend(
                 model_name=settings.qwen3tts_model,
-                model_size=settings.qwen3tts_size,
                 device=settings.device,
+                dtype=settings.dtype,
+                language=settings.qwen3tts_language,
+                speaker=settings.qwen3tts_speaker,
+                instruct=settings.qwen3tts_instruct,
             )
         case _:
             raise ValueError(f"Unknown backend: {name}")

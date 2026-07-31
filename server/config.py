@@ -50,8 +50,16 @@ class Settings(BaseSettings):
     chatterbox_exaggeration: float = 0.5  # 0.0 = monotone, 1.0 = very expressive
 
     # ── Qwen3-TTS specific ───────────────────────────────────────────
-    qwen3tts_model: str = "Qwen/Qwen3-TTS"
-    qwen3tts_size: str = "0.6B"  # "0.6B" or "1.7B"
+    # Full HuggingFace repo id. The suffix selects the generation mode:
+    #   -Base         clones from reference audio (works with /v1/voices)
+    #   -CustomVoice  named preset speakers (set qwen3tts_speaker)
+    #   -VoiceDesign  voice from a text description (set qwen3tts_instruct)
+    # Available: Qwen3-TTS-12Hz-{0.6B,1.7B}-{Base,CustomVoice},
+    #            Qwen3-TTS-12Hz-1.7B-VoiceDesign
+    qwen3tts_model: str = "Qwen/Qwen3-TTS-12Hz-0.6B-Base"
+    qwen3tts_language: str = "English"
+    qwen3tts_speaker: str = "Ryan"  # CustomVoice only
+    qwen3tts_instruct: str = ""  # Style prompt, e.g. "Speak in a happy tone"
 
     # ── Audio defaults ───────────────────────────────────────────────
     sample_rate: int = 24000
