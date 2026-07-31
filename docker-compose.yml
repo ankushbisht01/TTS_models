@@ -1,0 +1,50 @@
+# ─────────────────────────────────────────────────────────────────────
+# docker-compose.yml — Voice Cloning Server
+#
+# Usage:
+#   docker compose up -d        # Start
+#   docker compose down         # Stop
+#   docker compose logs -f      # View logs
+# ─────────────────────────────────────────────────────────────────────
+
+services:
+  voice-server:
+    build: .
+    image: voice-cloning-server:latest
+    container_name: voice-cloning-server
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    # GPU access
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+    # Persist voices and model cache across restarts
+    volumes:
+      - ./voices:/app/voices
+      - ./lora_adapters:/app/lora_adapters
+      - ./models_cache:/app/models_cache
+      - ./output:/app/output
+
+    environment:
+      - ACTIVE_BACKENDS=f5tts
+      - DEFAULT_BACKEND=f5tts
+      - DEVICE=cuda
+      - DTYPE=float16
+      - LOG_LEVEL=info
+      - HOST=0.0.0.0
+      - PORT=8000
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s  # Models take time to load

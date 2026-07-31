@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "voice-cloning-server"
+version = "1.0.0"
+description = "Self-hosted voice cloning & TTS server with OpenAI-compatible API"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+dependencies = [
+    # Core server
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+
+    # Audio processing
+    "soundfile>=0.12.1",
+    "librosa>=0.10.2",
+    "numpy>=1.26.0",
+    "scipy>=1.14.0",
+
+    # ML core
+    "torch>=2.7.0",
+    "torchaudio>=2.7.0",
+    "transformers>=4.46.0",
+    "huggingface-hub>=0.26.0",
+
+    # Utilities
+    "rich>=13.9.0",
+    "click>=8.1.0",
+    "pyyaml>=6.0.0",
+    "aiofiles>=24.1.0",
+]
+
+[project.optional-dependencies]
+f5tts = [
+    "f5-tts>=0.4.0",
+]
+chatterbox = [
+    "chatterbox-tts>=0.1.0",
+]
+qwen3tts = [
+    "qwen-tts>=0.1.0",
+]
+cosyvoice = [
+    "cosyvoice>=0.2.0",
+]
+all = [
+    "voice-cloning-server[f5tts,chatterbox]",
+]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "httpx>=0.27.0",
+    "ruff>=0.8.0",
+]
+
+[project.scripts]
+vc-server = "server.api_server:main"
+vc-clone = "scripts.clone_voice:main"
+vc-benchmark = "scripts.benchmark:main"
+
+[tool.setuptools.packages.find]
+include = ["server*", "scripts*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
