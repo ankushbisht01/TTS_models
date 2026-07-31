@@ -1,10 +1,17 @@
-.PHONY: help setup setup-all install-f5tts install-chatterbox install-qwen3tts \
-       run run-dev test benchmark docker-build docker-up docker-down clean
+.PHONY: help venv-check setup setup-all install-f5tts install-chatterbox install-qwen3tts \
+       run run-dev test check-gpu benchmark lint format docker-build docker-up docker-down clean
 
 SHELL := /bin/bash
-PYTHON ?= python3
 VENV := .venv
 CUDA_VERSION ?= cu128
+# Leave empty to let setup_environment.sh auto-detect a supported interpreter
+# (3.11–3.13). Override to pin one: make setup PYTHON_BIN=/usr/bin/python3.12
+PYTHON_BIN ?=
+
+# Fail with a useful message instead of "No such file or directory"
+venv-check:
+	@test -x $(VENV)/bin/python || { \
+		echo "❌ No virtualenv at $(VENV)/ — run 'make setup' first."; exit 1; }
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -13,10 +20,7 @@ help: ## Show this help
 # ─── Environment Setup ───────────────────────────────────────────────
 
 setup: ## Set up Python venv + core dependencies (run this first)
-	$(PYTHON) -m venv $(VENV)
-	$(VENV)/bin/pip install --upgrade pip setuptools wheel
-	$(VENV)/bin/pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$(CUDA_VERSION)
-	$(VENV)/bin/pip install -e ".[dev]"
+	PYTHON_BIN=$(PYTHON_BIN) CUDA_VERSION=$(CUDA_VERSION) bash setup/setup_environment.sh
 	@echo ""
 	@echo "✅ Core setup complete. Now install model backends:"
 	@echo "   make install-f5tts       # Recommended primary model"
@@ -25,34 +29,34 @@ setup: ## Set up Python venv + core dependencies (run this first)
 
 setup-all: setup install-f5tts install-chatterbox ## Set up everything (core + F5-TTS + Chatterbox)
 
-install-f5tts: ## Install F5-TTS backend
+install-f5tts: venv-check ## Install F5-TTS backend
 	$(VENV)/bin/pip install -e ".[f5tts]"
 	@echo "✅ F5-TTS installed"
 
-install-chatterbox: ## Install Chatterbox backend
+install-chatterbox: venv-check ## Install Chatterbox backend
 	$(VENV)/bin/pip install -e ".[chatterbox]"
 	@echo "✅ Chatterbox installed"
 
-install-qwen3tts: ## Install Qwen3-TTS backend
+install-qwen3tts: venv-check ## Install Qwen3-TTS backend (via transformers)
 	$(VENV)/bin/pip install -e ".[qwen3tts]"
 	@echo "✅ Qwen3-TTS installed"
 
 # ─── Running ─────────────────────────────────────────────────────────
 
-run: ## Start the API server (production)
+run: venv-check ## Start the API server (production)
 	$(VENV)/bin/uvicorn server.api_server:app \
 		--host 0.0.0.0 --port 8000 --workers 1
 
-run-dev: ## Start the API server (dev mode with auto-reload)
+run-dev: venv-check ## Start the API server (dev mode with auto-reload)
 	$(VENV)/bin/uvicorn server.api_server:app \
 		--host 0.0.0.0 --port 8000 --reload --log-level debug
 
 # ─── Testing ─────────────────────────────────────────────────────────
 
-test: ## Run all tests
+test: venv-check ## Run all tests
 	$(VENV)/bin/pytest tests/ -v
 
-check-gpu: ## Verify GPU + CUDA + PyTorch setup
+check-gpu: venv-check ## Verify GPU + CUDA + PyTorch setup
 	$(VENV)/bin/python -c "\
 		import torch; \
 		print(f'PyTorch: {torch.__version__}'); \

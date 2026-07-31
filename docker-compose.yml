@@ -41,6 +41,9 @@ services:
       - LOG_LEVEL=info
       - HOST=0.0.0.0
       - PORT=8000
+      # Without this, HuggingFace caches to /root/.cache and the models_cache
+      # volume does nothing — every rebuild re-downloads several GB of weights.
+      - HF_HOME=/app/models_cache
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]

@@ -1,14 +1,17 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "voice-cloning-server"
 version = "1.0.0"
 description = "Self-hosted voice cloning & TTS server with OpenAI-compatible API"
 readme = "README.md"
-requires-python = ">=3.11"
-license = {text = "MIT"}
+# Upper bound is deliberate: librosa/numba and the TTS backends (f5-tts,
+# chatterbox-tts) have no wheels for 3.14 yet. Without this cap, pip on a
+# 3.14 interpreter fails deep in dependency resolution with a confusing error.
+requires-python = ">=3.11,<3.14"
+license = "MIT"
 
 dependencies = [
     # Core server
@@ -45,10 +48,11 @@ chatterbox = [
     "chatterbox-tts>=0.1.0",
 ]
 qwen3tts = [
-    "qwen-tts>=0.1.0",
-]
-cosyvoice = [
-    "cosyvoice>=0.2.0",
+    # There is no `qwen-tts` distribution on PyPI. qwen3tts_backend falls back
+    # to loading the model through transformers directly, so install what that
+    # path actually needs.
+    "transformers>=4.46.0",
+    "accelerate>=1.0.0",
 ]
 all = [
     "voice-cloning-server[f5tts,chatterbox]",

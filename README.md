@@ -29,9 +29,14 @@ Self-hosted voice cloning & TTS server with an OpenAI-compatible API. Supports m
 | CUDA | 12.8+ | 12.8+ |
 | PyTorch | 2.7+ | 2.7+ |
 | RAM | 16 GB | 32+ GB |
-| Python | 3.11+ | 3.12 |
+| Python | 3.11 – 3.13 | 3.12 |
 
 > **Blackwell GPU users (RTX 5000/PRO 4000):** PyTorch ≥ 2.7 and CUDA ≥ 12.8 are **mandatory**. Older versions will fail with kernel errors.
+
+> **Python 3.14 is not supported.** `librosa`/`numba` and the TTS backends
+> (`f5-tts`, `chatterbox-tts`) have no 3.14 wheels. On distros that ship 3.14 as
+> the default `python3` (recent Arch), the setup script picks a supported
+> interpreter automatically — see [Troubleshooting](#troubleshooting).
 
 ## Quick Start
 
@@ -194,6 +199,59 @@ Key settings:
 ├── Makefile                   # Shortcuts
 └── .env.example               # Configuration template
 ```
+
+## Troubleshooting
+
+### `BackendUnavailable: Cannot import 'setuptools.backends._legacy'`
+
+The build backend in `pyproject.toml` was invalid. It must be:
+
+```toml
+[build-system]
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
+```
+
+If you hit this on an older checkout, `git pull` and re-run the setup script.
+
+### `ERROR: Package requires a different Python: 3.14.x not in '<3.14,>=3.11'`
+
+Your `python3` is 3.14, which the dependency stack does not support yet. Install
+a 3.12 interpreter and point the setup script at it:
+
+```bash
+# Easiest, works on any distro — no root, no AUR:
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install 3.12
+
+# Then rebuild the environment (this deletes and recreates .venv):
+RECREATE_VENV=1 bash setup/setup_environment.sh
+```
+
+The script auto-detects `python3.12` / `python3.11` / `python3.13` on `PATH` and
+uses a uv-managed interpreter if none is present. To pin one explicitly:
+
+```bash
+PYTHON_BIN=/usr/bin/python3.12 bash setup/setup_environment.sh
+```
+
+### PyTorch installs but `torch.cuda.is_available()` is `False`
+
+Check driver ↔ CUDA compatibility with `nvidia-smi`, then reinstall torch from a
+matching wheel index:
+
+```bash
+CUDA_VERSION=cu126 RECREATE_VENV=1 bash setup/setup_environment.sh
+```
+
+`make check-gpu` prints the arch list; if your GPU's `sm_XX` is missing from it,
+the wheel has no kernels for your card and you need a newer CUDA index.
+
+### `libsndfile` / `soundfile` import errors
+
+The system audio libraries are missing. Re-run the setup script, or install
+manually: `sudo pacman -S libsndfile sox ffmpeg` (Arch) /
+`sudo apt install libsndfile1 sox ffmpeg` (Debian/Ubuntu).
 
 ## License
 
