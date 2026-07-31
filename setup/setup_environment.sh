@@ -97,7 +97,7 @@ print(f'  GPU OK:   {torch.cuda.is_available()}')
 if torch.cuda.is_available():
     print(f'  Device:   {torch.cuda.get_device_name(0)}')
     props = torch.cuda.get_device_properties(0)
-    print(f'  VRAM:     {props.total_mem / 1e9:.1f} GB')
+    print(f'  VRAM:     {props.total_memory / 1e9:.1f} GB')
     arch_list = torch.cuda.get_arch_list()
     has_blackwell = any('sm_120' in a or 'sm_12' in a for a in arch_list)
     print(f'  Blackwell: {\"✅\" if has_blackwell else \"⚠️  sm_120 not in arch list\"}')

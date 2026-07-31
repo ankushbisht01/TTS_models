@@ -262,7 +262,7 @@ async def server_status():
             gpu_info = {
                 "name": torch.cuda.get_device_name(0),
                 "vram_total_gb": round(
-                    torch.cuda.get_device_properties(0).total_mem / 1e9, 1
+                    torch.cuda.get_device_properties(0).total_memory / 1e9, 1
                 ),
                 "vram_used_gb": round(torch.cuda.memory_allocated(0) / 1e9, 2),
                 "vram_cached_gb": round(torch.cuda.memory_reserved(0) / 1e9, 2),
