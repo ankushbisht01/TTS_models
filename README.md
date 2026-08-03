@@ -200,6 +200,41 @@ Key settings:
 └── .env.example               # Configuration template
 ```
 
+## Fine-Tuning
+
+Zero-shot cloning via `/v1/voices/create` needs no training and handles most
+cases. Fine-tune only when you have **30+ minutes** of clean single-speaker
+audio and zero-shot quality isn't enough.
+
+> Only train on audio you own or have the speaker's consent to use.
+
+```bash
+# 1. Segment, normalize and transcribe (needs faster-whisper)
+pip install faster-whisper
+make prepare-dataset IN=./raw_audio OUT=./training_data SPEAKER=john
+
+# 2. Train
+make finetune OUT=./training_data SPEAKER=john
+
+# 3. Serve the result — add to .env, then restart
+#    F5TTS_CKPT_FILE=/path/to/ckpts/john/model_last.safetensors
+```
+
+[prepare_dataset.py](scripts/prepare_dataset.py) splits at silence boundaries
+(never mid-word), resamples to 24 kHz mono, peak-normalizes, and writes the
+pipe-delimited absolute-path CSV that f5-tts requires. It refuses to proceed
+with empty transcripts, since those silently corrupt training.
+
+[finetune_f5tts.sh](scripts/finetune_f5tts.sh) resolves the data and checkpoint
+directories f5-tts hard-codes relative to its own package, converts the CSV to
+Arrow, and runs `f5-tts_finetune-cli`. Tune with `EPOCHS`, `BATCH_SIZE`,
+`LEARNING_RATE` environment variables.
+
+**Qwen3-TTS cannot be fine-tuned** with this module. The `qwen-tts` package is
+inference-only — it exposes a `forward_finetune` on one submodule but ships no
+dataset builder, collator, or training loop. Use F5-TTS for fine-tuning and
+Qwen3-TTS for zero-shot.
+
 ## Troubleshooting
 
 ### `BackendUnavailable: Cannot import 'setuptools.backends._legacy'`

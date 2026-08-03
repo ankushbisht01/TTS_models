@@ -1,14 +1,24 @@
 """
-Dataset preparation for LoRA fine-tuning.
+Dataset preparation for F5-TTS fine-tuning.
 
-Takes a directory of audio files and creates a properly formatted dataset
-for fine-tuning F5-TTS with LoRA adapters.
+Takes a directory of audio files, segments and normalizes them, optionally
+transcribes them with Whisper, and writes the pipe-delimited CSV that
+`f5-tts_finetune-cli` ingests.
+
+Output layout:
+    <output-dir>/wavs/<speaker>_00000.wav
+    <output-dir>/metadata.csv          audio_file|text   (absolute paths)
+    <output-dir>/dataset_info.json
 
 Usage:
     python -m scripts.prepare_dataset \
         --input-dir ./raw_audio/ \
         --output-dir ./training_data/ \
-        --speaker-name "John"
+        --speaker-name "John" \
+        --transcribe
+
+Only use audio you have the rights to, and for a real person's voice, their
+consent. Then run scripts/finetune_f5tts.sh to train.
 """
 
 import csv
@@ -20,32 +30,101 @@ import numpy as np
 import soundfile as sf
 
 
-def _detect_silence(audio: np.ndarray, sr: int, threshold: float = 0.01) -> list[tuple[float, float]]:
-    """Detect silent segments for splitting."""
+def _split_on_silence(
+    audio: np.ndarray,
+    sr: int,
+    min_duration: float,
+    max_duration: float,
+    threshold: float = 0.01,
+) -> list[np.ndarray]:
+    """
+    Split audio into speech segments at silent gaps.
+
+    Splitting mid-word produces training pairs whose transcript doesn't match
+    the audio, so prefer silence boundaries and only hard-cut a run of speech
+    that exceeds max_duration.
+    """
     frame_length = int(0.025 * sr)  # 25ms frames
     hop_length = int(0.010 * sr)  # 10ms hop
 
-    segments = []
-    start = None
+    if len(audio) < frame_length:
+        return []
 
+    voiced = []
     for i in range(0, len(audio) - frame_length, hop_length):
-        frame = audio[i : i + frame_length]
-        rms = np.sqrt(np.mean(frame**2))
+        rms = np.sqrt(np.mean(audio[i : i + frame_length] ** 2))
+        voiced.append(rms > threshold)
 
-        if rms > threshold and start is None:
-            start = i / sr
-        elif rms <= threshold and start is not None:
-            end = i / sr
-            if end - start >= 1.0:  # Minimum 1 second segments
-                segments.append((start, end))
-            start = None
+    segments: list[np.ndarray] = []
+    min_silence_frames = int(0.3 / 0.010)  # 300ms of silence ends a segment
 
-    if start is not None:
-        end = len(audio) / sr
-        if end - start >= 1.0:
-            segments.append((start, end))
+    def emit(s_frame: int, e_frame: int) -> None:
+        start = max(0, int(s_frame * hop_length))
+        end = min(int(e_frame * hop_length) + frame_length, len(audio))
+        chunk = audio[start:end]
+        if len(chunk) / sr < min_duration:
+            return
+        max_samples = int(max_duration * sr)
+        for off in range(0, len(chunk), max_samples):
+            piece = chunk[off : off + max_samples]
+            if len(piece) / sr >= min_duration:
+                segments.append(piece)
+
+    start_frame = None
+    silence_run = 0
+
+    for i, is_voiced in enumerate(voiced):
+        if is_voiced:
+            if start_frame is None:
+                start_frame = i
+            silence_run = 0
+        elif start_frame is not None:
+            silence_run += 1
+            if silence_run >= min_silence_frames:
+                emit(start_frame, i - silence_run)
+                start_frame = None
+                silence_run = 0
+
+    if start_frame is not None:
+        emit(start_frame, len(voiced) - 1)
 
     return segments
+
+
+def _load_transcriber(model_size: str, device: str):
+    """Load faster-whisper, falling back to openai-whisper."""
+    try:
+        from faster_whisper import WhisperModel
+
+        model = WhisperModel(
+            model_size,
+            device=device,
+            compute_type="float16" if device.startswith("cuda") else "int8",
+        )
+
+        def transcribe(path: Path) -> str:
+            segs, _ = model.transcribe(str(path), beam_size=5)
+            return " ".join(s.text.strip() for s in segs).strip()
+
+        return transcribe
+    except ImportError:
+        pass
+
+    try:
+        import whisper
+
+        model = whisper.load_model(model_size, device=device)
+
+        def transcribe(path: Path) -> str:
+            return model.transcribe(str(path))["text"].strip()
+
+        return transcribe
+    except ImportError:
+        raise click.ClickException(
+            "--transcribe needs a Whisper implementation. Install one:\n"
+            "  pip install faster-whisper   (recommended, GPU)\n"
+            "  pip install openai-whisper"
+        )
 
 
 @click.command()
@@ -53,7 +132,7 @@ def _detect_silence(audio: np.ndarray, sr: int, threshold: float = 0.01) -> list
     "--input-dir", "-i",
     required=True,
     type=click.Path(exists=True, path_type=Path),
-    help="Directory containing raw audio files",
+    help="Directory of source audio files",
 )
 @click.option(
     "--output-dir", "-o",
@@ -84,6 +163,21 @@ def _detect_silence(audio: np.ndarray, sr: int, threshold: float = 0.01) -> list
     type=float,
     help="Minimum duration per segment (seconds)",
 )
+@click.option(
+    "--transcribe",
+    is_flag=True,
+    help="Auto-transcribe segments with Whisper (fills the text column)",
+)
+@click.option(
+    "--whisper-model",
+    default="large-v3",
+    help="Whisper model size for --transcribe",
+)
+@click.option(
+    "--device",
+    default="cuda",
+    help="Device for Whisper",
+)
 def main(
     input_dir: Path,
     output_dir: Path,
@@ -91,31 +185,37 @@ def main(
     target_sr: int,
     max_duration: float,
     min_duration: float,
+    transcribe: bool,
+    whisper_model: str,
+    device: str,
 ):
-    """Prepare audio dataset for voice cloning fine-tuning."""
+    """Prepare an audio dataset for F5-TTS fine-tuning."""
     from rich.console import Console
     from rich.progress import Progress
 
     console = Console()
-    console.print(f"[bold cyan]📦 Dataset Preparation[/]\n")
+    console.print("[bold cyan]📦 Dataset Preparation[/]\n")
 
+    output_dir = output_dir.resolve()
     audio_dir = output_dir / "wavs"
     audio_dir.mkdir(parents=True, exist_ok=True)
 
-    # Find all audio files
-    audio_extensions = {".wav", ".mp3", ".flac", ".ogg", ".m4a"}
-    audio_files = sorted([
-        f for f in input_dir.iterdir()
-        if f.suffix.lower() in audio_extensions
-    ])
+    audio_extensions = {".wav", ".mp3", ".flac", ".ogg", ".m4a", ".opus"}
+    audio_files = sorted(
+        f for f in input_dir.iterdir() if f.suffix.lower() in audio_extensions
+    )
 
     if not audio_files:
-        console.print(f"[red]No audio files found in {input_dir}[/]")
-        return
+        raise click.ClickException(f"No audio files found in {input_dir}")
 
     console.print(f"Found [cyan]{len(audio_files)}[/] audio files")
 
-    metadata = []
+    transcriber = None
+    if transcribe:
+        console.print(f"Loading Whisper [cyan]{whisper_model}[/] on {device}...")
+        transcriber = _load_transcriber(whisper_model, device)
+
+    metadata: list[dict] = []
     segment_count = 0
 
     with Progress() as progress:
@@ -123,85 +223,93 @@ def main(
 
         for audio_file in audio_files:
             try:
-                # Load audio
                 data, sr = sf.read(str(audio_file))
 
-                # Convert to mono
                 if data.ndim > 1:
                     data = data.mean(axis=1)
 
-                # Resample if needed
                 if sr != target_sr:
                     import librosa
+
                     data = librosa.resample(data, orig_sr=sr, target_sr=target_sr)
                     sr = target_sr
 
-                # Normalize
                 peak = np.abs(data).max()
                 if peak > 0:
                     data = data / peak * 0.95
 
-                # Split into segments if too long
-                total_duration = len(data) / sr
-
-                if total_duration <= max_duration:
-                    # Save as single file
+                for chunk in _split_on_silence(data, sr, min_duration, max_duration):
                     segment_name = f"{speaker_name}_{segment_count:05d}.wav"
-                    sf.write(str(audio_dir / segment_name), data, sr)
-                    metadata.append({
-                        "audio_file": f"wavs/{segment_name}",
-                        "text": "",  # User needs to fill in transcripts
-                        "speaker": speaker_name,
-                        "duration": round(total_duration, 2),
-                    })
-                    segment_count += 1
-                else:
-                    # Split into chunks
-                    samples_per_chunk = int(max_duration * sr)
-                    for start_sample in range(0, len(data), samples_per_chunk):
-                        chunk = data[start_sample : start_sample + samples_per_chunk]
-                        chunk_duration = len(chunk) / sr
+                    segment_path = audio_dir / segment_name
+                    sf.write(str(segment_path), chunk, sr)
 
-                        if chunk_duration >= min_duration:
-                            segment_name = f"{speaker_name}_{segment_count:05d}.wav"
-                            sf.write(str(audio_dir / segment_name), chunk, sr)
-                            metadata.append({
-                                "audio_file": f"wavs/{segment_name}",
-                                "text": "",
-                                "speaker": speaker_name,
-                                "duration": round(chunk_duration, 2),
-                            })
-                            segment_count += 1
+                    text = transcriber(segment_path) if transcriber else ""
+
+                    metadata.append(
+                        {
+                            # f5-tts requires ABSOLUTE paths in the CSV
+                            "audio_file": str(segment_path),
+                            "text": text,
+                            "duration": round(len(chunk) / sr, 2),
+                        }
+                    )
+                    segment_count += 1
 
             except Exception as e:
                 console.print(f"[red]Error processing {audio_file.name}: {e}[/]")
 
             progress.advance(task)
 
-    # Write metadata
-    meta_path = output_dir / "metadata.csv"
-    with open(meta_path, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["audio_file", "text", "speaker", "duration"])
-        writer.writeheader()
-        writer.writerows(metadata)
+    if not metadata:
+        raise click.ClickException(
+            "No usable segments produced. Try lowering --min-duration."
+        )
 
-    # Write summary
+    # f5-tts's prepare_csv_wavs expects: header, "|" delimiter, two columns.
+    # A "," delimiter or extra columns silently mis-parses transcripts.
+    meta_path = output_dir / "metadata.csv"
+    with open(meta_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f, delimiter="|", quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(["audio_file", "text"])
+        for m in metadata:
+            writer.writerow([m["audio_file"], m["text"]])
+
+    total_duration = sum(m["duration"] for m in metadata)
+    untranscribed = sum(1 for m in metadata if not m["text"].strip())
+
     summary = {
         "speaker": speaker_name,
         "total_segments": segment_count,
-        "total_duration_sec": sum(m["duration"] for m in metadata),
+        "total_duration_sec": round(total_duration, 1),
+        "total_duration_min": round(total_duration / 60, 1),
         "sample_rate": target_sr,
         "source_files": len(audio_files),
+        "untranscribed_segments": untranscribed,
     }
+    (output_dir / "dataset_info.json").write_text(json.dumps(summary, indent=2))
 
-    summary_path = output_dir / "dataset_info.json"
-    summary_path.write_text(json.dumps(summary, indent=2))
+    console.print("\n[green]✅ Dataset prepared![/]")
+    console.print(f"  Segments : [cyan]{segment_count}[/]")
+    console.print(f"  Duration : [cyan]{total_duration / 60:.1f} min[/]")
+    console.print(f"  Metadata : {meta_path}")
 
-    console.print(f"\n[green]✅ Dataset prepared![/]")
-    console.print(f"  Segments: [cyan]{segment_count}[/]")
-    console.print(f"  Total duration: [cyan]{summary['total_duration_sec']:.1f}s[/]")
-    console.print(f"  Output: [cyan]{output_dir}[/]")
-    console.print(f"\n[yellow]⚠️  Remember to fill in transcripts in metadata.csv![/]")
+    if total_duration < 10 * 60:
+        console.print(
+            f"\n[yellow]⚠️  Only {total_duration / 60:.1f} min of audio. "
+            "Fine-tuning F5-TTS wants 30+ min; below that, zero-shot cloning "
+            "via /v1/voices/create usually gives better results.[/]"
+        )
+
+    if untranscribed:
+        console.print(
+            f"\n[yellow]⚠️  {untranscribed} segments have no transcript. "
+            "Fill the text column in metadata.csv or re-run with --transcribe — "
+            "F5-TTS trains on (audio, text) pairs and empty text corrupts training.[/]"
+        )
+    else:
+        console.print(
+            f"\nNext: [cyan]bash scripts/finetune_f5tts.sh {output_dir} {speaker_name}[/]"
+        )
 
 
 if __name__ == "__main__":
