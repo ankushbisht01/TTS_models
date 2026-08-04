@@ -1,0 +1,2011 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:06.800
+[Submit subtitle corrections at criblate.com]
+
+00:00:06.800 --> 00:00:08.720
+This is a video about phase transitions.
+
+00:00:09.600 --> 00:00:13.139
+Our main goal will be to study a simulation of a discretized fluid model,
+
+00:00:13.139 --> 00:00:16.000
+which has a phase transition as the parameters are varied.
+
+00:00:16.480 --> 00:00:19.840
+That's what you're looking at right now, and it's called the liquid vapor model.
+
+00:00:20.880 --> 00:00:24.260
+To understand how this simulation works, we'll need to introduce one
+
+00:00:24.260 --> 00:00:27.540
+of the most important formulas in physics, the Boltzmann formula.
+
+00:00:28.260 --> 00:00:30.938
+Then we'll see how you could build this simulation yourself,
+
+00:00:30.938 --> 00:00:34.420
+and we'll investigate some of the very interesting behavior that it exhibits.
+
+00:00:36.340 --> 00:00:39.540
+By the way, this video is part one in a two part series.
+
+00:00:40.260 --> 00:00:43.540
+The follow up is live now on the Spectral Collective channel.
+
+00:00:44.340 --> 00:00:47.656
+There we'll look at a simplified version of the liquid vapor model,
+
+00:00:47.656 --> 00:00:51.220
+which we can essentially completely understand using basic mathematics.
+
+00:00:53.710 --> 00:00:55.630
+Okay, so what is a phase transition?
+
+00:00:56.350 --> 00:00:58.670
+You might remember from a chemistry class that
+
+00:00:58.670 --> 00:01:00.990
+phase transitions are not chemical reactions.
+
+00:01:01.630 --> 00:01:05.150
+The molecules of ice are the same as those in water and steam.
+
+00:01:05.470 --> 00:01:06.830
+It's all H2O.
+
+00:01:07.790 --> 00:01:10.470
+The different phases of matter correspond to different
+
+00:01:10.470 --> 00:01:13.150
+ways in which the molecules interact with each other.
+
+00:01:13.710 --> 00:01:16.833
+For instance, in ice, the molecules are locked into a
+
+00:01:16.833 --> 00:01:20.250
+rigid structure and the interactions span long distances.
+
+00:01:21.210 --> 00:01:25.130
+In other words, if you push on one end of an ice cube, the other end moves.
+
+00:01:25.690 --> 00:01:29.050
+This doesn't happen for water, and it definitely doesn't happen for steam.
+
+00:01:29.930 --> 00:01:33.471
+There is still some semblance of long range interaction in water though,
+
+00:01:33.471 --> 00:01:35.290
+since ripples can travel pretty far.
+
+00:01:36.890 --> 00:01:40.050
+However, if you move one small region of steam a little bit,
+
+00:01:40.050 --> 00:01:43.210
+there is pretty much no effect on another distant location.
+
+00:01:45.060 --> 00:01:47.780
+You've probably seen a phase diagram like this one before.
+
+00:01:48.500 --> 00:01:51.500
+It tells you what phase of matter you'll observe if you have a
+
+00:01:51.500 --> 00:01:54.500
+bunch of H2O molecules at various temperatures and pressures.
+
+00:01:55.460 --> 00:01:59.220
+Crossing any of these lines between phases results in a phase transition.
+
+00:02:00.100 --> 00:02:02.877
+This is not something that happens suddenly in real time,
+
+00:02:02.877 --> 00:02:05.460
+as you probably know from waiting for water to boil.
+
+00:02:06.260 --> 00:02:09.574
+Instead, the phase of a system refers to its equilibrium behavior,
+
+00:02:09.574 --> 00:02:13.339
+which is what you see after the system has had enough time to settle down.
+
+00:02:14.299 --> 00:02:17.899
+The equilibrium behavior is determined by only a few parameters.
+
+00:02:17.979 --> 00:02:19.899
+In this case, temperature and pressure.
+
+00:02:20.459 --> 00:02:23.094
+And a phase transition is a discontinuity in the
+
+00:02:23.094 --> 00:02:26.059
+equilibrium behavior as a function of the parameters.
+
+00:02:27.419 --> 00:02:29.693
+Something you might not have seen before is that
+
+00:02:29.693 --> 00:02:32.299
+there are actually at least 19 different types of ice.
+
+00:02:32.699 --> 00:02:34.699
+But that's beyond the scope of this video.
+
+00:02:36.070 --> 00:02:38.292
+Also, at very high temperatures and pressures,
+
+00:02:38.292 --> 00:02:41.094
+there's something over here called a supercritical fluid,
+
+00:02:41.094 --> 00:02:43.510
+which varies continuously between liquid and gas.
+
+00:02:44.630 --> 00:02:47.428
+This means that by moving the parameters through this region,
+
+00:02:47.428 --> 00:02:51.190
+you can actually get steam from water without ever witnessing A phase transition.
+
+00:02:52.470 --> 00:02:55.992
+One of the main goals of this video is to introduce the liquid vapor model,
+
+00:02:55.992 --> 00:02:57.870
+which is a discretized model of a fluid
+
+00:02:57.870 --> 00:02:59.670
+in this region of the phase diagram.
+
+00:03:00.870 --> 00:03:02.230
+Here's what that looks like again.
+
+00:03:03.070 --> 00:03:05.524
+Each blue pixel on the screen represents a molecule,
+
+00:03:05.524 --> 00:03:07.790
+and each white pixel represents an empty space.
+
+00:03:08.830 --> 00:03:12.713
+We have a control panel here which also shows the phase diagram where we can
+
+00:03:12.713 --> 00:03:16.750
+set the values of two parameters which control the behavior of the simulation.
+
+00:03:17.950 --> 00:03:21.973
+T is the temperature, and you might be expecting pressure for the second parameter,
+
+00:03:21.973 --> 00:03:26.189
+but it turns out that pressure is a bit tricky to work with in a simulation like this,
+
+00:03:26.189 --> 00:03:29.630
+so we use a different parameter called the chemical potential instead.
+
+00:03:29.710 --> 00:03:30.370
+Instead of.
+
+00:03:31.800 --> 00:03:35.779
+Just to clarify this point, let me say that there's a nice correspondence between
+
+00:03:35.779 --> 00:03:40.200
+various pairs of thermodynamic observables, which I'll say more about later in the video.
+
+00:03:41.080 --> 00:03:45.038
+Temperature is paired up with energy, pressure is paired up with volume,
+
+00:03:45.038 --> 00:03:49.766
+and chemical potential is the thing which is paired up with the molecule count or the
+
+00:03:49.766 --> 00:03:50.920
+number of molecules.
+
+00:03:51.800 --> 00:03:54.642
+We'll get into the details of this later, but for now,
+
+00:03:54.642 --> 00:03:58.222
+just know that if we have a system at a specific fixed temperature,
+
+00:03:58.222 --> 00:04:01.591
+then it turns out we have to allow the energy to vary slightly,
+
+00:04:01.591 --> 00:04:05.170
+and how it varies is determined by the specific temperature we set.
+
+00:04:06.210 --> 00:04:09.533
+In the same way, if we wanted a system at a specific pressure,
+
+00:04:09.533 --> 00:04:11.730
+we'd have to allow the volume to change.
+
+00:04:12.130 --> 00:04:16.053
+And this isn't so easy to do in a simulation like the one I'm showing you,
+
+00:04:16.053 --> 00:04:20.294
+since the state of this simulation is represented in my computer by an array of
+
+00:04:20.294 --> 00:04:20.930
+fixed size.
+
+00:04:22.050 --> 00:04:25.442
+Instead, we'll allow the number of molecules on the screen to change in
+
+00:04:25.442 --> 00:04:28.930
+a way that's controlled by this other parameter, the chemical potential.
+
+00:04:30.010 --> 00:04:34.285
+At high chemical potential, there will generally be more molecules on the screen,
+
+00:04:34.285 --> 00:04:35.130
+and vice versa.
+
+00:04:36.250 --> 00:04:40.354
+Increasing the number of molecules has a somewhat similar effect to decreasing
+
+00:04:40.354 --> 00:04:44.090
+the volume, since both of these increase the density of the molecules.
+
+00:04:44.570 --> 00:04:48.730
+And this is why the chemical potential is at least an okay, stand in for pressure.
+
+00:04:50.410 --> 00:04:52.843
+Now, although you might have some intuition for it,
+
+00:04:52.843 --> 00:04:55.610
+the temperature is actually a little bit more mysterious.
+
+00:04:56.400 --> 00:05:00.006
+It controls how important the energy is, and in our simulation,
+
+00:05:00.006 --> 00:05:03.440
+the energy corresponds to how clumped up the molecules are.
+
+00:05:04.480 --> 00:05:07.225
+We'll understand much more about this later, but for now,
+
+00:05:07.225 --> 00:05:10.452
+just notice that at high temperatures, having molecules clumped up
+
+00:05:10.452 --> 00:05:14.160
+next to each other doesn't matter so much, and randomness is the key factor.
+
+00:05:14.160 --> 00:05:17.855
+Instead, when we vary the chemical potential at high temperatures,
+
+00:05:17.855 --> 00:05:21.941
+the density of the molecules varies smoothly without a phase transition,
+
+00:05:21.941 --> 00:05:26.140
+and this is like the supercritical fluid region of our real phase diagram.
+
+00:05:27.100 --> 00:05:30.696
+But at low temperatures, once we cross a certain threshold,
+
+00:05:30.696 --> 00:05:35.085
+a phase transition begins to happen and the density goes from very low,
+
+00:05:35.085 --> 00:05:39.900
+like a gas, to very high, like a liquid, skipping all the intermediate values.
+
+00:05:41.020 --> 00:05:44.949
+Due to the nature of the simulation, the number of molecules on the screen still
+
+00:05:44.949 --> 00:05:48.780
+has to change gradually, and the phase transition doesn't happen all at once.
+
+00:05:50.300 --> 00:05:53.900
+But during the phase transition, every region of the picture is
+
+00:05:53.900 --> 00:05:57.386
+either mostly blue or mostly white, and there are no regions
+
+00:05:57.386 --> 00:06:01.100
+with intermediate density where the blue and white regions meet.
+
+00:06:01.100 --> 00:06:05.340
+We see well defined curves with shapes that can actually be described mathematically.
+
+00:06:07.020 --> 00:06:10.940
+There is so much to talk about in this one simulation and in this video.
+
+00:06:10.940 --> 00:06:14.380
+I want to introduce everything we need to really understand what's going on here.
+
+00:06:16.070 --> 00:06:19.070
+The main question at this point, which I didn't say much about yet,
+
+00:06:19.070 --> 00:06:20.950
+is how exactly does this simulation work?
+
+00:06:21.990 --> 00:06:24.688
+To answer this question, we'll need to talk about the
+
+00:06:24.688 --> 00:06:27.590
+most important formula in statistical the Boltzmann law.
+
+00:06:29.350 --> 00:06:32.797
+The Boltzmann law is a formula for a probability distribution
+
+00:06:32.797 --> 00:06:36.470
+telling us the probability of each configuration x of molecules.
+
+00:06:37.510 --> 00:06:41.110
+A first question you might have is why are we using randomness here at all?
+
+00:06:42.350 --> 00:06:44.592
+I want to first say that this is not the randomness
+
+00:06:44.592 --> 00:06:46.350
+that might come from quantum mechanics.
+
+00:06:46.990 --> 00:06:50.323
+Even if the universe is truly deterministic, using randomness
+
+00:06:50.323 --> 00:06:53.710
+to model systems with many particles can be extremely useful.
+
+00:06:54.830 --> 00:06:57.310
+To see why, let's start with a thought experiment.
+
+00:06:57.870 --> 00:07:02.190
+Suppose we have 20 particles in a box with given initial positions and velocities.
+
+00:07:02.830 --> 00:07:05.353
+This is called a microstate, since it contains all the
+
+00:07:05.353 --> 00:07:08.110
+information about the microscopic particles in the system.
+
+00:07:09.410 --> 00:07:13.202
+Lets suppose that these are perfectly spherical particles evolving according to
+
+00:07:13.202 --> 00:07:17.090
+Newton's laws of motion, colliding elastically with each other with no friction.
+
+00:07:17.810 --> 00:07:21.090
+Now let's suppose you close your eyes and take a 30 minute nap.
+
+00:07:21.410 --> 00:07:23.890
+What microstate will you observe when you wake up?
+
+00:07:25.090 --> 00:07:27.330
+You probably couldn't solve this problem by hand.
+
+00:07:27.730 --> 00:07:29.610
+Maybe you could do it if you had a computer.
+
+00:07:29.610 --> 00:07:33.090
+But even a computer will start to struggle if we increase the particle count.
+
+00:07:33.650 --> 00:07:36.171
+For instance, even this simulation with just 200
+
+00:07:36.171 --> 00:07:38.850
+particles took my computer multiple hours to make.
+
+00:07:39.740 --> 00:07:42.820
+Even the most powerful computers we have could never solve this problem.
+
+00:07:42.820 --> 00:07:46.860
+If the number of particles was something like 10 billion or 10 to the power of 10.
+
+00:07:47.420 --> 00:07:49.260
+There are just too many calculations.
+
+00:07:50.060 --> 00:07:52.467
+And by the way, 10 billion isn't even close to the
+
+00:07:52.467 --> 00:07:55.260
+typical number of particles in anything we interact with.
+
+00:07:55.660 --> 00:07:58.617
+In just one teaspoon of water, the number of water
+
+00:07:58.617 --> 00:08:01.100
+molecules is around 10 to the 23rd power.
+
+00:08:01.900 --> 00:08:04.700
+To get a bit of a grasp on just how large this is.
+
+00:08:04.700 --> 00:08:08.220
+There are about that many teaspoons worth of water in the entire ocean.
+
+00:08:08.950 --> 00:08:12.500
+So clearly we're not going to be able to predict the exact location of every
+
+00:08:12.500 --> 00:08:15.910
+water molecule in a glass of water in order to determine the microstate.
+
+00:08:16.230 --> 00:08:19.430
+But we don't need to do that in order to know that it's water and not ice.
+
+00:08:19.910 --> 00:08:22.694
+I mean, people could tell the difference between water ice
+
+00:08:22.694 --> 00:08:25.670
+and steam far before anyone even knew that molecules existed.
+
+00:08:26.390 --> 00:08:29.632
+Since we can only see the large scale behavior or the macro state,
+
+00:08:29.632 --> 00:08:33.758
+we really only care about the overall statistics of the molecules rather than their
+
+00:08:33.758 --> 00:08:34.790
+individual behavior.
+
+00:08:35.810 --> 00:08:38.892
+This is the key motivation for the first main idea,
+
+00:08:38.892 --> 00:08:44.210
+which is approximating a deterministic microstate like this one by a random microstate.
+
+00:08:45.010 --> 00:08:47.739
+One perspective on this is that we are using randomness as
+
+00:08:47.739 --> 00:08:50.610
+a proxy for the fact that we don't know the true microstate.
+
+00:08:51.010 --> 00:08:55.010
+In other words, we're using randomness as a stand in for our own uncertainty.
+
+00:08:56.210 --> 00:08:59.447
+This is a subtle point, and in fact, it's still an open problem to
+
+00:08:59.447 --> 00:09:02.930
+prove mathematically that this approximation is a good one in general.
+
+00:09:03.700 --> 00:09:05.460
+But that's beyond the scope of this video.
+
+00:09:06.100 --> 00:09:10.500
+For now, we'll just accept the postulate of randomness because it works well in practice.
+
+00:09:11.380 --> 00:09:15.700
+But just saying that the microstate of a system is random doesn't tell the full picture.
+
+00:09:16.180 --> 00:09:18.740
+We need to know the distribution of the microstates.
+
+00:09:19.379 --> 00:09:23.460
+In other words, we need to know the probability that we see any particular microstate.
+
+00:09:24.340 --> 00:09:28.399
+It turns out that the probability of a microstate x is proportional to the exponential
+
+00:09:28.399 --> 00:09:32.600
+of the negation of the energy of the microstate over over the temperature of the system.
+
+00:09:33.320 --> 00:09:35.372
+This is called the Boltzmann distribution, and
+
+00:09:35.372 --> 00:09:37.960
+understanding this is our first main task for this video.
+
+00:09:39.000 --> 00:09:43.400
+If you've seen this before, you might remember a factor of k in the denominator here.
+
+00:09:44.040 --> 00:09:47.640
+This is called Boltzmann's constant, and we'll just ignore it in this video.
+
+00:09:48.520 --> 00:09:51.115
+We can do this by choosing our units in such a
+
+00:09:51.115 --> 00:09:53.880
+way that the numerical value of k is equal to 1.
+
+00:09:54.840 --> 00:09:57.293
+Anyway, this formula actually already explains how
+
+00:09:57.293 --> 00:10:00.040
+phase transitions can arise as we vary the temperature.
+
+00:10:00.960 --> 00:10:04.480
+So, before we prove the Boltzmann formula itself, let's see how this works.
+
+00:10:06.080 --> 00:10:10.160
+First, states with higher energy have lower probability and vice versa.
+
+00:10:10.800 --> 00:10:13.600
+This agrees with the fact that nature likes to minimize energy.
+
+00:10:14.400 --> 00:10:17.067
+But this doesn't necessarily mean that we'll typically see a
+
+00:10:17.067 --> 00:10:20.000
+microstate with very low energy under the Boltzmann distribution.
+
+00:10:20.800 --> 00:10:24.320
+In order to understand which energy levels are more likely we also have
+
+00:10:24.320 --> 00:10:27.840
+to account for the number of microstates at a particular energy level.
+
+00:10:28.640 --> 00:10:32.384
+Lets use Omega E to denote the set of microstates with energy e.
+
+00:10:32.384 --> 00:10:35.777
+Since all of these microstates have the same probability,
+
+00:10:35.777 --> 00:10:39.287
+which is proportional to the exponential of minus E over T,
+
+00:10:39.287 --> 00:10:43.733
+the probability that we get a microstate in Omega E is proportional to this
+
+00:10:43.733 --> 00:10:48.354
+exponential factor times the size of Omega E. To put things on common footing,
+
+00:10:48.354 --> 00:10:52.800
+we can move the size of Omega E into the exponential by taking a logarithm.
+
+00:10:53.200 --> 00:10:57.640
+The logarithm of the size of Omega E is actually a very important quantity
+
+00:10:57.640 --> 00:11:02.140
+called the entropy of the system at energy level E, and we denote it by S.
+
+00:11:02.140 --> 00:11:07.480
+Keep in mind that in this context, the entropy S is actually a function of the energy E,
+
+00:11:07.480 --> 00:11:11.740
+although for now we'll just write it as S to keep the notation simple.
+
+00:11:12.860 --> 00:11:16.044
+From this formula, we can see that the most likely energy
+
+00:11:16.044 --> 00:11:19.340
+level is the one where minus E over t plus S is maximized.
+
+00:11:20.460 --> 00:11:25.730
+Since temperature is non negative, this is equivalent to minimizing E minus T times S.
+
+00:11:26.840 --> 00:11:28.920
+This important quantity is called the free energy.
+
+00:11:29.720 --> 00:11:32.760
+Let's take a minute to see how this minimization problem is solved.
+
+00:11:34.280 --> 00:11:36.570
+First, when the temperature is very low, changing
+
+00:11:36.570 --> 00:11:39.000
+the entropy doesn't change the free energy by much.
+
+00:11:39.400 --> 00:11:43.400
+So minimizing the free energy essentially amounts to minimizing the energy itself.
+
+00:11:44.680 --> 00:11:48.100
+At high temperatures, changes in entropy are much more important,
+
+00:11:48.100 --> 00:11:52.520
+and so the minimization of free energy is driven by maximizing the entropy instead.
+
+00:11:54.000 --> 00:11:56.672
+In summary, nature tries to minimize the free energy and
+
+00:11:56.672 --> 00:11:59.440
+at different temperatures this is done in different ways.
+
+00:12:00.720 --> 00:12:03.402
+This simple fact is ultimately what leads to the different
+
+00:12:03.402 --> 00:12:05.760
+phases of matter and the transitions between them.
+
+00:12:07.200 --> 00:12:09.760
+We can see this principle in action using our simulation.
+
+00:12:10.880 --> 00:12:13.780
+For now, let's consider a situation with a fixed
+
+00:12:13.780 --> 00:12:16.800
+number N of molecules represented by blue pixels.
+
+00:12:17.840 --> 00:12:21.106
+The molecules can move around from pixel to pixel inside of a box,
+
+00:12:21.106 --> 00:12:24.470
+but it's energetically favorable for them to be next to each other.
+
+00:12:25.910 --> 00:12:30.390
+This is inspired by real intermolecular interactions, which have a sort of sweet spot.
+
+00:12:30.710 --> 00:12:34.790
+Molecules really don't like to be too close, but they also don't like to be too far apart.
+
+00:12:35.670 --> 00:12:38.137
+We encode the fact that the molecules can't be too
+
+00:12:38.137 --> 00:12:40.950
+close by the fact that each pixel can contain at most 1.
+
+00:12:41.590 --> 00:12:45.334
+And we encode the fact that they don't like to be too far apart by giving each
+
+00:12:45.334 --> 00:12:49.270
+pair of molecules an energy of minus 1 if they are adjacent and 0 if they're not.
+
+00:12:49.710 --> 00:12:51.230
+Remember, lower energy is better.
+
+00:12:52.830 --> 00:12:55.895
+In other words, we can actually write the energy of a microstate
+
+00:12:55.895 --> 00:12:59.390
+explicitly as minus the number of pairs of molecules which are adjacent.
+
+00:13:00.350 --> 00:13:03.550
+Since having lower energy is good, I'll put a little green diamond
+
+00:13:03.550 --> 00:13:06.556
+between each pair of adjacent molecules so that the energy is
+
+00:13:06.556 --> 00:13:09.950
+exactly equal to the negative of the number of little green diamonds.
+
+00:13:09.950 --> 00:13:10.350
+You see.
+
+00:13:11.390 --> 00:13:13.934
+Note that we're totally ignoring kinetic energy here,
+
+00:13:13.934 --> 00:13:16.670
+so our model isn't exactly a realistic fluid simulation.
+
+00:13:16.830 --> 00:13:18.030
+But that's not the point.
+
+00:13:18.960 --> 00:13:21.195
+The main point of this model is to be as simple as
+
+00:13:21.195 --> 00:13:23.520
+possible while still exhibiting a phase transition.
+
+00:13:24.560 --> 00:13:28.528
+And at high and low temperatures, we can see two distinct behaviors emerging,
+
+00:13:28.528 --> 00:13:29.920
+which we call macrostates.
+
+00:13:31.040 --> 00:13:34.933
+At high temperatures, the molecules bounce around and mostly ignore one another,
+
+00:13:34.933 --> 00:13:36.880
+which is how molecules behave in a gas.
+
+00:13:37.200 --> 00:13:38.960
+So this is a gas macrostate.
+
+00:13:39.760 --> 00:13:43.360
+At low temperatures, though, the molecules start to clump up into a droplet.
+
+00:13:43.770 --> 00:13:45.210
+This is a liquid macrostate.
+
+00:13:46.170 --> 00:13:49.263
+The energy of a droplet is much lower since there are more
+
+00:13:49.263 --> 00:13:52.410
+pairs of adjacent molecules represented by green diamonds.
+
+00:13:53.130 --> 00:13:55.853
+But at the same time, the entropy is also lower since
+
+00:13:55.853 --> 00:13:58.730
+there are far fewer configurations that look like this.
+
+00:13:59.850 --> 00:14:02.761
+If you just chose a random configuration of N molecules in a
+
+00:14:02.761 --> 00:14:05.770
+box without considering the energy, there is basically no way
+
+00:14:05.770 --> 00:14:08.730
+that you'd choose a configuration that looks like a droplet.
+
+00:14:09.780 --> 00:14:11.878
+Instead, you get something that looks like a gas,
+
+00:14:11.878 --> 00:14:14.404
+since there are just more microstates that look like this,
+
+00:14:14.404 --> 00:14:15.860
+although they have higher energy.
+
+00:14:17.140 --> 00:14:21.124
+But at low temperatures, when you're considering energy as an important factor,
+
+00:14:21.124 --> 00:14:24.100
+the higher energy gas configurations lose to the droplets.
+
+00:14:24.980 --> 00:14:29.380
+Notice that there are no macrostates with both low energy and high entropy.
+
+00:14:30.100 --> 00:14:33.047
+So when minimizing the free energy, our simulation can't
+
+00:14:33.047 --> 00:14:36.100
+just minimize energy and maximize entropy simultaneously.
+
+00:14:37.180 --> 00:14:40.976
+Instead, it has to choose which of these optimization tasks is more important,
+
+00:14:40.976 --> 00:14:43.020
+and that's determined by the temperature.
+
+00:14:44.380 --> 00:14:48.189
+I think this point that energy and entropy are in competition with each other,
+
+00:14:48.189 --> 00:14:51.022
+and that this competition is mediated by the temperature,
+
+00:14:51.022 --> 00:14:52.780
+is the main takeaway of this video.
+
+00:14:53.660 --> 00:14:57.061
+This is all a consequence of the formula for the Boltzmann distribution,
+
+00:14:57.061 --> 00:15:01.029
+where the probability of a particular microstate is proportional to the exponential
+
+00:15:01.029 --> 00:15:05.280
+of the negative of the energy of the microstate divided by the temperature of the system.
+
+00:15:06.400 --> 00:15:09.840
+But we still haven't seen exactly why this is the correct formula.
+
+00:15:10.240 --> 00:15:12.640
+So our next task will be to explain this.
+
+00:15:13.440 --> 00:15:15.826
+After that, we'll be ready to really understand what's
+
+00:15:15.826 --> 00:15:18.080
+going on in the simulations I've shown you so far.
+
+00:15:19.599 --> 00:15:23.749
+It will actually take us a few steps to get to this formula for the Boltzmann
+
+00:15:23.749 --> 00:15:26.714
+distribution, but bear with me, because along the way,
+
+00:15:26.714 --> 00:15:30.595
+we'll get a more precise Understanding of what temperature actually is,
+
+00:15:30.595 --> 00:15:33.290
+lets first consider a completely isolated system.
+
+00:15:34.010 --> 00:15:37.464
+This system has no way to exchange energy with the outside world,
+
+00:15:37.464 --> 00:15:41.130
+and so every possible microstate of this system has the same energy.
+
+00:15:42.090 --> 00:15:45.219
+In fact, by the same reasoning, there's essentially no way to tell
+
+00:15:45.219 --> 00:15:48.490
+the possible microstates of this system apart in any meaningful way.
+
+00:15:49.290 --> 00:15:53.023
+In this situation, the only reasonable probability distribution on the
+
+00:15:53.023 --> 00:15:56.970
+microstates is the one where every possible microstate is equally likely.
+
+00:15:58.160 --> 00:16:02.756
+In other words, if the collection of microstates of an isolated system at fixed energy
+
+00:16:02.756 --> 00:16:07.511
+level E is called Omega E, then each possible microstate will be chosen with probability
+
+00:16:07.511 --> 00:16:12.000
+1 over the size of Omega E, because all of the probabilities need to add up to one.
+
+00:16:12.960 --> 00:16:15.804
+This fact that in an isolated system at fixed energy E,
+
+00:16:15.804 --> 00:16:20.302
+all microstates are equally likely will come up a few more times during our derivation
+
+00:16:20.302 --> 00:16:21.440
+of the Boltzmann law.
+
+00:16:21.760 --> 00:16:22.960
+So keep this in mind.
+
+00:16:25.200 --> 00:16:29.327
+Now, what would happen if we have two isolated systems at different energies and then
+
+00:16:29.327 --> 00:16:33.600
+suddenly put them in contact, allowing energy to transfer from one system to the other?
+
+00:16:34.560 --> 00:16:37.827
+Well, one thing we know from experience is that after enough time,
+
+00:16:37.827 --> 00:16:41.440
+the temperatures of two things in contact with each other will equalize.
+
+00:16:42.000 --> 00:16:45.440
+But what is temperature actually?
+
+00:16:45.520 --> 00:16:48.326
+This fact that temperature equalizes when things are
+
+00:16:48.326 --> 00:16:51.240
+put into contact is essentially all we know about it.
+
+00:16:51.880 --> 00:16:54.002
+So let's try to figure out what quantity must
+
+00:16:54.002 --> 00:16:56.360
+equalize once the system has reached equilibrium.
+
+00:16:57.320 --> 00:16:59.400
+To do this, let's formalize things a bit.
+
+00:16:59.720 --> 00:17:02.941
+At any given instant, system one will have some energy,
+
+00:17:02.941 --> 00:17:06.280
+which we'll call E1, and system two will have energy E2.
+
+00:17:06.760 --> 00:17:12.120
+The total energy of the combined system is E1 plus E2, and that can't be changed.
+
+00:17:12.440 --> 00:17:15.480
+But energy can move back and forth between the two subsystems.
+
+00:17:16.020 --> 00:17:19.460
+So E1 can increase if E2 decreases by the same amount.
+
+00:17:20.100 --> 00:17:22.805
+We'll use DE to denote a small energy packet that
+
+00:17:22.805 --> 00:17:25.620
+could be transferred from one system to the other.
+
+00:17:26.420 --> 00:17:30.671
+These small energy packets will continuously be transferred back and forth randomly,
+
+00:17:30.671 --> 00:17:33.911
+and the system reaches equilibrium when there's no overall flow
+
+00:17:33.911 --> 00:17:36.340
+of energy packets from one system to the other.
+
+00:17:36.500 --> 00:17:39.540
+Or in other words, when both directions are equally likely.
+
+00:17:40.340 --> 00:17:42.398
+But what determines the chances that an energy
+
+00:17:42.398 --> 00:17:44.500
+packet will flow from one system to the other?
+
+00:17:45.230 --> 00:17:48.370
+Well, remember that the combined system is in isolation,
+
+00:17:48.370 --> 00:17:51.790
+so each microstate of the combined system is equally likely.
+
+00:17:52.750 --> 00:17:56.882
+This means that we need to understand the number of combined microstates of the
+
+00:17:56.882 --> 00:18:00.910
+combined system with various splits of the energy across the two subsystems.
+
+00:18:01.710 --> 00:18:05.576
+If there are more combined microstates with energy split E1,
+
+00:18:05.576 --> 00:18:09.184
+DE and E2DE than there are with energy split E1 and E2,
+
+00:18:09.184 --> 00:18:14.339
+then an energy packet DE will be more likely to flow from system 2 to system 1,
+
+00:18:14.339 --> 00:18:19.880
+simply because there are more possibilities for the energy to flow in this direction.
+
+00:18:21.560 --> 00:18:26.183
+Let's use Omega E1 E2 to denote the set of combined microstates
+
+00:18:26.183 --> 00:18:30.440
+with energy E1 in system one and energy E2 in system two.
+
+00:18:31.080 --> 00:18:35.498
+This is the same as the Cartesian product of the set of microstates of system
+
+00:18:35.498 --> 00:18:39.630
+1 with energy E1 and the set of microstates of system 2 with energy E2.
+
+00:18:39.870 --> 00:18:43.756
+Since any combined microstate with the correct energy configuration is valid,
+
+00:18:43.756 --> 00:18:47.390
+and a combined microstate is the same thing as its two pieces combined.
+
+00:18:48.350 --> 00:18:51.676
+So we can consider a sort of combined entropy S12,
+
+00:18:51.676 --> 00:18:54.670
+which is the log of the size of omega E1 E2.
+
+00:18:55.070 --> 00:18:58.670
+And this is just the sum of the entropies of the two subsystems
+
+00:18:58.670 --> 00:19:02.270
+at their respective energies, which we'll denote by S1 and S2.
+
+00:19:03.610 --> 00:19:09.084
+Now, to determine if there are more combined microstates with energy split E1DE and E2DE,
+
+00:19:09.084 --> 00:19:14.250
+we should consider the change in this combined entropy, which we'll denote by ds12.
+
+00:19:14.970 --> 00:19:18.071
+If this change is positive, then the energy packet de
+
+00:19:18.071 --> 00:19:21.290
+will be more likely to flow from system 2 to system 1.
+
+00:19:22.090 --> 00:19:25.093
+Since the energy packet is very small, the change in combined
+
+00:19:25.093 --> 00:19:27.948
+entropy can be written in terms of the derivatives of the
+
+00:19:27.948 --> 00:19:31.050
+two entropies as functions of the energies of the two systems.
+
+00:19:31.050 --> 00:19:31.690
+Like this.
+
+00:19:32.070 --> 00:19:35.108
+Using the chain rule factoring out DE like this,
+
+00:19:35.108 --> 00:19:39.981
+we find that energy is more likely to flow from system 2 to system 1 as long
+
+00:19:39.981 --> 00:19:44.664
+as the derivative of S1 with respect to E1 is greater than the derivative
+
+00:19:44.664 --> 00:19:46.310
+of S2 with respect to E2.
+
+00:19:47.110 --> 00:19:50.020
+Similar reasoning shows that energy is more likely to flow
+
+00:19:50.020 --> 00:19:53.030
+in the opposite direction if the opposite inequality holds.
+
+00:19:53.990 --> 00:19:56.217
+Remember, equilibrium is reached when energy is
+
+00:19:56.217 --> 00:19:58.870
+equally likely to flow from either system to the other.
+
+00:19:59.660 --> 00:20:03.420
+This means that these two derivatives must be equal at equilibrium.
+
+00:20:03.980 --> 00:20:04.940
+And here it is.
+
+00:20:05.100 --> 00:20:08.460
+This is the quantity which equalizes when systems are brought into contact.
+
+00:20:08.780 --> 00:20:10.220
+Exactly what we were looking for.
+
+00:20:11.100 --> 00:20:12.460
+But is this temperature?
+
+00:20:13.340 --> 00:20:14.620
+Actually, not quite.
+
+00:20:15.180 --> 00:20:19.100
+We usually think that energy flows from a hotter system to a colder one.
+
+00:20:19.340 --> 00:20:22.340
+But we just saw that energy flows from the system with a lower
+
+00:20:22.340 --> 00:20:25.340
+value of this derivative to the system with the higher value.
+
+00:20:26.430 --> 00:20:30.750
+So the derivative of entropy with respect to energy is actually one over temperature.
+
+00:20:32.030 --> 00:20:35.919
+To get a better understanding for why this is the correct definition for temperature,
+
+00:20:35.919 --> 00:20:38.710
+let's just take a step back and review the math we just did.
+
+00:20:38.710 --> 00:20:42.795
+On a more intuitive level, generally increasing the Energy also
+
+00:20:42.795 --> 00:20:46.750
+increases the number of microstates available to the system.
+
+00:20:47.550 --> 00:20:51.134
+For instance, like we saw before, there are many more gas microstates
+
+00:20:51.134 --> 00:20:54.510
+than there are liquid microstates in our discretized simulation.
+
+00:20:55.720 --> 00:20:58.699
+But this increase is not consistent at high temperatures,
+
+00:20:58.699 --> 00:21:02.044
+when the derivative of entropy with respect to energy is small,
+
+00:21:02.044 --> 00:21:06.120
+adding or removing energy doesn't impact the number of microstates that much.
+
+00:21:07.160 --> 00:21:10.724
+On the other hand, at low temperatures, when this derivative is large,
+
+00:21:10.724 --> 00:21:15.000
+adding even a little bit of energy can increase the number of microstates by a lot.
+
+00:21:16.040 --> 00:21:19.427
+So when two systems are in contact to get more combined microstates,
+
+00:21:19.427 --> 00:21:23.562
+it makes sense for a high temperature system to donate energy to a low temperature
+
+00:21:23.562 --> 00:21:23.960
+system.
+
+00:21:24.730 --> 00:21:27.290
+And this is how we understand temperature intuitively.
+
+00:21:29.610 --> 00:21:32.404
+Now that we know what temperature is, we can derive the formula
+
+00:21:32.404 --> 00:21:35.375
+for the Boltzmann distribution of a system at fixed temperature T.
+
+00:21:35.375 --> 00:21:37.770
+But how can we control the temperature of our system?
+
+00:21:38.890 --> 00:21:43.016
+One way is to put it in contact with a huge reservoir of energy at that temperature,
+
+00:21:43.016 --> 00:21:44.490
+sometimes called a heat bath.
+
+00:21:44.490 --> 00:21:46.090
+Although it could also be cold.
+
+00:21:46.650 --> 00:21:49.801
+The temperatures will equalize between our system and the heat bath,
+
+00:21:49.801 --> 00:21:53.090
+but the temperature of the huge heat bath won't change by much at all.
+
+00:21:53.890 --> 00:21:56.548
+So the resulting temperature of our little system will
+
+00:21:56.548 --> 00:21:59.650
+essentially be set to the same temperature T as the heat bath.
+
+00:22:00.930 --> 00:22:04.592
+Now, we want to figure out the probability that we see a particular microstate,
+
+00:22:04.592 --> 00:22:06.770
+say X, when we just look at the little system.
+
+00:22:07.410 --> 00:22:11.098
+But again, the combined system of the heat bath plus the little
+
+00:22:11.098 --> 00:22:14.610
+system is isolated and has some fixed total energy, say E0.
+
+00:22:15.580 --> 00:22:17.860
+So each combined microstate is equally likely.
+
+00:22:17.860 --> 00:22:21.323
+Again, this means that the probability that we see a particular
+
+00:22:21.323 --> 00:22:24.842
+microstate X in the little system is proportional to the number
+
+00:22:24.842 --> 00:22:28.140
+of microstates of the heat bath that are compatible with X.
+
+00:22:29.100 --> 00:22:31.658
+Since the two systems can only exchange energy,
+
+00:22:31.658 --> 00:22:35.523
+a microstate of the heat bath is compatible with a microstate X of the
+
+00:22:35.523 --> 00:22:38.353
+little system exactly when it has the right energy,
+
+00:22:38.353 --> 00:22:41.020
+which is the total energy minus the energy of x.
+
+00:22:41.880 --> 00:22:45.512
+So the set of heat bath microstates compatible with X is the same as the set
+
+00:22:45.512 --> 00:22:49.240
+of microstates with this energy, which we can write using our Omega notation.
+
+00:22:49.880 --> 00:22:53.960
+This is the exponential of the entropy of the heat bath at this particular energy.
+
+00:22:55.000 --> 00:22:58.627
+Now remember, the heat bath is huge and can basically donate as much
+
+00:22:58.627 --> 00:23:02.040
+energy as the little system needs without changing temperature.
+
+00:23:02.840 --> 00:23:05.168
+In other words, for all relevant energy values,
+
+00:23:05.168 --> 00:23:09.576
+the derivative of the entropy of the heat bath with respect to its energy is a constant,
+
+00:23:09.576 --> 00:23:11.310
+which is one over the temperature.
+
+00:23:12.110 --> 00:23:17.177
+This means that the entropy of the heat bath at energy E 0 minus
+
+00:23:17.177 --> 00:23:22.165
+E is essentially the same as its entropy at energy E0 minus 1,
+
+00:23:22.165 --> 00:23:27.470
+t times E. Let's call the entropy of the heat bath at energy E0s0.
+
+00:23:28.510 --> 00:23:30.670
+Now, we can factor the exponential like this.
+
+00:23:31.470 --> 00:23:35.207
+Since the exponential of S0 is a constant which doesn't depend on X,
+
+00:23:35.207 --> 00:23:38.340
+we can just absorb that in our proportionality relation.
+
+00:23:38.820 --> 00:23:42.007
+And we find that the probability of X is proportional to the
+
+00:23:42.007 --> 00:23:45.140
+exponential of minus the energy of X over the temperature.
+
+00:23:45.380 --> 00:23:46.660
+Exactly what we wanted.
+
+00:23:47.300 --> 00:23:51.239
+This finishes the proof of Boltzmann's formula for the probability
+
+00:23:51.239 --> 00:23:54.640
+of microstates in a system at temperature T. This is the
+
+00:23:54.640 --> 00:23:58.340
+distribution that the simulation I've shown is sampling from.
+
+00:23:58.980 --> 00:24:02.758
+So far, we've been considering configurations where there are a fixed number of
+
+00:24:02.758 --> 00:24:06.728
+molecules and the energy of a microstate is the negative of the number of pairs of
+
+00:24:06.728 --> 00:24:10.793
+adjacent molecules, which we could also see visually as the number of green diamonds
+
+00:24:10.793 --> 00:24:11.080
+here.
+
+00:24:11.960 --> 00:24:15.055
+This mimics the fact that intermolecular forces have a sweet spot
+
+00:24:15.055 --> 00:24:17.960
+where molecules prefer to be relatively close to each other.
+
+00:24:19.239 --> 00:24:21.960
+So now we understand this distribution on some level.
+
+00:24:22.280 --> 00:24:25.390
+But just knowing the Boltzmann formula is not enough to actually
+
+00:24:25.390 --> 00:24:28.840
+sample from this distribution, at least not efficiently on a computer.
+
+00:24:29.920 --> 00:24:32.455
+The key reason for this is that there are exponentially
+
+00:24:32.455 --> 00:24:34.160
+many different possible microstates.
+
+00:24:34.880 --> 00:24:38.654
+So even though we have a formula for the distribution which does allow us to
+
+00:24:38.654 --> 00:24:42.676
+implement some basic sampling procedure, like generating a uniform random number
+
+00:24:42.676 --> 00:24:46.648
+and choosing the microstate based on a division of the unit interval into bins,
+
+00:24:46.648 --> 00:24:50.720
+this kind of procedure will take an exponentially long time to run on a computer.
+
+00:24:51.600 --> 00:24:54.480
+So how are we getting the samples you're seeing on the screen right now?
+
+00:24:55.550 --> 00:24:59.710
+Well, you probably noticed that the simulation is continuously changing over time.
+
+00:24:59.870 --> 00:25:03.390
+So we're not just getting a sample from the Boltzmann distribution in one go.
+
+00:25:04.110 --> 00:25:06.823
+Instead, we're making a bunch of small, manageable random
+
+00:25:06.823 --> 00:25:09.870
+changes to the picture that eventually lead to a proper sample.
+
+00:25:10.430 --> 00:25:12.430
+You can think of this like shuffling cards.
+
+00:25:12.750 --> 00:25:15.589
+Each time you shuffle, a little bit of randomness is added,
+
+00:25:15.589 --> 00:25:19.630
+and eventually you get a roughly uniform distribution on the arrangements of cards.
+
+00:25:21.000 --> 00:25:24.116
+For this simulation, at each time step, we choose two pixels,
+
+00:25:24.116 --> 00:25:27.488
+and if there's a molecule in only one, we randomly decide whether
+
+00:25:27.488 --> 00:25:31.320
+or not to switch the position of the molecule from one pixel to the other.
+
+00:25:32.280 --> 00:25:34.760
+But how do we decide the probability of the swap?
+
+00:25:35.240 --> 00:25:38.200
+Here's where we use our formula for the Boltzmann distribution.
+
+00:25:39.000 --> 00:25:42.240
+Let's call the microstate we've currently got X and the microstate.
+
+00:25:42.240 --> 00:25:46.337
+With the molecules swapped X' by our formula we know that the ratio of these
+
+00:25:46.337 --> 00:25:51.080
+probabilities is exactly the exponential of the energy difference over the temperature.
+
+00:25:52.560 --> 00:25:55.834
+Here we're using the fact that the proportionality constant that's
+
+00:25:55.834 --> 00:25:58.960
+hidden in the Boltzmann formula is the same for both X and X'.
+
+00:25:59.200 --> 00:26:01.920
+So it cancels out and we actually get an equality here.
+
+00:26:03.280 --> 00:26:07.134
+Now, given that we've chosen this pair of pixels to potentially swap,
+
+00:26:07.134 --> 00:26:09.200
+we can only choose between X and X'.
+
+00:26:09.840 --> 00:26:13.847
+So given that we've only got two choices and we know the ratio of their probabilities,
+
+00:26:13.847 --> 00:26:16.596
+we can also find each probability individually because the
+
+00:26:16.596 --> 00:26:18.320
+probabilities have to add up to one.
+
+00:26:19.310 --> 00:26:23.433
+If you only have two choices and the ratio of their probabilities is Q,
+
+00:26:23.433 --> 00:26:27.150
+then the raw probability of the choice in the numerator is Q1Q.
+
+00:26:28.110 --> 00:26:31.432
+So this is the probability that we pick X', or in other words,
+
+00:26:31.432 --> 00:26:33.790
+the probability that we swap the molecules.
+
+00:26:34.830 --> 00:26:36.270
+And that's basically it.
+
+00:26:36.670 --> 00:26:39.470
+Repeating this one step is the entire algorithm.
+
+00:26:41.550 --> 00:26:43.710
+Now, it's important that the energy difference
+
+00:26:43.710 --> 00:26:45.870
+here can actually be calculated quite easily.
+
+00:26:46.540 --> 00:26:49.242
+This is because it only depends on the at most 8 pixels
+
+00:26:49.242 --> 00:26:52.140
+surrounding the two that we've chosen to potentially swap.
+
+00:26:52.700 --> 00:26:58.140
+So this algorithm can easily be run on a computer, and it's really not that complicated.
+
+00:26:58.380 --> 00:27:02.030
+I hope that by this point in the video, if you have some programming experience,
+
+00:27:02.030 --> 00:27:03.900
+you could make this simulation yourself.
+
+00:27:04.860 --> 00:27:07.511
+By the way, this algorithm is called Kawasaki Dynamics,
+
+00:27:07.511 --> 00:27:11.415
+and it's an example of a more general class of algorithms that go by the name of
+
+00:27:11.415 --> 00:27:12.620
+Markovchain Monte Carlo.
+
+00:27:14.600 --> 00:27:16.901
+One thing you might be wondering about is why don't we
+
+00:27:16.901 --> 00:27:19.160
+force the swap to happen between neighboring pixels?
+
+00:27:19.480 --> 00:27:21.681
+After all, that would be a more realistic choice,
+
+00:27:21.681 --> 00:27:24.600
+since we wouldn't have molecules teleporting all over the place.
+
+00:27:25.160 --> 00:27:27.853
+But as I mentioned before, this procedure shouldn't really
+
+00:27:27.853 --> 00:27:30.360
+be thought of as a simulation of real fluid dynamics.
+
+00:27:30.600 --> 00:27:34.040
+It's just a sort of random walk through the space of possible microstates.
+
+00:27:34.760 --> 00:27:37.404
+As it turns out, by running this random walk for long enough,
+
+00:27:37.404 --> 00:27:40.828
+we do end up getting a sample that's very close to the Boltzmann distribution,
+
+00:27:40.828 --> 00:27:43.212
+just like how when you shuffle a deck of cards enough,
+
+00:27:43.212 --> 00:27:46.550
+its distribution gets close to the uniform distribution on all arrangements.
+
+00:27:47.670 --> 00:27:51.233
+Actually, this also holds for the algorithm where we only swap neighboring pixels,
+
+00:27:51.233 --> 00:27:54.710
+but the number of steps it would take to get an accurate sample is much higher.
+
+00:27:55.270 --> 00:27:58.256
+This is similar to how there are multiple different ways to shuffle cards,
+
+00:27:58.256 --> 00:27:59.910
+but some are more efficient than others.
+
+00:28:00.950 --> 00:28:04.755
+With the algorithm I've presented here, which allows for teleportation,
+
+00:28:04.755 --> 00:28:08.185
+we can even look at a slightly Bigger simulation and we can see
+
+00:28:08.185 --> 00:28:11.240
+the change in behavior as the temperature changes again.
+
+00:28:11.240 --> 00:28:15.133
+At high temperatures we see a gaseous phase with high energy and entropy,
+
+00:28:15.133 --> 00:28:19.240
+while at low temperatures we see a liquid phase with low energy and entropy.
+
+00:28:20.120 --> 00:28:22.900
+Additionally, the phase transition doesn't happen all at once,
+
+00:28:22.900 --> 00:28:26.038
+especially when we're going from high temperature to low temperature,
+
+00:28:26.038 --> 00:28:28.280
+since it takes the molecules a while to clump up.
+
+00:28:30.360 --> 00:28:32.734
+Now, I promised a simulation which has a phase
+
+00:28:32.734 --> 00:28:35.160
+diagram similar to that of H2O in this region.
+
+00:28:36.180 --> 00:28:39.316
+But this is a two dimensional phase diagram and so far we've only
+
+00:28:39.316 --> 00:28:42.259
+got temperature as a parameter, meaning the model we've been
+
+00:28:42.259 --> 00:28:45.540
+considering so far could only have a one dimensional phase diagram.
+
+00:28:46.500 --> 00:28:49.324
+The other axis on the standard phase diagram is pressure,
+
+00:28:49.324 --> 00:28:53.140
+but we're actually going to use a different second parameter for this video.
+
+00:28:54.260 --> 00:28:59.013
+In the same way that temperature is defined as the thing which equalizes when systems
+
+00:28:59.013 --> 00:29:03.822
+are allowed to swap energy, pressure can be defined as the thing which equalizes when
+
+00:29:03.822 --> 00:29:08.407
+systems are also allowed to swap volume, maybe by using a moving wall between the
+
+00:29:08.407 --> 00:29:08.910
+systems.
+
+00:29:09.710 --> 00:29:12.406
+But in our simulation it might be a bit tough to
+
+00:29:12.406 --> 00:29:14.990
+expand and contract the container on the fly.
+
+00:29:15.550 --> 00:29:19.564
+Instead, we'll allow the number of molecules to change when two systems are
+
+00:29:19.564 --> 00:29:23.470
+brought into contact with a permeable wall which lets molecules through.
+
+00:29:23.710 --> 00:29:26.510
+The thing which equalizes is called the chemical potential.
+
+00:29:27.760 --> 00:29:31.288
+If you have some fancy setup with multiple different kinds of molecules,
+
+00:29:31.288 --> 00:29:34.719
+each kind of molecule will have its own associated chemical potential
+
+00:29:34.719 --> 00:29:38.737
+which will equalize when two systems are put into contact using a permeable wall,
+
+00:29:38.737 --> 00:29:41.040
+which only lets that type of molecule through.
+
+00:29:41.920 --> 00:29:46.601
+We only have one type of molecule though, so we'll only have one chemical potential
+
+00:29:46.601 --> 00:29:51.056
+which we'll call C. This is defined as minus T times the derivative of entropy
+
+00:29:51.056 --> 00:29:55.625
+S with respect to the number of molecules n. By the way, unlike the temperature,
+
+00:29:55.625 --> 00:30:00.080
+which is always non negative, the chemical potential could be any real number.
+
+00:30:01.680 --> 00:30:06.059
+Now, we'll place our small system in a huge heat bath at fixed temperature and fixed
+
+00:30:06.059 --> 00:30:10.647
+chemical potential, and allow our system to exchange energy and molecules with the heat
+
+00:30:10.647 --> 00:30:10.960
+bath.
+
+00:30:11.840 --> 00:30:15.480
+Using an argument similar to the one we used when deriving the formula for the
+
+00:30:15.480 --> 00:30:18.933
+Boltzmann distribution, we can see that the probability of any particular
+
+00:30:18.933 --> 00:30:22.527
+microstate of our small system is now proportional to the exponential of the
+
+00:30:22.527 --> 00:30:26.120
+negative of one over the temperature times the energy of the microstate plus
+
+00:30:26.120 --> 00:30:29.713
+the chemical potential over the temperature times the number of molecules in
+
+00:30:29.713 --> 00:30:30.460
+the microstate.
+
+00:30:31.020 --> 00:30:33.994
+This means that when the chemical potential is positive,
+
+00:30:33.994 --> 00:30:37.180
+microstates with more molecules are favored and vice versa.
+
+00:30:38.300 --> 00:30:42.265
+Another way to think about this is that we're redefining the energy function like this,
+
+00:30:42.265 --> 00:30:45.820
+so that it depends on the chemical potential and the molecule number as well.
+
+00:30:46.550 --> 00:30:49.110
+This way we still have the same Boltzmann formula as before.
+
+00:30:51.190 --> 00:30:54.950
+Allowing the number of molecules to change actually makes the simulation easier.
+
+00:30:55.430 --> 00:30:59.667
+Instead of choosing two pixels and possibly swapping a molecule from one to the other,
+
+00:30:59.667 --> 00:31:03.510
+we can just choose one pixel and randomly decide to add or remove a molecule.
+
+00:31:03.910 --> 00:31:07.035
+What this means is that each pixel can make its own decisions,
+
+00:31:07.035 --> 00:31:10.009
+and these decisions can actually be somewhat parallelized,
+
+00:31:10.009 --> 00:31:12.630
+meaning that this simulation can be run on the gpu.
+
+00:31:14.380 --> 00:31:17.126
+So we can increase the size of the simulation by a lot,
+
+00:31:17.126 --> 00:31:21.420
+and we can change the temperature and the chemical potential on the fly in real time.
+
+00:31:23.180 --> 00:31:25.982
+Now let's explore the phase diagram for this model,
+
+00:31:25.982 --> 00:31:29.004
+which describes the behavior as a function of T and C.
+
+00:31:29.004 --> 00:31:33.729
+This simulation is more spatially homogeneous than the one with fixed molecule count,
+
+00:31:33.729 --> 00:31:37.740
+so the density of molecules gives a decent large scale characterization.
+
+00:31:39.110 --> 00:31:43.247
+In other words, our phase diagram will be a function telling us the density
+
+00:31:43.247 --> 00:31:47.494
+of molecules for each value of the parameters T and C. At high temperatures,
+
+00:31:47.494 --> 00:31:51.190
+changing the chemical potential makes the density change smoothly.
+
+00:31:51.270 --> 00:31:53.750
+So the phase diagram looks something like this over here.
+
+00:31:54.549 --> 00:31:59.030
+This is the supercritical fluid phase, which interpolates smoothly between liquid and gas.
+
+00:32:00.390 --> 00:32:02.737
+When the chemical potential is greater than minus 2,
+
+00:32:02.737 --> 00:32:05.670
+changing the temperature also makes the density change smoothly.
+
+00:32:06.130 --> 00:32:09.570
+And we can fill in this corner of the diagram identifying the liquid phase.
+
+00:32:10.610 --> 00:32:14.409
+The density also changes smoothly with T when C is less than minus 2,
+
+00:32:14.409 --> 00:32:15.730
+which is the gas phase.
+
+00:32:15.810 --> 00:32:18.130
+And so the overall phase diagram looks like this.
+
+00:32:20.290 --> 00:32:23.930
+As promised, this looks like the phase diagram of H2O in this region,
+
+00:32:23.930 --> 00:32:27.569
+with a phase transition line between a liquid phase and a gas phase,
+
+00:32:27.569 --> 00:32:29.890
+as well as a region of supercritical fluid.
+
+00:32:30.850 --> 00:32:32.370
+To me, this is pretty amazing.
+
+00:32:33.020 --> 00:32:36.932
+After all, the model we're working with is almost nothing like the real world,
+
+00:32:36.932 --> 00:32:41.345
+where molecules have non trivial shapes and can move around freely in three dimensions,
+
+00:32:41.345 --> 00:32:45.358
+where kinetic energy is relevant at all, and where the intermolecular energy is
+
+00:32:45.358 --> 00:32:49.420
+much more complicated than just it's good when molecules are next to each other.
+
+00:32:50.460 --> 00:32:53.326
+Still, with all of these simplifications, we can recover behavior
+
+00:32:53.326 --> 00:32:56.060
+that is qualitatively similar to something in the real world.
+
+00:32:56.860 --> 00:32:59.428
+This is an example of the principle of universality,
+
+00:32:59.428 --> 00:33:03.131
+which is the idea that most specific details of a model shouldn't actually
+
+00:33:03.131 --> 00:33:04.020
+be too important.
+
+00:33:05.300 --> 00:33:09.608
+Universality posits that there are usually only a few fundamental microscopic rules
+
+00:33:09.608 --> 00:33:14.020
+that you need in order to see the same macroscopic behavior, at least qualitatively.
+
+00:33:15.540 --> 00:33:18.820
+This is maybe the Second and final key point of this video.
+
+00:33:19.460 --> 00:33:22.473
+But before we wrap things up, I want to talk a bit more about some
+
+00:33:22.473 --> 00:33:25.120
+of the interesting behavior we can observe in this model,
+
+00:33:25.120 --> 00:33:28.270
+as well as some connections to other models you might have heard of.
+
+00:33:30.270 --> 00:33:32.748
+First, you probably noticed these shapes expanding
+
+00:33:32.748 --> 00:33:34.830
+as we cross the line of phase transition.
+
+00:33:35.550 --> 00:33:39.594
+Since the density can't change smoothly as a function of the chemical potential,
+
+00:33:39.594 --> 00:33:42.526
+these droplets or bubbles need to form so that locally it
+
+00:33:42.526 --> 00:33:44.750
+always looks like either a liquid or a gas.
+
+00:33:45.870 --> 00:33:49.230
+As we change the temperature, the shape of the droplets changes as well.
+
+00:33:49.550 --> 00:33:53.070
+And this is simply due to the fact that we're working on a square lattice of pixels.
+
+00:33:53.820 --> 00:33:58.240
+At very low temperatures, the droplets really feel the shape of the lattice and become
+
+00:33:58.240 --> 00:34:01.889
+square themselves, while at higher but still subcritical temperatures,
+
+00:34:01.889 --> 00:34:03.020
+they look more round.
+
+00:34:03.900 --> 00:34:05.857
+It's actually possible to calculate the shape
+
+00:34:05.857 --> 00:34:07.900
+of these bubbles as a function of temperature.
+
+00:34:08.140 --> 00:34:10.220
+Look up the wolf shape if you want to learn more.
+
+00:34:12.060 --> 00:34:14.813
+You might have also noticed that we actually have to cross the
+
+00:34:14.813 --> 00:34:17.521
+phase transition line by a decent amount in order to see the
+
+00:34:17.521 --> 00:34:20.540
+droplets appearing and the phase transition happening in real time.
+
+00:34:21.250 --> 00:34:25.105
+If we instead only just barely cross the line from the gas to the liquid phase,
+
+00:34:25.105 --> 00:34:28.130
+you'll see that the system actually remains in the gas phase.
+
+00:34:28.690 --> 00:34:31.114
+This is because the phase transition actually needs
+
+00:34:31.114 --> 00:34:33.490
+to happen through the droplets we just discussed.
+
+00:34:33.890 --> 00:34:36.054
+If we artificially insert a big enough droplet,
+
+00:34:36.054 --> 00:34:38.770
+then it will slowly grow and fill up the whole simulation.
+
+00:34:39.250 --> 00:34:42.322
+But without this kickstart, the droplets that arise naturally in
+
+00:34:42.322 --> 00:34:44.866
+the gas won't get big enough to start this reaction,
+
+00:34:44.866 --> 00:34:48.370
+even though the liquid macrostate is the true phase at these parameters.
+
+00:34:49.380 --> 00:34:51.298
+Instead, they're overwhelmed by the gas around
+
+00:34:51.298 --> 00:34:53.300
+them and shrink back down as soon as they form.
+
+00:34:53.460 --> 00:34:56.900
+They just can't get big enough to be stable like the one we inserted artificially.
+
+00:34:58.260 --> 00:35:01.197
+This phenomenon is known as metastability, where the system
+
+00:35:01.197 --> 00:35:05.429
+remains in the wrong macrostate for a very long time if there's no external impulse,
+
+00:35:05.429 --> 00:35:07.620
+like our artificial insertion of a droplet.
+
+00:35:08.500 --> 00:35:10.952
+You might have seen something like this in real life,
+
+00:35:10.952 --> 00:35:13.773
+where water can be cooled slightly below its freezing point,
+
+00:35:13.773 --> 00:35:17.011
+but doesn't actually turn into ice until some external impulse starts
+
+00:35:17.011 --> 00:35:18.260
+a freezing chain reaction.
+
+00:35:21.100 --> 00:35:24.857
+Now let's take a look at the behavior of the model exactly at the critical point,
+
+00:35:24.857 --> 00:35:26.620
+the end of the phase transition line.
+
+00:35:27.740 --> 00:35:31.740
+The behavior here is somewhat unlike at any other point in the phase diagram.
+
+00:35:32.540 --> 00:35:36.177
+At the critical point, the molecules form strange fractal like structures,
+
+00:35:36.177 --> 00:35:39.076
+and there's a self similarity to the model at criticality,
+
+00:35:39.076 --> 00:35:42.860
+meaning that it looks essentially the same, no matter how much you zoom out.
+
+00:35:44.150 --> 00:35:48.270
+This doesn't happen away from the critical point anywhere except for the critical point.
+
+00:35:48.270 --> 00:35:51.430
+When you zoom out, the model becomes more and more homogeneous.
+
+00:35:52.230 --> 00:35:55.990
+At slightly higher temperatures, it becomes homogeneous with density 1/2.
+
+00:35:56.150 --> 00:36:00.630
+And at slightly lower temperatures, it becomes homogeneous with density either 1 or 0.
+
+00:36:02.550 --> 00:36:04.873
+The critical point is the only point where scaling
+
+00:36:04.873 --> 00:36:06.870
+the model doesn't seem to change anything.
+
+00:36:07.030 --> 00:36:10.583
+And this mysterious behavior sparks a lot of interesting ideas,
+
+00:36:10.583 --> 00:36:15.320
+including the critical brain hypothesis, which hypothesizes that brains are in some
+
+00:36:15.320 --> 00:36:19.380
+sense at criticality with the self similarity and multiscale structure,
+
+00:36:19.380 --> 00:36:24.230
+allowing for long range impulses and intercommunication in the brain without it being
+
+00:36:24.230 --> 00:36:26.260
+overwhelmed by electrical activity.
+
+00:36:26.900 --> 00:36:29.300
+But that is far beyond the scope of this video.
+
+00:36:31.780 --> 00:36:35.045
+Something slightly more accessible, which you might have heard of before,
+
+00:36:35.045 --> 00:36:35.940
+is the Ising model.
+
+00:36:36.180 --> 00:36:39.831
+This is a model of a magnet which consists of a bunch of tiny magnetic
+
+00:36:39.831 --> 00:36:43.690
+elements arranged in a grid, each of which is pointing either up or down.
+
+00:36:44.570 --> 00:36:47.490
+Neighboring elements would like to be aligned with each other,
+
+00:36:47.490 --> 00:36:51.210
+and there's an external field which also influences each element individually.
+
+00:36:52.330 --> 00:36:55.137
+If this simulation looks familiar, that's because it's exactly
+
+00:36:55.137 --> 00:36:58.170
+the same model as the fluid we've been looking at this whole time.
+
+00:36:58.650 --> 00:37:02.330
+Just identify a molecule with up and an empty space with down.
+
+00:37:03.210 --> 00:37:06.305
+Under this identification, we need to reinterpret the chemical
+
+00:37:06.305 --> 00:37:09.450
+potential as an external magnetic field over the whole magnet.
+
+00:37:10.820 --> 00:37:14.772
+In this particular simulation, I'm also imposing boundary conditions where the left
+
+00:37:14.772 --> 00:37:18.820
+border of the simulation is fixed to be up and the right border is fixed to be down.
+
+00:37:19.940 --> 00:37:22.709
+These are called dobrushin boundary conditions,
+
+00:37:22.709 --> 00:37:27.303
+and they lead to very interesting behavior, especially at the critical point,
+
+00:37:27.303 --> 00:37:31.780
+which is what we're looking at right now with this magnetic interpretation.
+
+00:37:31.860 --> 00:37:35.883
+Something interesting also happens if we allow the magnets to not just point up or down,
+
+00:37:35.883 --> 00:37:37.300
+but to point in any direction.
+
+00:37:38.270 --> 00:37:41.945
+For now, let's just let them point in any direction in two dimensional space,
+
+00:37:41.945 --> 00:37:43.950
+which I'll parameterize by a color wheel.
+
+00:37:44.590 --> 00:37:47.775
+Then we get a truly different model which actually doesn't have the
+
+00:37:47.775 --> 00:37:51.150
+same type of phase transition anymore, at least not in two dimensions.
+
+00:37:52.430 --> 00:37:56.510
+The fact that the direction of the magnet can change smoothly means that the elements
+
+00:37:56.510 --> 00:38:00.590
+will never end up all pointing in the same direction, even at very low temperatures.
+
+00:38:01.470 --> 00:38:05.008
+Instead, as we decrease the temperature, we see a new phenomenon where the
+
+00:38:05.008 --> 00:38:08.690
+color varies smoothly, except for at a few points where all the colors meet.
+
+00:38:09.650 --> 00:38:12.979
+These are called vortices, and they come in two different orientations
+
+00:38:12.979 --> 00:38:16.450
+depending on the direction in which the colors change around the vortex.
+
+00:38:17.410 --> 00:38:21.726
+Interestingly, these vortices behave somewhat like positively and negatively
+
+00:38:21.726 --> 00:38:26.156
+charged particles, and they interact with something like an electrical force,
+
+00:38:26.156 --> 00:38:30.472
+with vortices of opposite types attracting each other and a repulsive force
+
+00:38:30.472 --> 00:38:34.220
+between vortices of the same type of this is called the XY model.
+
+00:38:34.220 --> 00:38:39.968
+If you are curious and want to learn more, all of these models can also be considered
+
+00:38:39.968 --> 00:38:45.580
+in three dimensions, or even higher, or on other strange non euclidean geometries.
+
+00:38:46.620 --> 00:38:49.362
+Even in just three dimensions, our simple liquid vapor
+
+00:38:49.362 --> 00:38:51.900
+model is not as well understood as we might like.
+
+00:38:52.300 --> 00:38:55.929
+For instance, in two dimensions it's known that the temperature at the critical
+
+00:38:55.929 --> 00:38:59.420
+point is exactly one over two times log of one plus the square root of two.
+
+00:39:00.000 --> 00:39:02.679
+But in three dimensions there's no such formula yet,
+
+00:39:02.679 --> 00:39:06.800
+only numerical approximation, and it's unclear if there will ever be a formula.
+
+00:39:08.080 --> 00:39:11.701
+Unfortunately, performing rigorous mathematical analysis on a more
+
+00:39:11.701 --> 00:39:15.760
+realistic model of H2O in three dimensions is simply out of the question.
+
+00:39:16.560 --> 00:39:20.126
+Something like that would have to incorporate the electromagnetic asymmetry
+
+00:39:20.126 --> 00:39:23.360
+of the molecules and allow them to move and rotate freely in space.
+
+00:39:24.400 --> 00:39:28.759
+So far, most techniques we have to solve things exactly are restricted to two dimensions,
+
+00:39:28.759 --> 00:39:32.530
+and adding all these extra details would certainly not make anything easier.
+
+00:39:33.810 --> 00:39:37.081
+For all of these reasons, we'll probably never have a precise
+
+00:39:37.081 --> 00:39:40.460
+mathematical description of H2O that allows us to prove things
+
+00:39:40.460 --> 00:39:43.570
+like the fact that the melting point of ice is 273kelvin.
+
+00:39:44.930 --> 00:39:48.467
+Rather than despair at this fact, we can, as mathematicians recognize
+
+00:39:48.467 --> 00:39:52.210
+that such a question is not really mathematical in nature to begin with.
+
+00:39:52.930 --> 00:39:55.285
+In math we prefer to simplify things as much as
+
+00:39:55.285 --> 00:39:57.490
+we can while still retaining core features.
+
+00:39:58.050 --> 00:40:00.708
+This helps us gain a better conceptual understanding of which
+
+00:40:00.708 --> 00:40:03.410
+mechanisms are the most fundamental to the observed behavior.
+
+00:40:04.370 --> 00:40:08.850
+In the second video, which is live now on Spectral Collective, we'll do exactly that.
+
+00:40:09.410 --> 00:40:12.910
+There we'll simplify the liquid vapor model from this video even more,
+
+00:40:12.910 --> 00:40:17.260
+to the point where we can essentially completely understand it in a rigorous way using
+
+00:40:17.260 --> 00:40:18.210
+basic mathematics.
+
+00:40:19.410 --> 00:40:21.854
+I find the fact that we can do this without completely
+
+00:40:21.854 --> 00:40:23.890
+destroying the phase diagram really amazing.
+
+00:40:24.390 --> 00:40:27.460
+And in the second video we'll see exactly how the different phases
+
+00:40:27.460 --> 00:40:30.390
+arise and what makes a phase transition happen mathematically.
+
+00:40:31.350 --> 00:40:50.080
+I hope to see you there.
+

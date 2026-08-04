@@ -35,6 +35,13 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
+if [ ! -d "$1" ]; then
+    err "Dataset directory '$1' does not exist."
+    err "Prepare it first:"
+    err "  make prepare-dataset IN=./raw_audio OUT=$1 SPEAKER=$2"
+    exit 1
+fi
+
 DATASET_DIR="$(cd "$1" && pwd)"
 SPEAKER="$2"
 

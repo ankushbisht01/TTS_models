@@ -23,6 +23,7 @@ consent. Then run scripts/finetune_f5tts.sh to train.
 
 import csv
 import json
+import os
 from pathlib import Path
 
 import click
@@ -91,6 +92,64 @@ def _split_on_silence(
     return segments
 
 
+def _read_dotenv(path: Path) -> dict[str, str]:
+    """Minimal .env reader — avoids a python-dotenv dependency."""
+    values: dict[str, str] = {}
+    if not path.exists():
+        return values
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        values[key.strip()] = val.strip().strip('"').strip("'")
+    return values
+
+
+def _groq_model_name(model_size: str) -> str:
+    """Map local Whisper names to Groq's model ids."""
+    if model_size.startswith(("whisper-", "distil-")):
+        return model_size
+    return f"whisper-{model_size}"
+
+
+def _load_groq_transcriber(model_size: str, api_key: str):
+    """Transcribe via Groq's OpenAI-compatible endpoint."""
+    try:
+        from groq import Groq
+    except ImportError:
+        raise click.ClickException(
+            "The groq package is required for --transcribe-backend groq:\n"
+            "  .venv/bin/pip install groq"
+        )
+
+    import time as _time
+
+    client = Groq(api_key=api_key)
+    model = _groq_model_name(model_size)
+
+    def transcribe(path: Path) -> str:
+        last_err = None
+        for attempt in range(5):
+            try:
+                with open(path, "rb") as f:
+                    resp = client.audio.transcriptions.create(
+                        file=(path.name, f.read()),
+                        model=model,
+                        response_format="text",
+                    )
+                return (resp if isinstance(resp, str) else resp.text).strip()
+            except Exception as e:  # rate limits are the common case
+                last_err = e
+                if "rate" in str(e).lower() or "429" in str(e):
+                    _time.sleep(2**attempt)
+                    continue
+                raise
+        raise click.ClickException(f"Groq transcription failed for {path.name}: {last_err}")
+
+    return transcribe
+
+
 def _load_transcriber(model_size: str, device: str):
     """Load faster-whisper, falling back to openai-whisper."""
     try:
@@ -121,9 +180,11 @@ def _load_transcriber(model_size: str, device: str):
         return transcribe
     except ImportError:
         raise click.ClickException(
-            "--transcribe needs a Whisper implementation. Install one:\n"
-            "  pip install faster-whisper   (recommended, GPU)\n"
-            "  pip install openai-whisper"
+            "--transcribe needs a Whisper implementation. Install one INTO THE VENV\n"
+            "(plain `pip install` hits PEP 668 'externally-managed-environment'\n"
+            "on Arch/Debian):\n"
+            "  .venv/bin/pip install faster-whisper   (recommended, GPU)\n"
+            "  .venv/bin/pip install openai-whisper"
         )
 
 
@@ -169,14 +230,20 @@ def _load_transcriber(model_size: str, device: str):
     help="Auto-transcribe segments with Whisper (fills the text column)",
 )
 @click.option(
+    "--transcribe-backend",
+    type=click.Choice(["auto", "groq", "faster-whisper", "whisper"]),
+    default="auto",
+    help="auto = Groq if GROQ_API_KEY is set, else local Whisper",
+)
+@click.option(
     "--whisper-model",
     default="large-v3",
-    help="Whisper model size for --transcribe",
+    help="Whisper model size ('large-v3'; Groq maps it to 'whisper-large-v3')",
 )
 @click.option(
     "--device",
     default="cuda",
-    help="Device for Whisper",
+    help="Device for local Whisper",
 )
 def main(
     input_dir: Path,
@@ -186,6 +253,7 @@ def main(
     max_duration: float,
     min_duration: float,
     transcribe: bool,
+    transcribe_backend: str,
     whisper_model: str,
     device: str,
 ):
@@ -212,8 +280,32 @@ def main(
 
     transcriber = None
     if transcribe:
-        console.print(f"Loading Whisper [cyan]{whisper_model}[/] on {device}...")
-        transcriber = _load_transcriber(whisper_model, device)
+        # GROQ_API_KEY from the real environment first, then the project .env
+        api_key = os.environ.get("GROQ_API_KEY") or _read_dotenv(
+            Path(__file__).resolve().parent.parent / ".env"
+        ).get("GROQ_API_KEY", "")
+
+        backend = transcribe_backend
+        if backend == "auto":
+            backend = "groq" if api_key else "faster-whisper"
+
+        if backend == "groq":
+            if not api_key:
+                raise click.ClickException(
+                    "GROQ_API_KEY is not set. Add it to .env:\n"
+                    "  echo 'GROQ_API_KEY=gsk_...' >> .env\n"
+                    "or export it, or use --transcribe-backend faster-whisper."
+                )
+            console.print(
+                f"Transcribing via [cyan]Groq {_groq_model_name(whisper_model)}[/]"
+            )
+            console.print(
+                "[yellow]Note: this uploads each audio segment to Groq's API.[/]"
+            )
+            transcriber = _load_groq_transcriber(whisper_model, api_key)
+        else:
+            console.print(f"Loading Whisper [cyan]{whisper_model}[/] on {device}...")
+            transcriber = _load_transcriber(whisper_model, device)
 
     metadata: list[dict] = []
     segment_count = 0

@@ -1,6 +1,6 @@
 .PHONY: help venv-check setup setup-all install-f5tts install-chatterbox install-qwen3tts \
-       run run-dev test check-gpu benchmark prepare-dataset finetune lint format \
-       docker-build docker-up docker-down clean
+       run run-dev test check-gpu benchmark fetch-test-data prepare-dataset finetune \
+       lint format docker-build docker-up docker-down clean
 
 SHELL := /bin/bash
 VENV := .venv
@@ -72,6 +72,9 @@ benchmark: venv-check ## Run model benchmarks
 	$(VENV)/bin/python -m scripts.benchmark
 
 # ─── Fine-Tuning ─────────────────────────────────────────────────────
+
+fetch-test-data: venv-check ## Download a public-domain corpus to test the pipeline (LIMIT=50)
+	$(VENV)/bin/python -m scripts.fetch_test_dataset --limit $(or $(LIMIT),50) -o ./raw_audio
 
 prepare-dataset: venv-check ## Segment+transcribe audio for training (IN=dir OUT=dir SPEAKER=name)
 	@test -n "$(IN)" || { echo "❌ Usage: make prepare-dataset IN=./raw_audio OUT=./training_data SPEAKER=john"; exit 1; }

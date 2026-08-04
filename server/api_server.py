@@ -17,7 +17,7 @@ import numpy as np
 import soundfile as sf
 import uvicorn
 from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field
 
 from .config import settings
@@ -244,6 +244,20 @@ def _content_type(fmt: str) -> str:
         "flac": "audio/flac",
         "ogg": "audio/ogg",
     }.get(fmt.lower(), "audio/wav")
+
+
+# ─── Web UI ───────────────────────────────────────────────────────────
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+
+
+@app.get("/", include_in_schema=False)
+async def ui():
+    """Serve the browser UI. Same origin as the API, so no CORS needed."""
+    index = STATIC_DIR / "index.html"
+    if not index.exists():
+        raise HTTPException(404, "UI not installed (server/static/index.html missing)")
+    return FileResponse(index)
 
 
 # ─── API Routes ───────────────────────────────────────────────────────

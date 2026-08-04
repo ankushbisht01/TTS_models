@@ -1,0 +1,2725 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.240
+[Submit subtitle corrections at criblate.com]
+
+00:00:02.240 --> 00:00:04.000
+Imagine yourself in an art museum.
+
+00:00:04.400 --> 00:00:07.503
+As you stroll through the galleries, you come across a
+
+00:00:07.503 --> 00:00:10.720
+large low table covered in small white skeletal frames.
+
+00:00:11.120 --> 00:00:15.520
+Each looks like a random fragment of a cube, and they're all laid out in an orderly grid.
+
+00:00:16.000 --> 00:00:19.568
+What we're looking at is a digital reproduction of an artwork
+
+00:00:19.568 --> 00:00:22.960
+called Variations of Incomplete Open Cubes by Sol LeWitt.
+
+00:00:23.120 --> 00:00:26.640
+It represents every possible way that a cube can be incomplete,
+
+00:00:26.640 --> 00:00:28.260
+subject to a few conditions.
+
+00:00:28.740 --> 00:00:31.347
+In this video, you and I will investigate this sculpture
+
+00:00:31.347 --> 00:00:33.860
+and explore some of the mathematical ideas behind it.
+
+00:00:34.180 --> 00:00:36.961
+We'll get to know these cubes, making visualizations,
+
+00:00:36.961 --> 00:00:40.740
+observing patterns and asking simple questions with surprising answers.
+
+00:00:41.220 --> 00:00:44.476
+Although I've tried to make these explorations accessible and playful,
+
+00:00:44.476 --> 00:00:47.220
+in the end we'll stumble into a highly non trivial result.
+
+00:00:47.380 --> 00:00:50.129
+A lovely classical technique, an ingenious trick
+
+00:00:50.129 --> 00:00:52.820
+for counting cubes by thinking about symmetry.
+
+00:00:54.900 --> 00:00:58.020
+But first, let's get a little more specific about what we're looking at here.
+
+00:00:58.420 --> 00:01:02.180
+First of all, a cube is of course, a regular six sided shape.
+
+00:01:02.580 --> 00:01:06.980
+By open cube, we mean a hollow cube framed by its 12 edges.
+
+00:01:07.460 --> 00:01:12.180
+We can make an open cube incomplete by selecting one of these edges and getting rid of it.
+
+00:01:12.900 --> 00:01:16.260
+By removing other edges, we can create different variations.
+
+00:01:21.630 --> 00:01:25.550
+The first of LeWitt's constraints is that the existing edges must all be connected.
+
+00:01:25.630 --> 00:01:29.630
+We can't remove so many edges that the cube falls apart into separate pieces.
+
+00:01:30.670 --> 00:01:35.550
+The second constraint basically says that the existing edges have to form an obvious cube.
+
+00:01:35.630 --> 00:01:39.950
+If we reduce our cube down to, say, a flat square, we're going to say that doesn't count.
+
+00:01:40.190 --> 00:01:41.790
+Nor does anything less.
+
+00:01:41.790 --> 00:01:44.510
+A corner, a single edge, or nothing at all.
+
+00:01:45.020 --> 00:01:48.204
+Our cubes must be properly three dimensional, meaning they have to
+
+00:01:48.204 --> 00:01:51.580
+have at least one edge along the height, width and depth of the cube.
+
+00:01:54.220 --> 00:01:56.672
+To understand the final constraint, let's bring
+
+00:01:56.672 --> 00:01:59.020
+in another open cube and make it incomplete.
+
+00:01:59.580 --> 00:02:03.906
+This may look different than the first cube, but if we grab it and tumble it
+
+00:02:03.906 --> 00:02:08.460
+around like this, we can see that it is actually the same incomplete open cube.
+
+00:02:08.460 --> 00:02:10.460
+We were just looking at it from a different angle.
+
+00:02:11.080 --> 00:02:13.718
+In fact, if we played around with this shape long enough,
+
+00:02:13.718 --> 00:02:17.605
+we would eventually discover that there are 24 different ways we can reposition it,
+
+00:02:17.605 --> 00:02:21.400
+each of which looks unique from the others, but all fundamentally the same shape.
+
+00:02:22.360 --> 00:02:25.006
+In the final art piece, it would be a little redundant
+
+00:02:25.006 --> 00:02:27.800
+to include all of these rotationally equivalent figures.
+
+00:02:27.800 --> 00:02:30.600
+So we just choose one to represent the whole family.
+
+00:02:32.200 --> 00:02:34.520
+We then place this representative on the table.
+
+00:02:34.920 --> 00:02:39.320
+The next cube will be rotationally distinct from this one, a genuinely different shape.
+
+00:02:39.440 --> 00:02:43.680
+The next cube is rotationally unique from those and so on for the whole table.
+
+00:02:43.840 --> 00:02:47.135
+The final work of art shows the full collection
+
+00:02:47.135 --> 00:02:50.640
+of 122 rotationally unique incomplete open cubes.
+
+00:02:51.280 --> 00:02:54.194
+One of the interesting things about this piece is that the
+
+00:02:54.194 --> 00:02:57.360
+entire definition can be put into explicit mathematical terms.
+
+00:02:57.600 --> 00:03:01.910
+In the business, you might rephrase this as an enumeration of all proper
+
+00:03:01.910 --> 00:03:05.920
+subsets of a cube that are connected and span R3 modulo rotations.
+
+00:03:06.510 --> 00:03:09.161
+If you told the mathematician to find such an enumeration,
+
+00:03:09.161 --> 00:03:11.630
+this table is basically what they would come up with.
+
+00:03:12.750 --> 00:03:14.030
+So we have something interesting.
+
+00:03:14.110 --> 00:03:18.510
+An artist who effectively solved a math problem as part of his creative process.
+
+00:03:18.830 --> 00:03:21.950
+Who was Sol LeWitt and what was he trying to accomplish with this piece?
+
+00:03:24.350 --> 00:03:29.470
+Sol LeWitt was a modern artist associated with conceptual art, minimalism, and serial art.
+
+00:03:30.030 --> 00:03:33.790
+The core idea of conceptual art can be seen in LeWitt's series of wall drawings.
+
+00:03:34.160 --> 00:03:38.080
+LeWitt would provide a set of instructions for how a wall should be drawn or painted on.
+
+00:03:38.080 --> 00:03:40.240
+In this case, wall drawing number 118,
+
+00:03:40.320 --> 00:03:44.320
+he specifies a drawing with 50 points, all connected by lines.
+
+00:03:44.880 --> 00:03:47.694
+Trained installers would then follow these instructions to
+
+00:03:47.694 --> 00:03:50.800
+produce the actual piece on the walls of galleries and museums.
+
+00:03:51.200 --> 00:03:54.259
+Like a musician writing a score to be performed by others,
+
+00:03:54.259 --> 00:03:58.320
+LeWitt's instructions emphasize the conceptual nature of the resulting work.
+
+00:03:58.480 --> 00:04:01.920
+It's the idea of the piece that is the true product of the artist.
+
+00:04:01.950 --> 00:04:05.151
+The in perhaps his most well known quote, LeWitt said,
+
+00:04:05.151 --> 00:04:07.700
+the idea becomes a machine that makes art.
+
+00:04:08.420 --> 00:04:11.420
+Minimalism is to some degree, exactly what it sounds like.
+
+00:04:11.420 --> 00:04:14.100
+LeWitt's work uses very minimal ornamentation.
+
+00:04:14.420 --> 00:04:19.060
+Much of it is flat white because, as he put it, white is less expressive than black.
+
+00:04:19.380 --> 00:04:22.980
+And most of the sculptures are simple geometric forms like the cube.
+
+00:04:23.140 --> 00:04:26.093
+Of the cube, he wrote, the most interesting characteristic
+
+00:04:26.093 --> 00:04:28.740
+of the cube is that it is relatively uninteresting.
+
+00:04:29.180 --> 00:04:32.824
+Therefore, it is the best form to use for any more elaborate function,
+
+00:04:32.824 --> 00:04:35.740
+the grammatical device from which the work may proceed.
+
+00:04:36.060 --> 00:04:40.009
+In the prior decade, modern art was dominated by Abstract Expressionism,
+
+00:04:40.009 --> 00:04:44.780
+famous for paintings filled with splatters and splotches and other acts of randomness.
+
+00:04:45.420 --> 00:04:48.140
+Serial art was a reaction to this arbitrariness.
+
+00:04:48.300 --> 00:04:50.847
+LeWitt sought instead a technique in which he said,
+
+00:04:50.847 --> 00:04:53.593
+all of the planning and decisions are made beforehand,
+
+00:04:53.593 --> 00:04:55.740
+and the execution is a perfunctory affair.
+
+00:04:56.330 --> 00:05:00.090
+Many of LeWitt's serial structures begin with the question, how many ways?
+
+00:05:00.250 --> 00:05:04.090
+Like how many ways can I put five cubes on 25 squares?
+
+00:05:04.410 --> 00:05:07.530
+Or how many ways can I stack three open boxes?
+
+00:05:07.770 --> 00:05:10.302
+The resulting artworks are simply a presentation
+
+00:05:10.302 --> 00:05:12.570
+of the correct answers to these questions.
+
+00:05:13.130 --> 00:05:17.450
+Sometime in 1973, LeWitt asked himself a new serial art style question:
+
+00:05:18.170 --> 00:05:20.890
+How many ways can a cube be incomplete?
+
+00:05:21.620 --> 00:05:23.060
+And we have something pretty amazing.
+
+00:05:23.060 --> 00:05:26.043
+A surprisingly intact record of the artist's thought
+
+00:05:26.043 --> 00:05:28.740
+process as he went about solving this problem.
+
+00:05:29.220 --> 00:05:31.727
+Sol LeWitt left behind about 50 notebook pages,
+
+00:05:31.727 --> 00:05:35.620
+which show sketches and working drawings that capture the development of
+
+00:05:35.620 --> 00:05:37.060
+the incomplete open cubes.
+
+00:05:37.220 --> 00:05:41.218
+These are currently in the archives at the Wadsworth Athenium in Connecticut,
+
+00:05:41.218 --> 00:05:45.320
+who were kind enough to let us examine these drawings and reproduce them here,
+
+00:05:45.320 --> 00:05:49.942
+by reviewing their contents, we effectively get to look over Sol LeWitt's shoulder as he
+
+00:05:49.942 --> 00:05:50.980
+solves the problem.
+
+00:05:52.390 --> 00:05:55.937
+One of the things these notebooks make clear is that of the three constraints,
+
+00:05:55.937 --> 00:05:59.030
+rotational equivalence was by far the most difficult to figure out.
+
+00:05:59.350 --> 00:06:02.733
+It's easy to tell at a glance if a cube is flat or disconnected,
+
+00:06:02.733 --> 00:06:07.014
+but in page after page of these notebooks, we see LeWitt struggling to eliminate
+
+00:06:07.014 --> 00:06:08.230
+rotational duplicates.
+
+00:06:08.630 --> 00:06:11.081
+As the story goes, he would make small models of
+
+00:06:11.081 --> 00:06:13.430
+the cubes out of paperclips or pipe cleaners.
+
+00:06:13.510 --> 00:06:16.306
+By comparing the models, he would occasionally discover that two
+
+00:06:16.306 --> 00:06:19.190
+cubes he had thought were distinct turn out to be the same shape.
+
+00:06:19.500 --> 00:06:23.740
+The red marks indicate times when he found duplicates and had to cross one off.
+
+00:06:24.060 --> 00:06:26.256
+As LeWitt explained, "I was trying to figure out a
+
+00:06:26.256 --> 00:06:28.540
+way to do it through numbers and letters logically.
+
+00:06:28.700 --> 00:06:30.860
+But in the end, it all had to be done empirically.
+
+00:06:31.020 --> 00:06:34.140
+I had to build a model for each one and then rotate it."
+
+00:06:34.460 --> 00:06:37.105
+Although he never found a purely mathematical solution,
+
+00:06:37.105 --> 00:06:40.134
+as we'll see from these notebooks, LeWitt did find many clever
+
+00:06:40.134 --> 00:06:43.260
+tricks and ingenious simplifications on the way to his solution.
+
+00:06:43.580 --> 00:06:45.020
+A true thinking process.
+
+00:06:46.070 --> 00:06:49.293
+It was only after he'd completed the piece that LeWitt consulted
+
+00:06:49.293 --> 00:06:52.918
+with two mathematicians who confirmed that he'd found the right number.
+
+00:06:52.918 --> 00:06:55.990
+While LeWitt had to solve the problem painstakingly by hand,
+
+00:06:55.990 --> 00:06:58.636
+it seems a mathematician is someone who knows how to pull
+
+00:06:58.636 --> 00:07:01.190
+this number out of thin air with a simple calculation.
+
+00:07:01.910 --> 00:07:05.750
+But in the beginning, the mathematician doesn't know anything about the problem either.
+
+00:07:05.990 --> 00:07:08.594
+They, too, must go through some exploratory thought
+
+00:07:08.594 --> 00:07:10.790
+process in order to figure out the answer.
+
+00:07:11.680 --> 00:07:15.600
+In this video, we're going to solve the specific problem that eluded Sol LeWitt.
+
+00:07:15.600 --> 00:07:19.120
+And we're going to do it by showing a thought process that leads to the solution.
+
+00:07:19.600 --> 00:07:22.885
+A little housekeeping before we begin our mathematical exploration
+
+00:07:22.885 --> 00:07:26.120
+is going to focus only on the problem of rotational equivalence.
+
+00:07:26.120 --> 00:07:28.320
+We'll relax these other constraints for now.
+
+00:07:28.640 --> 00:07:31.440
+This means that we'll be considering all possible cubes,
+
+00:07:31.440 --> 00:07:35.440
+including flat or disconnected ones, and even the full cube and the empty cube.
+
+00:07:35.760 --> 00:07:40.000
+As a consequence, the number of families we find is going to be larger than LeWitt's
+
+00:07:40.000 --> 00:07:44.140
+final count of 122, at least until we bring back the other conditions at the end.
+
+00:07:45.260 --> 00:07:45.980
+Let's begin.
+
+00:07:49.820 --> 00:07:53.796
+Lots of the pages in Sol LeWitt's notebooks are made up of loose sketches
+
+00:07:53.796 --> 00:07:57.500
+which show him just kind of exploring the idea of incomplete cubes.
+
+00:07:57.820 --> 00:08:01.246
+Pages in this style don't show much strategy or organization,
+
+00:08:01.246 --> 00:08:06.300
+just a cloud of partial cube doodles as he was getting familiar with the general concept.
+
+00:08:06.700 --> 00:08:10.100
+A wonderful document in the collection is this business letter to LeWitt.
+
+00:08:10.180 --> 00:08:13.130
+If you look closely, you can see that the back of the sheet
+
+00:08:13.130 --> 00:08:16.180
+has clearly been used as incomplete open cube scratch paper.
+
+00:08:16.500 --> 00:08:19.558
+Anyone who's ever gotten obsessed with a math problem will find this
+
+00:08:19.558 --> 00:08:22.660
+familiar how the problem just starts to get all over your paperwork.
+
+00:08:23.380 --> 00:08:25.660
+One way for us to begin poking at this problem
+
+00:08:25.660 --> 00:08:27.940
+is to notice that there is a simpler version.
+
+00:08:28.260 --> 00:08:30.435
+Instead of taking on the incomplete open cubes,
+
+00:08:30.435 --> 00:08:32.980
+let's warm up by considering the two dimensional case.
+
+00:08:33.060 --> 00:08:36.740
+What are all of the rotationally equivalent incomplete open squares?
+
+00:08:37.310 --> 00:08:39.495
+This is a more bite sized version of the problem,
+
+00:08:39.495 --> 00:08:42.350
+one which we'll be able to think through in all of its details.
+
+00:08:42.750 --> 00:08:46.303
+To begin, let's set aside these constraints and just ask how many squares do
+
+00:08:46.303 --> 00:08:49.950
+we have to worry about altogether before we start sorting and filtering them?
+
+00:08:50.430 --> 00:08:55.790
+To define an incomplete square, each edge presents us with two choices, on or off.
+
+00:08:56.030 --> 00:08:58.887
+And from this sequence of choices we get a tree of
+
+00:08:58.887 --> 00:09:01.630
+decisions which generates all possible squares.
+
+00:09:01.870 --> 00:09:06.045
+For example, if we choose the top edge to be on, the left edge off,
+
+00:09:06.045 --> 00:09:09.970
+the bottom on and the right on, we get this incomplete square.
+
+00:09:10.370 --> 00:09:12.050
+Every other outcome is similar.
+
+00:09:12.850 --> 00:09:15.142
+If we take the side view of our decision tree,
+
+00:09:15.142 --> 00:09:18.530
+we can see that the number of possibilities doubles at every level.
+
+00:09:18.770 --> 00:09:21.338
+So the number of outcomes at the bottom must equal
+
+00:09:21.338 --> 00:09:23.650
+2 raised to the height of the decision tree.
+
+00:09:23.890 --> 00:09:24.450
+That is:
+
+00:09:24.450 --> 00:09:26.786
+There's a formula we can use for calculating the
+
+00:09:26.786 --> 00:09:29.170
+number of possible outcomes of a tree like this.
+
+00:09:29.330 --> 00:09:33.330
+In general, it's 2 raised to the number of choices we have to make.
+
+00:09:33.750 --> 00:09:36.586
+The beauty of a formula like this is that it makes our life much
+
+00:09:36.586 --> 00:09:39.510
+easier when we move on to the more complicated case of the cubes.
+
+00:09:39.830 --> 00:09:43.110
+A cube has 12 edges that can be set to on or off.
+
+00:09:43.190 --> 00:09:45.510
+So we have 12 binary choices to make.
+
+00:09:45.670 --> 00:09:50.470
+2 to the 12th gives us 4096 total incomplete open cubes.
+
+00:09:50.550 --> 00:09:53.084
+And it's very convenient to be able to just calculate that
+
+00:09:53.084 --> 00:09:55.750
+number rather than having to try and figure it out manually.
+
+00:09:56.950 --> 00:10:00.204
+Now let's get down to the main problem of how to sort these 16
+
+00:10:00.204 --> 00:10:03.510
+incomplete open squares into rotationally equivalent families.
+
+00:10:04.030 --> 00:10:05.870
+We'll start with this one part square.
+
+00:10:05.950 --> 00:10:07.870
+What is the family it belongs to?
+
+00:10:08.270 --> 00:10:12.390
+If we compare it to its neighbor, we can see that they are rotationally equivalent.
+
+00:10:12.390 --> 00:10:16.350
+That is, by reorienting one, we can get them to look exactly the same.
+
+00:10:16.750 --> 00:10:20.190
+So we gather these together and say they're part of the same family.
+
+00:10:20.830 --> 00:10:23.950
+This next square is obviously not going to belong to this family.
+
+00:10:24.030 --> 00:10:26.924
+If we want to be thorough, we can rotate it through its
+
+00:10:26.924 --> 00:10:29.870
+possible positions just to be sure, and then reject it.
+
+00:10:30.450 --> 00:10:32.970
+The next one is another member of this family,
+
+00:10:32.970 --> 00:10:35.984
+and we just proceed down the whole length in this way,
+
+00:10:35.984 --> 00:10:39.490
+scooping up any rotationally equivalent squares we come across.
+
+00:10:39.970 --> 00:10:44.130
+Our one part squares form a rotationally equivalent family of four.
+
+00:10:44.930 --> 00:10:48.610
+And now we go through the list again, this time picking up all the corner pieces.
+
+00:10:48.770 --> 00:10:51.490
+These also gather into a family of four.
+
+00:10:51.970 --> 00:10:54.555
+Now, if all families had four members, then it would
+
+00:10:54.555 --> 00:10:57.090
+be easy to calculate the total number of families.
+
+00:10:57.090 --> 00:11:01.680
+So 16 squares divided into groups of four would mean four families total.
+
+00:11:02.240 --> 00:11:05.200
+Unfortunately, the parallel bars break this pattern
+
+00:11:05.280 --> 00:11:08.541
+by collecting into a family of only two. The three
+
+00:11:08.541 --> 00:11:11.280
+part squares form another family of four.
+
+00:11:11.760 --> 00:11:15.679
+Finally, the complete square is only rotationally equivalent to itself,
+
+00:11:15.679 --> 00:11:17.280
+so it forms a family of one.
+
+00:11:17.440 --> 00:11:18.880
+Same for the empty square.
+
+00:11:19.280 --> 00:11:25.040
+And there we are, six total families of rotationally equivalent incomplete open squares.
+
+00:11:25.610 --> 00:11:28.410
+We got this result using brute force search.
+
+00:11:28.650 --> 00:11:32.810
+What we'd really like is a formula, something we can also apply to the cube.
+
+00:11:32.890 --> 00:11:35.501
+If we had that mathematical confirmation, then it would
+
+00:11:35.501 --> 00:11:37.970
+be easy to then apply Sol Lewitt's other conditions
+
+00:11:37.970 --> 00:11:41.226
+for the art piece. A representative from each family forms
+
+00:11:41.226 --> 00:11:44.650
+a collection of rotationally unique incomplete open squares.
+
+00:11:44.890 --> 00:11:48.170
+We can get rid of the square on the right because it isn't incomplete.
+
+00:11:48.330 --> 00:11:50.625
+We can get rid of the two squares on the left
+
+00:11:50.625 --> 00:11:52.970
+because they aren't properly two dimensional.
+
+00:11:53.410 --> 00:11:56.290
+And we can get rid of the square in the middle because it isn't connected.
+
+00:11:56.690 --> 00:11:58.370
+That leaves us with these two.
+
+00:11:58.530 --> 00:12:03.330
+And there we have it, the complete variations of incomplete open squares.
+
+00:12:03.650 --> 00:12:04.370
+Beautiful.
+
+00:12:04.930 --> 00:12:09.220
+One of the great things about this piece is that it gives us some appreciation for the
+
+00:12:09.220 --> 00:12:13.211
+added complexity that seems to arise when we consider the same problem in three
+
+00:12:13.211 --> 00:12:13.810
+dimensions.
+
+00:12:14.210 --> 00:12:17.240
+Just for the fun of it, let's think through what it would be like
+
+00:12:17.240 --> 00:12:20.130
+to try and do a brute force search for families of the cubes.
+
+00:12:21.250 --> 00:12:26.370
+So here we are moving down a hallway that has all 4,096 incomplete open cubes.
+
+00:12:26.690 --> 00:12:29.106
+To sort these cubes into families, you'd have to go
+
+00:12:29.106 --> 00:12:31.570
+down the line and manually compare them one by one.
+
+00:12:31.890 --> 00:12:34.624
+And keep in mind that unlike with squares, cubes are actually
+
+00:12:34.624 --> 00:12:37.090
+kind of tricky with regards to rotational equivalents.
+
+00:12:37.090 --> 00:12:39.490
+You may have to tumble them around for a while to be sure.
+
+00:12:39.490 --> 00:12:42.130
+So this is going to take some focus and concentration.
+
+00:12:42.770 --> 00:12:46.290
+It's also going to take a lot of time because this is really a very long hallway.
+
+00:12:46.800 --> 00:12:49.745
+4096 is one of those numbers where, you know it's big,
+
+00:12:49.745 --> 00:12:54.000
+but it's hard to really appreciate how big until you see a hallway like this.
+
+00:12:54.160 --> 00:12:57.440
+In fact, we're going to need to speed things up a little bit to get where we're going.
+
+00:12:57.680 --> 00:13:01.397
+And as we zoom along here, keep in mind that you'll have to go down this
+
+00:13:01.397 --> 00:13:04.960
+hallway over and over again, one time for each family you gather up.
+
+00:13:05.200 --> 00:13:07.440
+So clearly this is going to be quite an ordeal.
+
+00:13:07.840 --> 00:13:12.080
+In fact, after all this travel, we've only made it to the halfway point of the hallway.
+
+00:13:12.670 --> 00:13:16.110
+So we've come up with a pretty vivid sense of the difficulty of our problem.
+
+00:13:16.350 --> 00:13:18.830
+But enough goofing around, let's make a plan.
+
+00:13:19.150 --> 00:13:22.910
+Clearly, Sol LeWitt has his work cut out for him. To make any progress,
+
+00:13:22.910 --> 00:13:26.350
+he's probably going to have to come up with something better than brute force search.
+
+00:13:26.990 --> 00:13:31.023
+When you're comparing two cubes to see if they might be rotationally equivalent,
+
+00:13:31.023 --> 00:13:34.350
+a good question to ask is: do they have the same number of edges?
+
+00:13:34.750 --> 00:13:38.021
+A five part cube and a six part cube will never look the same,
+
+00:13:38.021 --> 00:13:39.710
+no matter how we position them.
+
+00:13:40.370 --> 00:13:42.878
+From early on, we see Lewitt restricting his attention
+
+00:13:42.878 --> 00:13:44.690
+to cubes with a given number of edges.
+
+00:13:45.010 --> 00:13:48.580
+Different pages dedicated to different sized cubes show how
+
+00:13:48.580 --> 00:13:52.210
+he broke the overall problem into several smaller problems.
+
+00:13:52.370 --> 00:13:56.690
+This divide and conquer approach is reflected in the final layout of the art piece.
+
+00:13:56.770 --> 00:13:59.890
+The bottom row contains all possible three part cubes.
+
+00:13:59.970 --> 00:14:04.770
+The next row contains all of the four part cubes, and so on, row by row up the table.
+
+00:14:05.420 --> 00:14:08.342
+By breaking the overall problem into nine smaller problems,
+
+00:14:08.342 --> 00:14:12.700
+LeWitt makes the first of several simplifications that we'll see him bring to the task.
+
+00:14:13.420 --> 00:14:14.220
+What about us?
+
+00:14:14.220 --> 00:14:16.180
+We're hoping to come up with a formula.
+
+00:14:16.180 --> 00:14:19.260
+So what kind of strategy should we consider to attack the problem?
+
+00:14:19.980 --> 00:14:23.294
+When we found the decision tree formula, it was by considering the
+
+00:14:23.294 --> 00:14:26.860
+decision process itself and then noticing a formula that described it.
+
+00:14:26.940 --> 00:14:30.056
+If we want to do the same thing for sorting the shapes into families,
+
+00:14:30.056 --> 00:14:32.540
+then we probably want to study the associated process.
+
+00:14:32.780 --> 00:14:36.179
+That is, while Sol LeWitt is trying to get away from brute force search,
+
+00:14:36.179 --> 00:14:39.530
+for us, it might make sense to actually look directly at this process,
+
+00:14:39.530 --> 00:14:41.970
+and see if we can understand what it is accomplishing.
+
+00:14:43.570 --> 00:14:45.520
+Obviously, it's a method that's going to take a while,
+
+00:14:45.520 --> 00:14:48.770
+but if we did have all the time in the world, then it would be perfectly straightforward.
+
+00:14:48.770 --> 00:14:52.431
+We just pick up one of the cubes, travel the length of the hallway,
+
+00:14:52.431 --> 00:14:57.130
+gathering up its rotational equivalents, and that's one family. Moving down the line,
+
+00:14:57.130 --> 00:14:59.929
+we pick up the next cube and gather up its family,
+
+00:14:59.929 --> 00:15:02.280
+and the next one gives us another family.
+
+00:15:02.920 --> 00:15:05.325
+And then once more, we find that some cubes seem
+
+00:15:05.325 --> 00:15:07.480
+to belong to smaller families than others.
+
+00:15:08.120 --> 00:15:10.955
+It's important to appreciate that this irregularity
+
+00:15:10.955 --> 00:15:13.400
+is what's making our counting problem hard.
+
+00:15:13.960 --> 00:15:16.116
+If every family were the same size, then it would
+
+00:15:16.116 --> 00:15:18.360
+be easy to calculate the total number of families.
+
+00:15:18.520 --> 00:15:21.946
+But if every family seems to be doing its own thing in terms of size,
+
+00:15:21.946 --> 00:15:26.117
+then we apparently have no choice but to go through and manually count them up like
+
+00:15:26.117 --> 00:15:27.160
+this, one at a time.
+
+00:15:27.850 --> 00:15:31.800
+Before we can make any progress on our main question of how many families there are,
+
+00:15:31.800 --> 00:15:34.810
+it seems like we first want to understand a more local problem.
+
+00:15:35.450 --> 00:15:38.650
+For a given incomplete open cube, how big is its family?
+
+00:15:39.210 --> 00:15:41.950
+For instance, if I gave you a cube shaped like a table,
+
+00:15:41.950 --> 00:15:44.490
+could you reason about how big its family must be?
+
+00:15:44.730 --> 00:15:46.010
+Try looking at it this way.
+
+00:15:46.170 --> 00:15:48.810
+The table has one complete square side on top.
+
+00:15:49.050 --> 00:15:52.530
+A cube has six sides, total, six directions
+
+00:15:52.530 --> 00:15:54.650
+the tabletop could be oriented to point.
+
+00:15:55.050 --> 00:15:57.850
+Based on this logic, we would expect a family size of six.
+
+00:15:57.930 --> 00:15:59.360
+And that is indeed what we find.
+
+00:15:59.510 --> 00:16:01.918
+Find if we try this with a few different cubes,
+
+00:16:01.918 --> 00:16:05.299
+we'll quickly notice that the ones that belong to large 24 member
+
+00:16:05.299 --> 00:16:09.910
+families tend to be a bit more irregular looking, like this weird character on the right.
+
+00:16:10.150 --> 00:16:12.759
+While the shapes like the table that are more orderly
+
+00:16:12.759 --> 00:16:15.270
+or symmetrical seem to belong to smaller families.
+
+00:16:15.750 --> 00:16:16.950
+This makes sense in a way.
+
+00:16:16.950 --> 00:16:22.070
+If a cube is oddly shaped, then it probably looks different in each possible orientation.
+
+00:16:22.630 --> 00:16:23.990
+So this is a kind of hunch
+
+00:16:23.990 --> 00:16:28.150
+we might develop, that more symmetrical shapes seem to have smaller families.
+
+00:16:29.070 --> 00:16:32.590
+For Sol LeWitt, the best plan seems to be divide and conquer.
+
+00:16:32.830 --> 00:16:37.328
+For us, the plan is to delay the main question and first focus on a simpler question,
+
+00:16:37.328 --> 00:16:39.710
+how to calculate a given cube's family size.
+
+00:16:39.950 --> 00:16:43.470
+And we'll pursue our hunch that this has something to do with symmetry.
+
+00:16:44.030 --> 00:16:46.256
+Both approaches still have a lot of work to do,
+
+00:16:46.256 --> 00:16:49.950
+but we each now have a strategy for how we're going to dig into this problem.
+
+00:16:50.430 --> 00:16:54.270
+In LeWitt's notebooks, we see him devise a number of different label concepts.
+
+00:16:54.680 --> 00:16:57.240
+He came up with a numbering system for the cubes themselves.
+
+00:16:57.480 --> 00:17:01.708
+Two integers separated by a slash in which the first number describes how many
+
+00:17:01.708 --> 00:17:05.720
+parts the cube has, and the second part is an arbitrarily assigned index.
+
+00:17:06.040 --> 00:17:10.170
+Obviously, the cubes don't come in any specific order, but by giving each a number,
+
+00:17:10.170 --> 00:17:14.200
+Lewitt was able to bring some orderliness and consistency to his investigations.
+
+00:17:14.840 --> 00:17:18.920
+He also experimented with a couple of different ways of labeling the parts of the cube.
+
+00:17:19.000 --> 00:17:23.080
+In one, he assigned letters to the corners, and in another, he numbered the edges.
+
+00:17:23.760 --> 00:17:25.760
+Which of these do you think is a better notation?
+
+00:17:26.240 --> 00:17:29.022
+In LeWitt's case, he started with the corner labels,
+
+00:17:29.022 --> 00:17:31.697
+but after creating extensive notes in this style,
+
+00:17:31.697 --> 00:17:34.960
+he abandoned this system and switched to the numbered edges.
+
+00:17:35.440 --> 00:17:39.360
+As we'll see, this turns out to be a more efficient and elegant way to annotate the cubes.
+
+00:17:39.600 --> 00:17:43.760
+Moreover, good notation can also help you think about the problem in new ways.
+
+00:17:44.080 --> 00:17:46.240
+Consider an incomplete open cube.
+
+00:17:46.240 --> 00:17:48.811
+If we imagine the set of edges that are missing,
+
+00:17:48.811 --> 00:17:52.560
+we can then imagine an incomplete open cube made of just those edges.
+
+00:17:52.720 --> 00:17:56.700
+That is, every incomplete open cube is part of a complementary pair.
+
+00:17:57.260 --> 00:18:01.260
+The edge numbering notation makes it easy to think about complementary pairs.
+
+00:18:01.260 --> 00:18:05.231
+By taking a given cube's label and literally counting off the missing numbers,
+
+00:18:05.231 --> 00:18:07.420
+we can obtain the label of its complement.
+
+00:18:07.740 --> 00:18:11.389
+It was only after LeWitt switched to this edge numbering system that we
+
+00:18:11.389 --> 00:18:15.500
+suddenly see him begin to explore cubes and their complements at the same time.
+
+00:18:15.740 --> 00:18:18.900
+And these combinations are useful to consider because the number
+
+00:18:18.900 --> 00:18:22.060
+of edges of a cube and its complement must always add up to 12.
+
+00:18:22.720 --> 00:18:25.760
+For example, every four part cube has an eight part complement.
+
+00:18:25.840 --> 00:18:30.517
+Thus, LeWitt could basically explore four and eight part cubes in parallel,
+
+00:18:30.517 --> 00:18:33.760
+similarly for five and seven part cubes, and so on.
+
+00:18:33.920 --> 00:18:38.720
+By exploiting this duality, LeWitt was cleverly able to cut his search effort in half.
+
+00:18:39.040 --> 00:18:43.680
+Finding the right labeling system can be an invaluable step in making sense of a problem.
+
+00:18:44.720 --> 00:18:47.520
+So what's something that might be useful for us to label?
+
+00:18:48.010 --> 00:18:51.930
+We're interested in understanding families such as this 24 member group.
+
+00:18:52.010 --> 00:18:55.850
+And currently we don't have any way of referring to specific family members.
+
+00:18:56.170 --> 00:18:58.810
+So this could be a good candidate for a new labeling system.
+
+00:18:59.370 --> 00:19:01.808
+For instance, what is the relationship between the
+
+00:19:01.808 --> 00:19:04.490
+given cube and this family member in the lower corner?
+
+00:19:05.130 --> 00:19:08.366
+We can see that if we spin the given cube by 90 degrees,
+
+00:19:08.366 --> 00:19:11.370
+we obtain the orientation shown by that lower cube.
+
+00:19:11.530 --> 00:19:14.948
+We might even think to label that as the cube we get when we
+
+00:19:14.948 --> 00:19:18.480
+rotate the given cube by 90 degrees around the vertical axis.
+
+00:19:19.190 --> 00:19:23.590
+A similar kind of geometric description could be applied to all of these family members.
+
+00:19:23.910 --> 00:19:26.755
+And we can work out this labeling system by just thinking
+
+00:19:26.755 --> 00:19:29.350
+about all the different ways of reorienting a cube.
+
+00:19:29.830 --> 00:19:34.310
+For instance, we've seen that we can rotate the cube 90 degrees around the vertical axis.
+
+00:19:34.549 --> 00:19:38.199
+But we can also keep spinning to 180 degrees and 270
+
+00:19:38.199 --> 00:19:41.990
+degrees before returning to the original orientation.
+
+00:19:42.870 --> 00:19:45.859
+So let's take our given cube and make three copies
+
+00:19:45.859 --> 00:19:48.310
+and apply each of these transformations.
+
+00:19:49.180 --> 00:19:53.580
+The result is three different orientations of the cube, all distinct from one another.
+
+00:19:54.460 --> 00:19:58.140
+The vertical axis runs through two opposite faces of the cube.
+
+00:19:58.460 --> 00:20:03.900
+There are two other face centered axes we might call our set f1, f2 and f3.
+
+00:20:04.220 --> 00:20:08.700
+And each one of these can be used to give three new orientations of the cube.
+
+00:20:11.580 --> 00:20:16.220
+In total, we get nine additional family members by rotating around these axes.
+
+00:20:17.180 --> 00:20:20.428
+Let's zoom in on the first example and in the spirit of Sol LeWitt,
+
+00:20:20.428 --> 00:20:21.980
+we'll give it a two part label.
+
+00:20:22.220 --> 00:20:27.100
+f1 tells us the axis and 90 degrees tells us how much to rotate.
+
+00:20:27.420 --> 00:20:31.260
+We can apply this kind of label to all of the family members shown here.
+
+00:20:31.820 --> 00:20:34.692
+Another axis we can twirl the cube around is this
+
+00:20:34.692 --> 00:20:37.740
+diagonal line that passes through opposite corners.
+
+00:20:38.300 --> 00:20:41.670
+We can call it a corner axis and see that we can
+
+00:20:41.670 --> 00:20:45.180
+spin a cube 120 degrees or 240 degrees around it.
+
+00:20:46.010 --> 00:20:49.690
+Applying this to a pair of copies, we find two new orientations.
+
+00:20:50.490 --> 00:20:55.330
+If we work our way around the cube, we'll find a total of four axes like this,
+
+00:20:55.330 --> 00:20:57.130
+which we can label c1 to c4.
+
+00:20:57.770 --> 00:21:00.970
+Those first two examples we saw were the rotations around c1.
+
+00:21:01.369 --> 00:21:03.930
+And here are the outputs of all the rest.
+
+00:21:06.650 --> 00:21:10.186
+And at last, it is also possible to run an axis between
+
+00:21:10.186 --> 00:21:13.530
+diagonal edges and give the cube a 180 degree spin.
+
+00:21:14.260 --> 00:21:19.540
+The 12 edges of the cube pair off to make six of these axes, which we'll label like this.
+
+00:21:20.260 --> 00:21:24.180
+Here's a new cube orientation we can get from spinning around e1.
+
+00:21:24.900 --> 00:21:26.340
+And here are the rest.
+
+00:21:27.220 --> 00:21:31.332
+With six cubes from the edge axes, eight from the corner axes and nine
+
+00:21:31.332 --> 00:21:35.620
+from the face axes, we end up with 23 distinct orientations of the cube.
+
+00:21:35.780 --> 00:21:39.571
+If we include the original cube, to which we did Nothing,
+
+00:21:39.571 --> 00:21:44.160
+we get 24 distinct orientations, 24 uniquely labeled family members.
+
+00:21:44.640 --> 00:21:48.240
+There are simpler ways to deduce that there must be 24 rotations.
+
+00:21:48.400 --> 00:21:52.582
+But what we'll find later is that having an explicit list of all 24
+
+00:21:52.582 --> 00:21:56.640
+will be crucial for our final step in counting incomplete cubes.
+
+00:21:57.120 --> 00:21:59.360
+Note that what we've really labeled are actions.
+
+00:21:59.440 --> 00:22:03.360
+A label like 120 degree rotation around c4 refers to a
+
+00:22:03.360 --> 00:22:07.280
+transformation that can be applied to any given cube.
+
+00:22:07.720 --> 00:22:12.072
+If we grab a random incomplete open cube, we can supply it as input to the
+
+00:22:12.072 --> 00:22:16.600
+transformation and get a generally different incomplete open cube as output.
+
+00:22:17.000 --> 00:22:21.381
+If we take this same input and supply it to all 24 of our transformations,
+
+00:22:21.381 --> 00:22:25.880
+we get all 24 orientations of that shape that is all of its family members.
+
+00:22:26.120 --> 00:22:29.229
+We effectively have a recipe for taking any incomplete
+
+00:22:29.229 --> 00:22:32.280
+open cube and generating a copy of its whole family.
+
+00:22:32.600 --> 00:22:34.760
+We'll call this a family portrait.
+
+00:22:35.390 --> 00:22:38.007
+But what do you think would happen if we made the family
+
+00:22:38.007 --> 00:22:40.670
+portrait of a shape that doesn't have 24 family members?
+
+00:22:41.310 --> 00:22:44.910
+For instance, we know this table looking cube only has six members in its family.
+
+00:22:45.230 --> 00:22:48.910
+So if we make its family portrait, what's going to go in the other 18 slots?
+
+00:22:49.470 --> 00:22:52.990
+One thing we can say for sure is that there are going to be repeats.
+
+00:22:53.390 --> 00:22:57.250
+The reason for this is that we're about to knock over a table 24 different ways,
+
+00:22:57.250 --> 00:22:59.470
+but there are only six ways a table can land.
+
+00:23:00.270 --> 00:23:02.910
+So let's apply the transformations and see what we get.
+
+00:23:03.500 --> 00:23:07.020
+There are definitely a lot of repeats, perhaps most noticeably here in the upper corner.
+
+00:23:07.340 --> 00:23:10.112
+In addition to the unchanged cube, there are three
+
+00:23:10.112 --> 00:23:12.940
+manipulated cubes that end up still being upright.
+
+00:23:13.180 --> 00:23:15.500
+We'll color code the upright tables green.
+
+00:23:16.220 --> 00:23:18.460
+Now consider these four transformations.
+
+00:23:18.700 --> 00:23:21.740
+Each one manages to knock the table into the upside down position.
+
+00:23:22.220 --> 00:23:24.700
+We'll color code upside down tables purple.
+
+00:23:24.700 --> 00:23:28.780
+And we can see that our portrait then contains four tables in this orientation.
+
+00:23:29.580 --> 00:23:31.663
+In fact, it turns out there are four ways to get
+
+00:23:31.663 --> 00:23:33.660
+a table pointing in any particular direction.
+
+00:23:33.660 --> 00:23:36.940
+Which means we get exactly four copies of every family member.
+
+00:23:37.500 --> 00:23:41.432
+Another way to say this is that we can take this family portrait and we can
+
+00:23:41.432 --> 00:23:45.260
+rearrange the pieces into four complete copies of our six member family.
+
+00:23:45.740 --> 00:23:47.300
+So we're seeing some structure here.
+
+00:23:47.300 --> 00:23:51.740
+It's not just all upside down tables or alternating left and right tables.
+
+00:23:51.740 --> 00:23:54.260
+The family portrait worked like a copy machine.
+
+00:23:54.260 --> 00:23:56.620
+It made four complete replicas of this family.
+
+00:23:57.160 --> 00:23:59.080
+Does this happen with other small families?
+
+00:23:59.320 --> 00:24:02.760
+In this three part cube, the edges all meet at one corner.
+
+00:24:03.160 --> 00:24:07.120
+A complete cube has eight corners that a triple like this could be clustered around.
+
+00:24:07.120 --> 00:24:09.992
+And so we can reason that there are eight distinct
+
+00:24:09.992 --> 00:24:12.520
+orientations for this incomplete open cube.
+
+00:24:13.160 --> 00:24:14.800
+So now let's make a family portrait.
+
+00:24:14.800 --> 00:24:18.600
+We'll use this color coding to identify family members in the output.
+
+00:24:19.080 --> 00:24:22.049
+After we apply all the transformations, we discover that once
+
+00:24:22.049 --> 00:24:24.920
+again we have gotten complete copies of the entire family.
+
+00:24:25.320 --> 00:24:26.600
+This time a total of three.
+
+00:24:27.480 --> 00:24:30.360
+Let's compare these with the copies from the previous example.
+
+00:24:30.680 --> 00:24:32.920
+What can we say about these rectangles?
+
+00:24:33.240 --> 00:24:36.200
+For one thing, they both have 24 squares in total.
+
+00:24:36.360 --> 00:24:39.080
+Because that's how many cubes are in a family portrait.
+
+00:24:39.480 --> 00:24:42.920
+The height of these rectangles is the specific thing we're interested in.
+
+00:24:42.920 --> 00:24:45.800
+The size of the family that a given shape belongs to.
+
+00:24:46.360 --> 00:24:47.800
+What about across the top?
+
+00:24:47.960 --> 00:24:52.050
+What can we say about the family members that are giving width to these rectangles?
+
+00:24:53.330 --> 00:24:56.019
+In the first case, we see the familiar set of tables
+
+00:24:56.019 --> 00:24:58.450
+which look unchanged by their transformations.
+
+00:24:58.850 --> 00:25:00.690
+In the second case, we see something similar.
+
+00:25:00.850 --> 00:25:05.090
+All the corner pieces which ended up in the portrait looking just like they did before.
+
+00:25:05.890 --> 00:25:09.330
+We're going to call these cubes in the family portrait lookalikes.
+
+00:25:09.410 --> 00:25:13.090
+To be more specific, consider any cube and any transformation.
+
+00:25:13.490 --> 00:25:16.424
+A lookalike is what results if the cube looks the same
+
+00:25:16.424 --> 00:25:19.250
+after applying the transformation as it did before.
+
+00:25:20.220 --> 00:25:24.380
+In the examples from before, the cubes we did nothing to will always be lookalikes.
+
+00:25:24.460 --> 00:25:27.115
+But families may have additional lookalikes, and
+
+00:25:27.115 --> 00:25:29.660
+these add additional width to our rectangles.
+
+00:25:29.980 --> 00:25:32.780
+This shows us that there seems to be a numerical relationship.
+
+00:25:32.860 --> 00:25:35.564
+The size of a given family times the number of
+
+00:25:35.564 --> 00:25:38.620
+lookalikes in its family portrait always equals 24.
+
+00:25:39.100 --> 00:25:42.515
+To put it another way, it seems we can calculate how big a cube's
+
+00:25:42.515 --> 00:25:46.140
+family is by counting its lookalikes and dividing 24 by that number.
+
+00:25:46.770 --> 00:25:47.570
+Let's give it a try.
+
+00:25:47.730 --> 00:25:50.210
+Consider this cube with one edge removed.
+
+00:25:50.290 --> 00:25:51.570
+How big is its family?
+
+00:25:52.130 --> 00:25:55.356
+In order to use our formula, we need to think of all the ways
+
+00:25:55.356 --> 00:25:58.530
+to manipulate this cube that leave it apparently unchanged.
+
+00:25:59.010 --> 00:26:01.330
+One option is always to do nothing to it.
+
+00:26:01.570 --> 00:26:05.810
+But we can also spin the cube around this edge axis and it stays the same as before.
+
+00:26:06.210 --> 00:26:10.290
+The cube will look the same as long as that bottom left edge stays in place.
+
+00:26:10.610 --> 00:26:14.050
+And it turns out there are no other transformations that leave it fixed.
+
+00:26:14.360 --> 00:26:16.040
+So that gives us two lookalikes total.
+
+00:26:16.120 --> 00:26:18.760
+And that implies that the family size is 12.
+
+00:26:19.240 --> 00:26:23.400
+We can actually corroborate this result by remembering that a cube has 12 edges.
+
+00:26:23.640 --> 00:26:27.480
+So there should be 12 distinct ways to remove a single edge from a cube.
+
+00:26:27.720 --> 00:26:29.080
+So the formula checks out.
+
+00:26:29.480 --> 00:26:32.680
+The formula also seems to apply in our various edge cases.
+
+00:26:33.160 --> 00:26:35.800
+Let's make the family portrait of a complete cube.
+
+00:26:35.960 --> 00:26:38.432
+Of course, this turns out to be nothing but lookalikes,
+
+00:26:38.432 --> 00:26:40.680
+since a cube looks the same from every direction.
+
+00:26:40.820 --> 00:26:44.033
+But according to our formula, 24 divided by 24 is 1,
+
+00:26:44.033 --> 00:26:47.370
+and the cube is indeed the only member of its family.
+
+00:26:48.170 --> 00:26:50.050
+Suppose we have another family portrait.
+
+00:26:50.050 --> 00:26:54.170
+This one contains no lookalikes other than the unchanged cube at the top.
+
+00:26:54.570 --> 00:26:57.669
+24 divided by this minimum number of lookalikes
+
+00:26:57.669 --> 00:27:00.570
+ends up with the maximum family size of 24.
+
+00:27:01.530 --> 00:27:04.188
+So we have found a formulaic answer to our question,
+
+00:27:04.188 --> 00:27:07.050
+and in a way, we've confirmed our hunch about symmetry.
+
+00:27:07.560 --> 00:27:09.976
+To say that a shape is symmetrical is really to say
+
+00:27:09.976 --> 00:27:12.440
+that it looks the same from various points of view.
+
+00:27:12.680 --> 00:27:16.320
+The number of lookalikes is basically a numerical measure of symmetry.
+
+00:27:16.320 --> 00:27:20.200
+And our formula captures how more symmetry means smaller families.
+
+00:27:20.600 --> 00:27:24.600
+Conceptually, we now know families and lookalikes are related ideas.
+
+00:27:25.560 --> 00:27:27.844
+Consider that in order to notice this relationship,
+
+00:27:27.844 --> 00:27:31.560
+we had to be able to ask "what happens if we take the family portrait of a table?"
+
+00:27:31.720 --> 00:27:35.880
+And it's impossible to even ask this question until we use our labeling system to define.
+
+00:27:35.950 --> 00:27:37.710
+what a family portrait is.
+
+00:27:38.430 --> 00:27:41.470
+A good labeling system does more than just organize your data.
+
+00:27:41.710 --> 00:27:46.386
+Much as LeWitt's edge labels may have guided him to thinking about complementary pairs,
+
+00:27:46.386 --> 00:27:49.773
+our labeling system has enabled us to find a hidden connection
+
+00:27:49.773 --> 00:27:52.030
+between two seemingly unrelated concepts.
+
+00:27:52.830 --> 00:27:55.646
+Now, as we turn our attention back to the bigger problem of
+
+00:27:55.646 --> 00:27:58.606
+determining the total number of families, we can come at this
+
+00:27:58.606 --> 00:28:01.470
+question knowing that lookalikes may turn out to be useful.
+
+00:28:03.640 --> 00:28:06.881
+Another kind of scribbling you can find throughout the notebooks are
+
+00:28:06.881 --> 00:28:10.360
+running totals for the number of cubes Lewitt had found at a given time.
+
+00:28:10.760 --> 00:28:14.193
+Here, for instance, he's adding up the counts for three part,
+
+00:28:14.193 --> 00:28:17.400
+four part, five part cubes, and so on for a total of 79.
+
+00:28:17.800 --> 00:28:20.200
+He then tries to divide 79 by 12.
+
+00:28:20.760 --> 00:28:21.160
+Why?
+
+00:28:21.800 --> 00:28:22.920
+Here's my theory.
+
+00:28:23.000 --> 00:28:26.503
+In any sensible universe, the total number of incomplete open cubes
+
+00:28:26.503 --> 00:28:30.320
+should have some numerical relationship with the the geometry of a cube.
+
+00:28:30.480 --> 00:28:32.240
+A cube has 12 sides.
+
+00:28:32.240 --> 00:28:34.815
+So I propose that LeWitt was dividing his total
+
+00:28:34.815 --> 00:28:37.280
+by 12 to see if it happens to come out even.
+
+00:28:37.680 --> 00:28:41.602
+I just love this because it's such a common part of struggling with a math
+
+00:28:41.602 --> 00:28:46.000
+problem where you're just kind of blindly but optimistically probing for patterns.
+
+00:28:46.240 --> 00:28:50.280
+Conceptual artists are mystics rather than rationalists, LeWitt wrote.
+
+00:28:50.280 --> 00:28:53.360
+They leap to conclusions that logic cannot reach.
+
+00:28:53.920 --> 00:28:57.755
+In a similar way, mathematical problem solving can often involve phases
+
+00:28:57.755 --> 00:29:01.860
+where we just experimentally combine different ideas in search of patterns.
+
+00:29:02.180 --> 00:29:04.650
+For example, let's take this incomplete open cube
+
+00:29:04.650 --> 00:29:07.220
+and begin playing around with its family portrait.
+
+00:29:08.420 --> 00:29:11.011
+Now, presumably, we could create this family portrait
+
+00:29:11.011 --> 00:29:13.700
+using any of these family members as a starting point.
+
+00:29:13.700 --> 00:29:15.220
+For example, this cube here.
+
+00:29:15.300 --> 00:29:17.829
+Let's pull this one out and generate a new family
+
+00:29:17.829 --> 00:29:20.100
+portrait based on its various orientations.
+
+00:29:20.740 --> 00:29:23.300
+What can we say about these two family portraits?
+
+00:29:24.100 --> 00:29:26.020
+First of all, they depict the same family.
+
+00:29:26.180 --> 00:29:29.940
+Any member you can find on the left can also be found somewhere on the right.
+
+00:29:30.260 --> 00:29:32.260
+But the portraits are also clearly different.
+
+00:29:32.820 --> 00:29:35.124
+In order to compare them, let's stack them up
+
+00:29:35.124 --> 00:29:37.940
+vertically and take a look at each entry side by side.
+
+00:29:38.660 --> 00:29:40.420
+We know that these top two are different.
+
+00:29:40.500 --> 00:29:44.340
+We chose them as distinct family members when we created these portraits.
+
+00:29:44.900 --> 00:29:48.420
+These two show the result of applying a 90 degree rotation.
+
+00:29:48.580 --> 00:29:53.540
+But clearly two different cubes will remain different after a 90 degree twist,
+
+00:29:53.540 --> 00:29:58.500
+and they remain different when they are both turned by 180 degrees and so on.
+
+00:29:59.060 --> 00:30:03.634
+So we can see that while these two columns have complete agreement about their overall
+
+00:30:03.634 --> 00:30:08.208
+contents, they necessarily have zero agreement about which family members actually go
+
+00:30:08.208 --> 00:30:08.580
+where.
+
+00:30:09.300 --> 00:30:10.740
+So we can make an observation:
+
+00:30:10.980 --> 00:30:15.620
+Different portraits of the same family are just scrambled versions of each other.
+
+00:30:15.940 --> 00:30:19.620
+There is a unique family portrait generated by each member of the family.
+
+00:30:20.020 --> 00:30:24.494
+And so we can bring in all 24 family members, generate their 24 distinct family
+
+00:30:24.494 --> 00:30:28.231
+portraits, and then pile these portraits into one big collection,
+
+00:30:28.231 --> 00:30:30.100
+which we'll call a family album.
+
+00:30:30.660 --> 00:30:33.060
+Now, this is obviously a pretty abstract idea.
+
+00:30:33.060 --> 00:30:35.860
+Is there anything interesting we can say about this grid?
+
+00:30:36.180 --> 00:30:39.573
+We know that lookalikes are a relevant idea, so we could ask,
+
+00:30:39.573 --> 00:30:42.020
+how do lookalikes show up in family albums?
+
+00:30:42.420 --> 00:30:45.382
+I would say that this question is kind of our version of
+
+00:30:45.382 --> 00:30:48.820
+dividing by 12 in that we may not be sure what we're looking for
+
+00:30:48.820 --> 00:30:49.380
+exactly.
+
+00:30:49.930 --> 00:30:53.592
+Guided more by intuition than logic, we're just going to put these ideas of
+
+00:30:53.592 --> 00:30:57.450
+family albums and lookalikes together and see if anything interesting happens.
+
+00:30:57.690 --> 00:31:01.370
+And it turns out that if we give it a little thought, there is a pattern we can find.
+
+00:31:01.850 --> 00:31:05.290
+In particular, we're looking at a full sized family of 24.
+
+00:31:05.529 --> 00:31:08.970
+So each of these columns is only going to contain a single lookalike.
+
+00:31:09.290 --> 00:31:13.860
+What's going to be different in a family album where a column has two lookalikes,
+
+00:31:13.860 --> 00:31:14.650
+first of all?
+
+00:31:14.650 --> 00:31:17.850
+Well, the column on the left has 24 distinct family members.
+
+00:31:18.240 --> 00:31:21.812
+The column on the right is going to contain two full copies of the family,
+
+00:31:21.812 --> 00:31:23.840
+which therefore can only have 12 members.
+
+00:31:24.480 --> 00:31:29.360
+So when we go to produce the rest of the family album, we're only going to get 12 columns.
+
+00:31:29.680 --> 00:31:34.213
+But if the first column has two lookalikes, and if all the columns are just scrambled
+
+00:31:34.213 --> 00:31:38.960
+versions of each other, then all 12 of these columns should contain two lookalikes each.
+
+00:31:39.520 --> 00:31:42.392
+So although these two albums have different sizes,
+
+00:31:42.392 --> 00:31:46.010
+their overall count of lookalikes should be the same, 24 each.
+
+00:31:46.570 --> 00:31:50.490
+A similar kind of rebalancing would happen with any number of lookalikes.
+
+00:31:50.570 --> 00:31:56.010
+3 lookalikes means 1/3 as many columns, but 3 times as many lookalikes per column.
+
+00:31:56.410 --> 00:31:59.118
+4 lookalikes means a quarter as many columns, but
+
+00:31:59.118 --> 00:32:01.770
+quadruple the density of lookalikes per column.
+
+00:32:02.090 --> 00:32:04.797
+That is, in theory at least, we're predicting that
+
+00:32:04.797 --> 00:32:07.450
+every family album should contain 24 lookalikes.
+
+00:32:07.610 --> 00:32:09.530
+Let's see how this looks in practice.
+
+00:32:10.010 --> 00:32:14.201
+To generate this family's album, we make a column of copies of each member,
+
+00:32:14.201 --> 00:32:15.710
+apply our transformations,
+
+00:32:15.710 --> 00:32:20.270
+and we indeed see four lookalikes distributed in each of the six columns.
+
+00:32:20.670 --> 00:32:23.350
+We can do the same thing with the three part corner piece.
+
+00:32:23.350 --> 00:32:26.510
+Here we see eight columns with three lookalikes each.
+
+00:32:26.990 --> 00:32:30.033
+And in the case of the cubes with a single missing edge,
+
+00:32:30.033 --> 00:32:32.750
+we get 12 columns with two lookalikes per column.
+
+00:32:32.910 --> 00:32:37.390
+In all cases, this construction gives a total of 24 lookalikes per family.
+
+00:32:37.950 --> 00:32:40.881
+If we ignore everything but the lookalikes, we can arrange
+
+00:32:40.881 --> 00:32:43.710
+them into columns and begin building up a new rectangle
+
+00:32:43.950 --> 00:32:50.510
+piling up a column from each family. So its width is the total number of families.
+
+00:32:50.750 --> 00:32:52.990
+The height of this rectangle is 24.
+
+00:32:53.310 --> 00:32:58.590
+So we could say that the number of families times 24 gives the total number of lookalikes.
+
+00:32:58.750 --> 00:33:02.913
+Putting this another way, if we counted up all the lookalikes and divided by 24,
+
+00:33:02.913 --> 00:33:05.150
+this would give us the number of families.
+
+00:33:05.390 --> 00:33:08.510
+And technically, this is what we've been looking for the whole time.
+
+00:33:08.590 --> 00:33:10.990
+A formula that outputs the number of families.
+
+00:33:11.520 --> 00:33:13.520
+Could we actually solve the problem this way?
+
+00:33:14.000 --> 00:33:18.000
+As usual, we can turn to the two dimensional case to see this technique in action.
+
+00:33:19.520 --> 00:33:22.800
+So here are the six families of incomplete open squares.
+
+00:33:23.040 --> 00:33:27.440
+Our plan basically is to go through each of these and generate its family album.
+
+00:33:27.600 --> 00:33:30.157
+Then we'll count up all the lookalikes this produces
+
+00:33:30.157 --> 00:33:32.960
+and then we'll see how that number works in our formula.
+
+00:33:33.280 --> 00:33:35.440
+Let's start with the family of elbows.
+
+00:33:35.840 --> 00:33:39.720
+In the 2D case, there are only four possible transformations we can apply.
+
+00:33:39.720 --> 00:33:45.580
+We can do nothing, and we can rotate by 90 degrees, 180 and 270 degrees.
+
+00:33:46.060 --> 00:33:49.980
+So the family portrait for this square involves four transformed copies.
+
+00:33:50.140 --> 00:33:54.220
+Notice that the only lookalike in this column is the unchanged entry up at the top.
+
+00:33:56.380 --> 00:33:59.624
+Pulling out the other four portraits to produce our family album,
+
+00:33:59.624 --> 00:34:01.820
+we ultimately find four lookalikes overall.
+
+00:34:02.300 --> 00:34:06.060
+Let's compare this to the album produced by the family of parallel bars.
+
+00:34:06.140 --> 00:34:09.299
+Unpacking these, we find two lookalikes in each column,
+
+00:34:09.299 --> 00:34:11.769
+once again giving four lookalikes overall.
+
+00:34:12.169 --> 00:34:14.699
+So, in 2D, the general rule appears to be that each
+
+00:34:14.699 --> 00:34:17.129
+family contributes four lookalikes to the total.
+
+00:34:18.329 --> 00:34:21.010
+If we bring in all six families and unpack them,
+
+00:34:21.010 --> 00:34:24.809
+we can see that there is a grand total of 24 lookalikes altogether.
+
+00:34:25.209 --> 00:34:27.998
+Now, when we have all of the families sorted out like this,
+
+00:34:27.998 --> 00:34:31.449
+it's easy to see that each one contributes four lookalikes to our total.
+
+00:34:31.529 --> 00:34:35.180
+But the power of our formula becomes apparent when we remember that
+
+00:34:35.180 --> 00:34:38.830
+these incomplete open squares were first presented to us unsorted.
+
+00:34:39.070 --> 00:34:41.950
+This is the order of the squares we originally started with.
+
+00:34:42.190 --> 00:34:45.746
+In this state, we didn't know which squares belong to which families,
+
+00:34:45.746 --> 00:34:48.117
+but each column is the same as it was before,
+
+00:34:48.117 --> 00:34:51.364
+and the number of yellow squares is the same regardless of the
+
+00:34:51.364 --> 00:34:52.910
+arrangement of these columns.
+
+00:34:53.070 --> 00:34:55.150
+So we can just count these off directly.
+
+00:34:55.390 --> 00:35:00.430
+The first column has four lookalikes, the next one has just one, and so on down the line.
+
+00:35:00.990 --> 00:35:03.740
+Adding these up, we find 24 total look alikes,
+
+00:35:03.740 --> 00:35:06.550
+and we know that each family contributes four.
+
+00:35:06.630 --> 00:35:09.350
+So that tells us there must be six families in here.
+
+00:35:09.590 --> 00:35:11.830
+And this is exactly what we were looking for.
+
+00:35:11.830 --> 00:35:14.294
+We've been able to calculate that there must be six
+
+00:35:14.294 --> 00:35:16.710
+families without having to do any actual sorting.
+
+00:35:17.030 --> 00:35:21.591
+Notice that in this approach, we have no idea which squares belong to which families or
+
+00:35:21.591 --> 00:35:26.310
+how big any of the families are, only that there must be six families in there somewhere.
+
+00:35:27.190 --> 00:35:30.598
+Exciting though this may seem, we are in for some disappointment.
+
+00:35:30.598 --> 00:35:33.220
+When we try to apply this technique to our cubes,
+
+00:35:33.220 --> 00:35:35.860
+we will quickly discover that it doesn't really help us.
+
+00:35:36.260 --> 00:35:40.740
+First of all, it's not generally easier to count lookalikes than family size.
+
+00:35:40.900 --> 00:35:43.700
+And furthermore, we're still going to have to go down this darn hallway.
+
+00:35:43.860 --> 00:35:47.177
+So it's kind of cute that this approach would work technically,
+
+00:35:47.177 --> 00:35:50.020
+but it's pretty useless from a practical perspective.
+
+00:35:50.340 --> 00:35:54.898
+All we've really shown is that the number of families, which we know is hard to count,
+
+00:35:54.898 --> 00:35:58.820
+is related to this other thing, lookalikes, which are also hard to count.
+
+00:36:00.240 --> 00:36:04.440
+Disappointment is part of doing business. Like Sol LeWitt dividing by 12,
+
+00:36:04.440 --> 00:36:08.640
+you should never be afraid to stir the food around on the plate and see what happens.
+
+00:36:08.880 --> 00:36:10.400
+Sometimes it's a waste of time.
+
+00:36:10.560 --> 00:36:13.451
+Sometimes you discover something useless but interesting,
+
+00:36:13.451 --> 00:36:16.240
+like the relationship between families and lookalikes.
+
+00:36:16.400 --> 00:36:20.690
+And sometimes the disappointment is just the precursor to a different,
+
+00:36:20.690 --> 00:36:24.000
+almost opposite emotion, the euphoria of an epiphany.
+
+00:36:25.290 --> 00:36:28.250
+Unfortunately for us, you can't really arrange for an epiphany.
+
+00:36:28.250 --> 00:36:30.090
+They just kind of happen sometimes.
+
+00:36:30.330 --> 00:36:33.337
+For instance, maybe you're thinking about something else,
+
+00:36:33.337 --> 00:36:37.347
+but you're also noticing the grid of squares out of the corner of your eye,
+
+00:36:37.347 --> 00:36:40.090
+and your vision idly traces these horizontal lines.
+
+00:36:40.090 --> 00:36:43.850
+And now you're sort of gazing at all these look alikes you wish you could count.
+
+00:36:44.090 --> 00:36:46.191
+And then all of a Sudden you're like, wait a minute,
+
+00:36:46.191 --> 00:36:48.090
+I don't have to count these up going this way.
+
+00:36:48.250 --> 00:36:50.490
+I can also count them up going this way.
+
+00:36:51.460 --> 00:36:54.264
+And before we proceed, I just want to take a minute and describe
+
+00:36:54.264 --> 00:36:56.980
+what it can feel like when a thought like this occurs to you.
+
+00:36:57.300 --> 00:37:00.591
+Before you even have a chance to think it through in any detail,
+
+00:37:00.591 --> 00:37:03.780
+some part of you knows that you have just solved the problem.
+
+00:37:04.260 --> 00:37:07.336
+There's still a bit of work to do, but from this point forward,
+
+00:37:07.336 --> 00:37:11.096
+the feeling of the problem seems to change, as if you're now just pushing on
+
+00:37:11.096 --> 00:37:11.780
+an open door.
+
+00:37:12.260 --> 00:37:15.460
+So we're just going to count up the lookalikes going row by row.
+
+00:37:15.780 --> 00:37:19.060
+How many squares look the same after a 0 degree rotation?
+
+00:37:19.390 --> 00:37:19.790
+Easy.
+
+00:37:19.790 --> 00:37:20.830
+All 16 of them.
+
+00:37:21.230 --> 00:37:22.990
+How about a 90 degree rotation?
+
+00:37:23.230 --> 00:37:26.030
+Only two, the empty square and the complete square.
+
+00:37:26.430 --> 00:37:30.750
+At 180 degrees we get four, including the two sets of parallel bars.
+
+00:37:30.910 --> 00:37:33.564
+And 270 degrees is the same as 90 degrees, giving
+
+00:37:33.564 --> 00:37:36.110
+only the empty square and the complete square.
+
+00:37:36.750 --> 00:37:40.310
+So this is an alternative way of counting up the total of 24 lookalikes.
+
+00:37:40.310 --> 00:37:44.030
+And it's already a big improvement since we did it in four steps instead of 16.
+
+00:37:44.590 --> 00:37:47.550
+But let's think a little more carefully about what we're really doing here.
+
+00:37:48.040 --> 00:37:52.164
+A lookalike is really a combination between a specific cube and a specific
+
+00:37:52.164 --> 00:37:57.124
+transformation, such that the cube looks the same after the transformation is applied as
+
+00:37:57.124 --> 00:37:57.960
+it did before.
+
+00:37:58.760 --> 00:38:02.471
+We're trying to count up all possible combinations that make this happen,
+
+00:38:02.471 --> 00:38:05.673
+and our approach had been to look at each incomplete open cube
+
+00:38:05.673 --> 00:38:08.520
+and ask how many transformations make it look the same.
+
+00:38:09.000 --> 00:38:12.505
+Our epiphany was basically that we can count to the same number by
+
+00:38:12.505 --> 00:38:16.222
+instead looking at each transformation and asking how many incomplete
+
+00:38:16.222 --> 00:38:19.620
+open cubes are left unchanged by this transform transformation.
+
+00:38:19.940 --> 00:38:22.097
+This turns out to be a fundamentally different
+
+00:38:22.097 --> 00:38:24.300
+kind of question that is much easier to answer
+
+00:38:24.300 --> 00:38:28.260
+in general. As we'll see, it can basically be done with a formula.
+
+00:38:28.980 --> 00:38:32.349
+To figure out how, let's go back to the 2D case and see if we can
+
+00:38:32.349 --> 00:38:36.963
+figure out why it is that a 90 degree rotation only leaves two shapes looking unchanged,
+
+00:38:36.963 --> 00:38:39.140
+the empty square and the complete square.
+
+00:38:39.780 --> 00:38:42.580
+Consider an undetermined incomplete open square.
+
+00:38:43.060 --> 00:38:44.820
+What is required for this to be a lookalike
+
+00:38:44.820 --> 00:38:49.368
+under a 90 degree degree rotation? We're looking for patterns of edges which,
+
+00:38:49.368 --> 00:38:54.270
+if we make a copy and rotate it 90 degrees, look the same as before, edge by edge.
+
+00:38:54.590 --> 00:38:56.930
+Let's imagine, for instance, that we choose the
+
+00:38:56.930 --> 00:38:59.470
+top edge to be on and leave the rest undetermined.
+
+00:38:59.790 --> 00:39:04.106
+After rotating a copy and comparing, we See that in order for these to be the same,
+
+00:39:04.106 --> 00:39:07.070
+the original square must have its right edge on as well.
+
+00:39:07.630 --> 00:39:11.923
+But if the top edge being on forces the right edge to be on, then by the same logic,
+
+00:39:11.923 --> 00:39:16.370
+the right edge forces the bottom edge to be on and that forces the left edge to be on.
+
+00:39:16.770 --> 00:39:19.759
+If instead we had originally chosen the top edge to be off,
+
+00:39:19.759 --> 00:39:22.850
+the sequence of other edges would have all been off as well.
+
+00:39:23.170 --> 00:39:26.930
+Whatever choice we make, it is contagious across all sides of the square.
+
+00:39:27.490 --> 00:39:31.890
+So lookalikes for a 90 degree rotation are determined by a single overall choice.
+
+00:39:32.050 --> 00:39:33.890
+All on or all off.
+
+00:39:34.610 --> 00:39:37.526
+Compare this with the 180 degree rotation, which
+
+00:39:37.526 --> 00:39:41.050
+basically splits the square into two independent subsets.
+
+00:39:41.520 --> 00:39:44.240
+The two horizontal edges get exchanged by the rotation.
+
+00:39:44.400 --> 00:39:47.993
+In order to appear unchanged, they would need to be the same,
+
+00:39:47.993 --> 00:39:50.880
+either both on or both off. Entirely separately,
+
+00:39:50.880 --> 00:39:55.920
+the vertical edges are also exchanged and also must be both on or both off.
+
+00:39:56.480 --> 00:40:00.320
+So in this case we have two choices that specify the possible lookalikes.
+
+00:40:00.320 --> 00:40:03.074
+We can represent these choices as a tree in which we
+
+00:40:03.074 --> 00:40:06.040
+first decide whether or not there are horizontal sides,
+
+00:40:06.040 --> 00:40:10.420
+and then for each of those outcomes, we further decide whether there are vertical sides.
+
+00:40:10.580 --> 00:40:14.900
+The bottom row consists of the four lookalikes for the 180 degree rotation.
+
+00:40:15.220 --> 00:40:18.331
+And from our corresponding formula, we can also calculate
+
+00:40:18.331 --> 00:40:21.060
+this number as 2 raised to the second power or 4.
+
+00:40:21.540 --> 00:40:24.900
+In some ways, the three dimensional case is a little easier to visualize.
+
+00:40:25.380 --> 00:40:27.780
+Consider a 90 degree rotation of a cube.
+
+00:40:27.860 --> 00:40:31.515
+In this case, the top four edges of the cube get exchanged amongst
+
+00:40:31.515 --> 00:40:35.170
+each other and so they must all be the same on or off separately.
+
+00:40:35.170 --> 00:40:39.370
+The four vertical bars all get exchanged and therefore must be the same as each other.
+
+00:40:39.450 --> 00:40:41.890
+And finally, the bottom edges must all be the same.
+
+00:40:41.890 --> 00:40:44.793
+So we basically have three independent choices to make,
+
+00:40:44.793 --> 00:40:48.330
+which means we have two to the third or eight possible lookalikes.
+
+00:40:48.410 --> 00:40:50.796
+We can show these choices as a decision tree, where
+
+00:40:50.796 --> 00:40:53.370
+the first choice is whether a cube has the top square.
+
+00:40:53.450 --> 00:40:55.931
+For each of those, whether it has the vertical bars,
+
+00:40:55.931 --> 00:40:58.650
+and for each of those, whether it has the bottom square.
+
+00:40:59.050 --> 00:41:01.934
+If we run down the final line and give each of these a twirl,
+
+00:41:01.934 --> 00:41:06.000
+we see that we have generated all of the incomplete complete open cubes that look the
+
+00:41:06.000 --> 00:41:07.560
+same after a 90 degree rotation.
+
+00:41:09.000 --> 00:41:11.469
+So we know that there are eight look alikes associated
+
+00:41:11.469 --> 00:41:13.160
+with this particular transformation.
+
+00:41:13.640 --> 00:41:16.221
+Our plan for finally solving this problem is to make
+
+00:41:16.221 --> 00:41:19.000
+the same assessment for each of our 24 transformations.
+
+00:41:19.240 --> 00:41:22.240
+And we're already further along than you might think. By symmetry,
+
+00:41:22.240 --> 00:41:25.185
+the other 90 degree and 270 degree rotations in this
+
+00:41:25.185 --> 00:41:27.960
+row will have a similar set of eight lookalikes.
+
+00:41:28.200 --> 00:41:32.170
+So now we just need to think about the 180 degree rotations in this row.
+
+00:41:32.650 --> 00:41:35.770
+Let's consider the partition of the cube from the previous example.
+
+00:41:36.090 --> 00:41:39.384
+Recall how in the 2D case, the 180 degree rotation
+
+00:41:39.384 --> 00:41:42.810
+splits the square into two pairs of parallel sides.
+
+00:41:43.050 --> 00:41:44.410
+A similar thing happens here.
+
+00:41:44.410 --> 00:41:47.641
+The top square gets split into two separate subsets,
+
+00:41:47.641 --> 00:41:50.250
+each unaffected by a 180 degree rotation.
+
+00:41:50.490 --> 00:41:53.370
+And the other layers get similarly divided into pairs.
+
+00:41:53.770 --> 00:41:58.710
+So overall, this results in six independent choices, suggesting 64 lookalikes.
+
+00:41:58.790 --> 00:42:00.070
+You can see a set here.
+
+00:42:00.150 --> 00:42:03.390
+These are all of the incomplete open cubes that look the
+
+00:42:03.390 --> 00:42:06.630
+same after a 180 degrees spin around the vertical axis.
+
+00:42:07.430 --> 00:42:11.950
+This allows us to close out the row of face axes with an additional 64
+
+00:42:11.950 --> 00:42:16.470
+lookalikes for each of the 180 degree rotations. For the corner axis,
+
+00:42:16.470 --> 00:42:19.990
+it's a little easier to see what we're doing if we tilt the axis up vertically.
+
+00:42:20.310 --> 00:42:22.939
+Up at the top there's a cluster of three edges which
+
+00:42:22.939 --> 00:42:25.670
+all get exchanged and therefore must all be the same.
+
+00:42:26.190 --> 00:42:29.230
+There's a similar set of three edges meeting at the bottom corner.
+
+00:42:29.550 --> 00:42:31.710
+And then we have this ring around the center.
+
+00:42:31.870 --> 00:42:36.510
+This divides into these three sides which all get exchanged and must all be the same.
+
+00:42:36.590 --> 00:42:39.230
+And these three sides, which also must be the same.
+
+00:42:39.550 --> 00:42:42.380
+Altogether that's four distinct choices, giving
+
+00:42:42.380 --> 00:42:45.390
+16 possible on-off combinations such as this set.
+
+00:42:45.870 --> 00:42:48.350
+So we get to add a row of 16s to our table.
+
+00:42:49.070 --> 00:42:53.230
+Finally, let's tilt the edge axis vertically and work our way from top to bottom.
+
+00:42:53.630 --> 00:42:55.390
+We've got the top edge by itself.
+
+00:42:55.710 --> 00:42:57.550
+Below that we find a pair of Vs.
+
+00:42:57.630 --> 00:42:59.550
+These swap opposite arms.
+
+00:42:59.630 --> 00:43:02.110
+So these two edges get exchanged and must be the same.
+
+00:43:02.110 --> 00:43:05.070
+While these two edges also get swapped and must be the same.
+
+00:43:05.470 --> 00:43:08.190
+Below that we have a pair of edges at the midline.
+
+00:43:08.350 --> 00:43:12.030
+Below that is another pair of Vs which exchange opposite arms.
+
+00:43:12.510 --> 00:43:14.830
+And finally the fixed edge at the bottom.
+
+00:43:14.830 --> 00:43:19.051
+This gives a grand total of seven independent choices for lookalikes
+
+00:43:19.051 --> 00:43:22.900
+fixed by the edge axis rotation, meaning 128 distinct shapes.
+
+00:43:23.940 --> 00:43:27.620
+And after we fill in our final row, we can't forget that the act of
+
+00:43:27.620 --> 00:43:31.300
+doing nothing contributes a total of 4096 lookalikes to our total.
+
+00:43:32.580 --> 00:43:35.892
+So we've calculated the number of lookalikes for each transformation,
+
+00:43:35.892 --> 00:43:37.380
+and now we just add it all up.
+
+00:43:39.380 --> 00:43:43.460
+Ultimately we find 5,232 total lookalikes.
+
+00:43:43.460 --> 00:43:45.860
+Dividing by 24 gives us our final answer.
+
+00:43:45.860 --> 00:43:51.970
+It's seems that there are 218 rotationally unique families of incomplete open cubes.
+
+00:43:52.130 --> 00:43:56.130
+And this number is the happy conclusion of our mathematical train of thought.
+
+00:43:56.450 --> 00:43:59.053
+It's difficult to know for sure what kind of epiphanies might
+
+00:43:59.053 --> 00:44:01.570
+have occurred to LeWitt while he was solving this problem.
+
+00:44:01.969 --> 00:44:05.490
+But the notes do contain evidence of a possible flash of insight.
+
+00:44:05.730 --> 00:44:08.333
+Consider the overall organization of the art piece,
+
+00:44:08.333 --> 00:44:11.090
+with the cubes neatly separated into different sizes.
+
+00:44:11.820 --> 00:44:15.740
+Many of LeWitt's notebook pages depict earlier versions of this inventory.
+
+00:44:16.140 --> 00:44:19.156
+Early attempts have a loose, semi disorganized feeling,
+
+00:44:19.156 --> 00:44:22.940
+while later versions become more regimented and carefully annotated.
+
+00:44:23.180 --> 00:44:27.020
+Together they provide us with a high fidelity record of his discovery process.
+
+00:44:27.580 --> 00:44:30.204
+We can see one interesting development by comparing the
+
+00:44:30.204 --> 00:44:32.780
+three part cubes in an earlier and a later inventory.
+
+00:44:33.020 --> 00:44:35.197
+Notice in the second case that LeWitt seems to have
+
+00:44:35.197 --> 00:44:37.630
+found a new three part cube that he'd overlooked before.
+
+00:44:37.860 --> 00:44:38.100
+.
+
+00:44:38.420 --> 00:44:39.540
+Where did this come from?
+
+00:44:40.100 --> 00:44:42.820
+Consider this squiggly three part open cube.
+
+00:44:42.900 --> 00:44:46.100
+Let's hold a mirror up to it and observe its mirror image.
+
+00:44:46.340 --> 00:44:49.554
+Clearly, these shapes look similar, but what LeWitt discovered
+
+00:44:49.554 --> 00:44:52.820
+at some point is that they cannot be rotated into one another.
+
+00:44:53.539 --> 00:44:55.220
+Every shape has a mirror image.
+
+00:44:55.220 --> 00:44:59.220
+And apparently some mirror image pairs are not rotationally equivalent.
+
+00:44:59.300 --> 00:45:01.770
+On the other hand, notice that the other three part
+
+00:45:01.770 --> 00:45:04.240
+incomplete cube is equivalent to its mirror image.
+
+00:45:04.790 --> 00:45:07.190
+In general, there doesn't seem to be a fixed rule here.
+
+00:45:07.350 --> 00:45:09.190
+For any incomplete open cube,
+
+00:45:09.190 --> 00:45:10.950
+we can consider its mirror image.
+
+00:45:11.270 --> 00:45:13.990
+Sometimes the mirror image will be rotationally equivalent.
+
+00:45:14.150 --> 00:45:17.350
+Other times it turns out to be a genuinely distinct shape.
+
+00:45:17.990 --> 00:45:21.410
+This realization was an epiphany for LeWitt, meaning a sudden
+
+00:45:21.410 --> 00:45:25.110
+unplanned flash of insight that instantly transforms the problem.
+
+00:45:25.670 --> 00:45:29.670
+I want to suggest that this is probably not the kind of thing you realize gradually.
+
+00:45:29.920 --> 00:45:32.503
+Rather, I suspect there was a very specific moment when
+
+00:45:32.503 --> 00:45:35.040
+LeWitt realized that mirror images could be distinct.
+
+00:45:35.040 --> 00:45:38.960
+And this event is marked by a sudden change in the available documentation.
+
+00:45:39.440 --> 00:45:44.269
+Basically overnight, his tables undergo a dramatic growth spurt as he discovers that
+
+00:45:44.269 --> 00:45:49.040
+many of the cubes he'd found had undiscovered rotationally distinct mirror images.
+
+00:45:50.160 --> 00:45:54.880
+Sometime in early 1974, Lewitt's enumeration had reached its final form.
+
+00:45:55.530 --> 00:46:00.010
+From there, we could say he formalized his result by creating a number of artworks.
+
+00:46:00.330 --> 00:46:03.331
+We have already seen the table of incomplete open cubes,
+
+00:46:03.331 --> 00:46:06.010
+and this existed in at least two different forms.
+
+00:46:06.170 --> 00:46:09.770
+But LeWitt also celebrated the result with a number of other creations.
+
+00:46:10.090 --> 00:46:14.570
+He produced 40 inch painted aluminum sculptures of each of the variations.
+
+00:46:14.890 --> 00:46:17.450
+He also created a series of isometric drawings.
+
+00:46:17.850 --> 00:46:22.791
+These were collected along with black and white photographs into an art book shown here,
+
+00:46:22.791 --> 00:46:27.003
+which the critic Nicholas Baum described as a cross between a construction
+
+00:46:27.003 --> 00:46:31.158
+manual and a Rosetta stone. LeWitt's most abstract representation for the
+
+00:46:31.158 --> 00:46:34.920
+cubes compresses the isometric view down to a flat hexagonal form.
+
+00:46:35.320 --> 00:46:40.026
+His table of these simplified logos gets rid of any sense of three dimensionality,
+
+00:46:40.026 --> 00:46:43.240
+leaving just the raw data of the incomplete open cubes.
+
+00:46:43.800 --> 00:46:47.562
+One thing I can say, having just created a digital version of this work,
+
+00:46:47.562 --> 00:46:52.056
+is that this minimalist table was actually super convenient for entering the relevant
+
+00:46:52.056 --> 00:46:52.370
+data.
+
+00:46:52.690 --> 00:46:56.654
+I came up with a numbering system for the lines of the hexagon and then
+
+00:46:56.654 --> 00:47:00.450
+just directly transcribed this table into code. A few clicks later,
+
+00:47:00.450 --> 00:47:02.930
+and there it is, my very own Sol LeWitt.
+
+00:47:03.410 --> 00:47:07.451
+It would have been very mentally taxing to have to think about three dimensional
+
+00:47:07.451 --> 00:47:11.291
+cubes while entering this data, but was totally effortless to just read off
+
+00:47:11.291 --> 00:47:15.130
+this concise abstract information. For the purposes of working computation,
+
+00:47:15.840 --> 00:47:18.655
+with his idea, the artist really did format his findings
+
+00:47:18.655 --> 00:47:21.520
+in the most useful abstract form I could have asked for.
+
+00:47:22.000 --> 00:47:26.240
+LeWitt himself ended up making practical use of this minimalist representation.
+
+00:47:26.560 --> 00:47:29.693
+This sheet may appear to be another problem solving effort,
+
+00:47:29.693 --> 00:47:32.560
+but notice the list of names down the left hand side.
+
+00:47:32.880 --> 00:47:36.400
+These are the names of fabricators for the large scale sculptures.
+
+00:47:36.560 --> 00:47:39.840
+This sheet was how LeWitt kept track of who was making what.
+
+00:47:40.000 --> 00:47:44.130
+His simplified logograms made for a perfect, perfect, lightweight accounting system.
+
+00:47:44.530 --> 00:47:47.730
+Our mathematical journey hinged on two important observations.
+
+00:47:48.050 --> 00:47:51.650
+First, we noticed that the number of families is related to the number of lookalikes.
+
+00:47:51.650 --> 00:47:54.448
+Second, we had an epiphany that these lookalikes could
+
+00:47:54.448 --> 00:47:57.090
+be formulaically counted with a re-indexing trick.
+
+00:47:57.410 --> 00:48:00.485
+This turns out to be an example of a much more general counting
+
+00:48:00.485 --> 00:48:03.170
+technique from group theory known as Burnside's Lemma.
+
+00:48:03.250 --> 00:48:07.730
+This same logic can be applied in many situations beyond incomplete open cubes.
+
+00:48:08.070 --> 00:48:10.470
+Consider an incomplete open tetrahedron.
+
+00:48:10.710 --> 00:48:14.299
+Following the same steps of listing transforms and counting lookalikes,
+
+00:48:14.299 --> 00:48:18.343
+we can quickly calculate that there are 12 rotationally unique families of such
+
+00:48:18.343 --> 00:48:18.950
+tetrahedra.
+
+00:48:19.190 --> 00:48:24.809
+If instead of on or off, we choose to color the edges of the cube red, yellow or blue,
+
+00:48:24.809 --> 00:48:30.231
+Burnside's Lemma tells us that we should expect to find 22,815 rotationally unique
+
+00:48:30.231 --> 00:48:30.950
+colorings.
+
+00:48:31.190 --> 00:48:33.954
+In more complex cases, the technique can be used to count
+
+00:48:33.954 --> 00:48:36.670
+up unique positional possibilities of the Rubik's Cube.
+
+00:48:37.060 --> 00:48:40.295
+Burnside's Lemma is a general purpose counting technique you
+
+00:48:40.295 --> 00:48:43.477
+can use anytime you find yourself decorating a symmetrical
+
+00:48:43.477 --> 00:48:46.820
+object and wanting to know exactly how many options you have.
+
+00:48:47.220 --> 00:48:51.193
+From a mathematical point of view, formalizing our result really means putting
+
+00:48:51.193 --> 00:48:55.676
+together correct proofs for all of our assertions, our solving process was often messy,
+
+00:48:55.676 --> 00:48:59.700
+with a lot of hunches and loose ends that we'd now have to go back and verify.
+
+00:49:00.020 --> 00:49:03.940
+For example, it seemed like there were 24 distinct orientations of a cube.
+
+00:49:04.120 --> 00:49:05.800
+But who's to say we didn't miss a few?
+
+00:49:05.880 --> 00:49:08.040
+We need to prove that this is the right number.
+
+00:49:08.360 --> 00:49:10.679
+Or we noticed that there tended to be a complete
+
+00:49:10.679 --> 00:49:13.240
+number of copies of a family in the family portrait.
+
+00:49:13.240 --> 00:49:15.960
+But how can we be sure there aren't exceptions to this pattern?
+
+00:49:16.520 --> 00:49:20.199
+A formally correct proof would contain proper proofs of each of these results.
+
+00:49:20.520 --> 00:49:23.281
+The first is that the order of the cube group is 24,
+
+00:49:23.281 --> 00:49:26.680
+and the second is what's known as the orbit stabilizer theorem.
+
+00:49:27.160 --> 00:49:31.212
+Capturing our results in rigorous proofs is what makes our findings useful to others,
+
+00:49:31.212 --> 00:49:35.311
+but can contribute to the sense that the mathematician's work is formal and perhaps a
+
+00:49:35.311 --> 00:49:35.740
+bit dry.
+
+00:49:36.060 --> 00:49:39.874
+By taking the time to see how a mathematical exploration actually unfolds,
+
+00:49:39.874 --> 00:49:44.049
+we've gotten to see a process that can have much in common with an artistic one,
+
+00:49:44.049 --> 00:49:48.378
+with its guesswork and experiments, emotional ups and downs and moments of creative
+
+00:49:48.378 --> 00:49:49.100
+breakthrough.
+
+00:49:55.180 --> 00:50:00.220
+In the end, we found that there must be 218 families of rotationally equivalent cubes.
+
+00:50:00.880 --> 00:50:04.000
+What happens to this number if we bring back the other constraints?
+
+00:50:04.240 --> 00:50:07.986
+A 2014 paper from Kansas State University applies an exhaustive
+
+00:50:07.986 --> 00:50:12.327
+computational search and confirms that with all the constraints applied,
+
+00:50:12.327 --> 00:50:15.360
+Sol LeWitt's finding of 122 is the correct number.
+
+00:50:16.080 --> 00:50:18.585
+But interestingly, although that number is correct,
+
+00:50:18.585 --> 00:50:21.680
+it turns out there's actually an error in the final sculpture.
+
+00:50:21.840 --> 00:50:27.600
+The cubes labeled 104 and 105 are actually the same incomplete open cube, a duplicate.
+
+00:50:27.760 --> 00:50:30.240
+Meanwhile, this cube is nowhere to be found.
+
+00:50:31.360 --> 00:50:33.341
+When I first read this, I remember feeling like
+
+00:50:33.341 --> 00:50:35.280
+there was something kind of perfect about it.
+
+00:50:35.360 --> 00:50:38.610
+Of course, it would have been a bummer if LeWitt had made a lot of mistakes,
+
+00:50:38.610 --> 00:50:42.160
+but it also might have felt a little sterile if he'd just gotten it exactly right.
+
+00:50:42.400 --> 00:50:46.880
+There's something elegant about this little grace note of imperfection right at the end.
+
+00:50:47.760 --> 00:50:49.680
+So is this what mathematicians are for?
+
+00:50:49.680 --> 00:50:53.600
+To give a pass fail grade to the artwork and point out all of the mistakes?
+
+00:50:54.290 --> 00:50:57.725
+Certainly this is one role the mathematician should be capable of playing,
+
+00:50:57.725 --> 00:51:00.929
+but with regard to this specific sculpture, I think the mathematical
+
+00:51:00.929 --> 00:51:03.250
+point of view has something richer to contribute.
+
+00:51:03.890 --> 00:51:08.622
+LeWitt's biographer, Larry Bloom, wrote that LeWitt's primary impact on contemporary art
+
+00:51:08.622 --> 00:51:13.247
+was the idea that the product of the mind is more significant than the product of the
+
+00:51:13.247 --> 00:51:13.570
+hand.
+
+00:51:14.050 --> 00:51:15.890
+This is a work of conceptual art.
+
+00:51:15.970 --> 00:51:18.581
+The mathematical point of view is specifically a
+
+00:51:18.581 --> 00:51:21.300
+way of engaging with the art in conceptual terms.
+
+00:51:21.620 --> 00:51:24.882
+It contributes to the space of ideas around this piece and I
+
+00:51:24.882 --> 00:51:28.580
+believe adds something aesthetic to how we can appreciate the work.
+
+00:51:28.740 --> 00:51:33.546
+In LeWitt's own words, all intervening steps, scribbles, sketches, drawings,
+
+00:51:33.546 --> 00:51:38.100
+failed works, models, studies, thoughts, conversations are of interest.
+
+00:51:38.660 --> 00:51:41.228
+Those that show the thought process of the artist are
+
+00:51:41.228 --> 00:51:43.700
+sometimes more interesting than the final product.
+
+00:51:45.790 --> 00:52:11.200
+...
+

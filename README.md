@@ -209,8 +209,12 @@ audio and zero-shot quality isn't enough.
 > Only train on audio you own or have the speaker's consent to use.
 
 ```bash
-# 1. Segment, normalize and transcribe (needs faster-whisper)
-pip install faster-whisper
+# 0. Put your source audio somewhere, and install a transcriber INTO THE VENV.
+#    A bare `pip install` hits PEP 668 on Arch/Debian.
+mkdir -p raw_audio          # then copy your .wav/.mp3/.m4a files in
+.venv/bin/pip install -e ".[transcribe]"
+
+# 1. Segment, normalize and transcribe
 make prepare-dataset IN=./raw_audio OUT=./training_data SPEAKER=john
 
 # 2. Train
@@ -224,6 +228,27 @@ make finetune OUT=./training_data SPEAKER=john
 (never mid-word), resamples to 24 kHz mono, peak-normalizes, and writes the
 pipe-delimited absolute-path CSV that f5-tts requires. It refuses to proceed
 with empty transcripts, since those silently corrupt training.
+
+### Transcription backends
+
+| Backend | Needs | Notes |
+|:--|:--|:--|
+| `groq` | `GROQ_API_KEY` in `.env` | No GPU, fast; **uploads each segment to Groq** |
+| `faster-whisper` | local GPU | Nothing leaves the machine |
+| `whisper` | local GPU | Fallback if faster-whisper is unavailable |
+
+`--transcribe-backend auto` (the default) picks Groq when `GROQ_API_KEY` is set,
+otherwise local Whisper. `--whisper-model large-v3` maps to `whisper-large-v3`
+on Groq automatically. Rate limits are retried with exponential backoff.
+
+```bash
+echo 'GROQ_API_KEY=gsk_...' >> .env       # https://console.groq.com/keys
+make prepare-dataset IN=./raw_audio OUT=./training_data SPEAKER=john
+```
+
+Whisper output is not perfect — review `metadata.csv` before training. F5-TTS
+learns exact (audio, text) pairs, so systematic transcription errors teach
+wrong pronunciations.
 
 [finetune_f5tts.sh](scripts/finetune_f5tts.sh) resolves the data and checkpoint
 directories f5-tts hard-codes relative to its own package, converts the CSV to

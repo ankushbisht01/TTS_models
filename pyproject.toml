@@ -57,6 +57,12 @@ qwen3tts = [
     # transformers==5.2.0 — the two backends cannot share a venv.
     "qwen-tts>=0.1.1",
 ]
+transcribe = [
+    # For scripts/prepare_dataset.py --transcribe. groq = hosted API (no GPU),
+    # faster-whisper = local. Install whichever you intend to use.
+    "groq>=1.0.0",
+    "faster-whisper>=1.0.0",
+]
 all = [
     "voice-cloning-server[f5tts,chatterbox]",
 ]

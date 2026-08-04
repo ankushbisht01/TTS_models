@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Cloning Server</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --text: #1a1d21;
+    --muted: #6b7280;
+    --border: #e2e5ea;
+    --accent: #2563eb;
+    --accent-text: #ffffff;
+    --ok: #15803d;
+    --err: #b91c1c;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --panel: #1c1f24;
+      --text: #e7e9ec;
+      --muted: #9aa1ab;
+      --border: #2c3037;
+      --accent: #3b82f6;
+      --ok: #4ade80;
+      --err: #f87171;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1rem 4rem;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  header { margin-bottom: 1.5rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .35rem; letter-spacing: -.01em; }
+  .sub { color: var(--muted); font-size: .875rem; }
+
+  .status {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    margin-top: .9rem;
+  }
+  .chip {
+    font-size: .78rem; padding: .25rem .6rem; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--panel); color: var(--muted);
+  }
+  .chip.on { color: var(--ok); border-color: currentColor; }
+  .chip.off { color: var(--err); border-color: currentColor; }
+
+  section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  h2 { font-size: .95rem; margin: 0 0 1rem; text-transform: uppercase;
+       letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+
+  label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: .3rem; }
+  input, textarea, select, button {
+    font: inherit; color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); padding: .55rem .7rem; width: 100%;
+  }
+  textarea { resize: vertical; min-height: 96px; }
+  input:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent;
+  }
+  .field { margin-bottom: .9rem; }
+  .row { display: flex; gap: .9rem; flex-wrap: wrap; }
+  .row > * { flex: 1 1 180px; }
+
+  button {
+    background: var(--accent); color: var(--accent-text);
+    border: none; font-weight: 600; cursor: pointer; width: auto;
+    padding: .6rem 1.1rem;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+
+  table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+  th, td { text-align: left; padding: .5rem .4rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; }
+  td.actions { text-align: right; }
+  td button { padding: .3rem .6rem; font-size: .8rem; }
+
+  .msg { margin-top: .9rem; font-size: .85rem; padding: .6rem .75rem;
+         border-radius: 8px; border: 1px solid var(--border); display: none; }
+  .msg.show { display: block; }
+  .msg.ok  { color: var(--ok);  border-color: currentColor; }
+  .msg.err { color: var(--err); border-color: currentColor; white-space: pre-wrap; }
+
+  audio { width: 100%; margin-top: 1rem; }
+  .meta { margin-top: .6rem; font-size: .8rem; color: var(--muted);
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .empty { color: var(--muted); font-size: .875rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Voice Cloning Server</h1>
+    <div class="sub">Create a voice profile from reference audio, then synthesize speech with it.</div>
+    <div class="status" id="status"><span class="chip">checking server…</span></div>
+  </header>
+
+  <section>
+    <h2>1 · Create a voice</h2>
+    <form id="createForm">
+      <div class="row">
+        <div class="field">
+          <label for="vName">Name</label>
+          <input id="vName" name="name" required placeholder="My Voice">
+        </div>
+        <div class="field">
+          <label for="vAudio">Reference audio (5–30s, clean speech)</label>
+          <input id="vAudio" name="audio" type="file"
+                 accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="vText">Transcript — must match the audio exactly</label>
+        <textarea id="vText" name="ref_text"
+                  placeholder="Type exactly what is said in the reference clip."></textarea>
+      </div>
+      <button type="submit" id="createBtn">Create voice</button>
+      <div class="msg" id="createMsg"></div>
+    </form>
+  </section>
+
+  <section>
+    <h2>2 · Voices</h2>
+    <div id="voiceList"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section>
+    <h2>3 · Generate speech</h2>
+    <form id="genForm">
+      <div class="row">
+        <div class="field">
+          <label for="gBackend">Backend</label>
+          <select id="gBackend"></select>
+        </div>
+        <div class="field">
+          <label for="gVoice">Voice</label>
+          <select id="gVoice"></select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="gFormat">Format</label>
+          <select id="gFormat">
+            <option value="wav">wav</option>
+            <option value="mp3">mp3</option>
+            <option value="flac">flac</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="gSpeed">Speed — <span id="gSpeedVal">1.0</span>×</label>
+          <input id="gSpeed" type="range" min="0.25" max="4" step="0.05" value="1">
+        </div>
+      </div>
+      <div class="field">
+        <label for="gText">Text</label>
+        <textarea id="gText" required
+                  placeholder="Text to speak in the selected voice."></textarea>
+      </div>
+      <button type="submit" id="genBtn">Generate</button>
+      <div class="msg" id="genMsg"></div>
+      <div id="player"></div>
+    </form>
+  </section>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+function show(el, text, kind) {
+  el.textContent = text;
+  el.className = "msg show " + kind;
+}
+function hide(el) { el.className = "msg"; }
+
+// Pull the server's error body out instead of showing a bare status code.
+async function errorText(res) {
+  try {
+    const data = await res.json();
+    return data.detail ? JSON.stringify(data.detail, null, 2) : JSON.stringify(data, null, 2);
+  } catch {
+    return `HTTP ${res.status} ${res.statusText}`;
+  }
+}
+
+async function loadStatus() {
+  const bar = $("status");
+  try {
+    const res = await fetch("/v1/status");
+    if (!res.ok) throw new Error(await errorText(res));
+    const s = await res.json();
+    // ServerStatus.backends is {name: info}, not a list
+    const loaded = Object.keys(s.backends || {});
+    const chips = [];
+    chips.push(`<span class="chip ${loaded.length ? "on" : "off"}">` +
+      (loaded.length ? `backends: ${loaded.join(", ")}` : "no backends loaded") +
+      `</span>`);
+    chips.push(`<span class="chip">${s.voices_count ?? 0} voice(s)</span>`);
+    if (s.gpu_info) {
+      chips.push(`<span class="chip on">${s.gpu_info.name}` +
+        ` · ${s.gpu_info.vram_used_gb}/${s.gpu_info.vram_total_gb} GB</span>`);
+    } else {
+      chips.push(`<span class="chip off">no GPU</span>`);
+    }
+    bar.innerHTML = chips.join("");
+
+    const sel = $("gBackend");
+    sel.innerHTML = loaded.length
+      ? loaded.map((b) => {
+          const cloning = s.backends[b]?.supports_cloning ? "" : " (no cloning)";
+          return `<option value="${b}">${b}${cloning}</option>`;
+        }).join("")
+      : `<option value="">— none loaded —</option>`;
+  } catch (e) {
+    bar.innerHTML = `<span class="chip off">server unreachable</span>`;
+    console.error(e);
+  }
+}
+
+async function loadVoices() {
+  const box = $("voiceList");
+  const sel = $("gVoice");
+  try {
+    const res = await fetch("/v1/voices");
+    if (!res.ok) throw new Error(await errorText(res));
+    const voices = await res.json();
+
+    if (!voices.length) {
+      box.innerHTML = `<div class="empty">No voices yet — create one above.</div>`;
+      sel.innerHTML = `<option value="">— no voices —</option>`;
+      return;
+    }
+
+    box.innerHTML = `<table><thead><tr>
+        <th>ID</th><th>Name</th><th>Duration</th><th></th>
+      </tr></thead><tbody>${voices.map((v) => `
+        <tr>
+          <td><code>${v.voice_id}</code></td>
+          <td>${v.name ?? ""}</td>
+          <td>${v.duration_sec ? v.duration_sec.toFixed(1) + "s" : "—"}</td>
+          <td class="actions">
+            <button class="ghost" data-del="${v.voice_id}">Delete</button>
+          </td>
+        </tr>`).join("")}</tbody></table>`;
+
+    sel.innerHTML = voices
+      .map((v) => `<option value="${v.voice_id}">${v.name ?? v.voice_id}</option>`)
+      .join("");
+
+    box.querySelectorAll("[data-del]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.del;
+        if (!confirm(`Delete voice "${id}"?`)) return;
+        const r = await fetch(`/v1/voices/${encodeURIComponent(id)}`, { method: "DELETE" });
+        if (!r.ok) alert(await errorText(r));
+        loadVoices();
+      });
+    });
+  } catch (e) {
+    box.innerHTML = `<div class="empty">Could not load voices: ${e.message}</div>`;
+  }
+}
+
+$("createForm").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const msg = $("createMsg");
+  const btn = $("createBtn");
+  hide(msg);
+  btn.disabled = true;
+  btn.textContent = "Uploading…";
+
+  try {
+    const fd = new FormData();
+    fd.append("name", $("vName").value);
+    fd.append("audio", $("vAudio").files[0]);
+    fd.append("ref_text", $("vText").value);
+
+    const res = await fetch("http://localhost:8000/v1/voices/create", { method: "POST", body: fd });
+    if (!res.ok) throw new Error(await errorText(res));
+    const data = await res.json();
+    show(msg, `Created "${data.voice_id}" — ${data.duration_sec?.toFixed(1)}s @ ${data.sample_rate} Hz`, "ok");
+    $("createForm").reset();
+    loadVoices();
+  } catch (e) {
+    show(msg, e.message, "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Create voice";
+  }
+});
+
+$("gSpeed").addEventListener("input", (e) => { $("gSpeedVal").textContent = e.target.value; });
+
+$("genForm").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const msg = $("genMsg");
+  const btn = $("genBtn");
+  const player = $("player");
+  hide(msg);
+  player.innerHTML = "";
+  btn.disabled = true;
+  btn.textContent = "Generating…";
+
+  try {
+    const res = await fetch("http://localhost:8000/v1/audio/speech", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: $("gBackend").value,
+        voice: $("gVoice").value,
+        input: $("gText").value,
+        response_format: $("gFormat").value,
+        speed: parseFloat($("gSpeed").value),
+      }),
+    });
+    if (!res.ok) throw new Error(await errorText(res));
+
+    const infer = res.headers.get("X-Inference-Time-Sec");
+    const dur = res.headers.get("X-Duration-Sec");
+    const backend = res.headers.get("X-Backend");
+
+    const url = URL.createObjectURL(await res.blob());
+    const ext = $("gFormat").value;
+    player.innerHTML =
+      `<audio controls autoplay src="${url}"></audio>
+       <div class="meta">${backend ?? ""} · ${dur ?? "?"}s audio in ${infer ?? "?"}s` +
+      (dur && infer ? ` · RTF ${(infer / dur).toFixed(2)}` : "") +
+      ` · <a href="${url}" download="cloned.${ext}">download</a></div>`;
+  } catch (e) {
+    show(msg, e.message, "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Generate";
+  }
+});
+
+loadStatus();
+loadVoices();
+</script>
+</body>
+</html>

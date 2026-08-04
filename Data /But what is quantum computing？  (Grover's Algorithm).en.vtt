@@ -1,0 +1,1924 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.956
+A lot of pop science outlets give a certain summary of quantum
+
+00:00:02.956 --> 00:00:05.960
+computing that I can almost guarantee leads to misconceptions.
+
+00:00:06.420 --> 00:00:08.020
+The summary goes something like this.
+
+00:00:08.440 --> 00:00:12.998
+In a classical computer, data is stored with bits, some sequence of ones and zeros,
+
+00:00:12.998 --> 00:00:17.392
+but in a quantum computer, you are able to represent every possible sequence of
+
+00:00:17.392 --> 00:00:21.840
+bits of some fixed length all at once in one big thing known as a superposition.
+
+00:00:22.280 --> 00:00:25.594
+And sometimes the implication of these summaries is that quantum
+
+00:00:25.594 --> 00:00:29.892
+computers can be faster by basically doing whatever a classical computer would do,
+
+00:00:29.892 --> 00:00:32.119
+but to all of these sequences in parallel.
+
+00:00:33.220 --> 00:00:35.950
+Now, this does gesture at something that's kind of true,
+
+00:00:35.950 --> 00:00:39.800
+but let me see if I can prove to you why I think this leads to misconceptions,
+
+00:00:39.800 --> 00:00:41.360
+and I'll prove it using a quiz.
+
+00:00:41.780 --> 00:00:45.255
+To set it up, I want you to imagine that I have a mystery function,
+
+00:00:45.255 --> 00:00:49.092
+and I tell you that there's a certain secret number among all the numbers
+
+00:00:49.092 --> 00:00:52.463
+from 0 up to n-1, where if you plug that value into my function,
+
+00:00:52.463 --> 00:00:56.560
+it returns true, but if you were to plug in any other value, it returns false.
+
+00:00:57.080 --> 00:01:00.195
+And let's say you can't look at the innards of the function to learn anything about it,
+
+00:01:00.195 --> 00:01:02.880
+the only thing you're allowed to do with it is just try it out on numbers.
+
+00:01:03.380 --> 00:01:05.977
+The warmup question is, how many times, on average,
+
+00:01:05.977 --> 00:01:10.000
+would you have to apply this mystery function in order to find the secret key?
+
+00:01:11.140 --> 00:01:13.958
+Well, if the setup was in an ordinary classical computer,
+
+00:01:13.958 --> 00:01:17.320
+there's really nothing better that you can do than guess and check.
+
+00:01:17.800 --> 00:01:21.415
+You go through all the numbers, and maybe you're lucky and find it early,
+
+00:01:21.415 --> 00:01:25.029
+maybe you're unlucky and it doesn't come up until later, but on average,
+
+00:01:25.029 --> 00:01:29.040
+with a list of n possibilities, it takes one half of n attempts to find the key.
+
+00:01:29.620 --> 00:01:32.580
+Now, in computer science, people care about how runtimes scale.
+
+00:01:32.960 --> 00:01:36.120
+If you had a list ten times as big, how much longer would it take?
+
+00:01:36.480 --> 00:01:39.160
+And computer scientists have a way of categorizing runtimes.
+
+00:01:39.320 --> 00:01:43.368
+They would call this one O of n, where that big O communicates that maybe
+
+00:01:43.368 --> 00:01:48.303
+there's some constants like the one half, or maybe some factors that grow slower than n,
+
+00:01:48.303 --> 00:01:52.240
+but the factor of n is what explains how quickly it scales as n grows.
+
+00:01:52.580 --> 00:01:56.220
+If n goes up by a factor of ten, the runtime also goes up by a factor of ten.
+
+00:01:56.700 --> 00:01:57.860
+Now, here's your quiz.
+
+00:01:58.280 --> 00:02:01.451
+For the equivalent of this setup, but in a quantum computer,
+
+00:02:01.451 --> 00:02:04.200
+what's the best runtime for finding the secret key?
+
+00:02:04.600 --> 00:02:08.844
+I've asked a variant of this quiz many times in a certain lecture that I've given
+
+00:02:08.844 --> 00:02:12.878
+over the years, and the options I typically offer are O of square root of n,
+
+00:02:12.878 --> 00:02:15.549
+O of log of n, O of log of log of n, and O of one,
+
+00:02:15.549 --> 00:02:19.479
+where here O of one would mean that the runtime is just some constant that
+
+00:02:19.479 --> 00:02:21.260
+doesn't actually grow as n grows.
+
+00:02:21.800 --> 00:02:24.100
+Now, to be fair, I have not defined quantum computing.
+
+00:02:24.500 --> 00:02:27.640
+In fact, doing so from the ground up is going to be the goal of this video.
+
+00:02:27.980 --> 00:02:31.536
+So without showing you what this mystery function would look like in that setting,
+
+00:02:31.536 --> 00:02:33.140
+it's kind of an incoherent question.
+
+00:02:33.380 --> 00:02:36.385
+But it's not really meant as a quiz that I'm grading you on or anything,
+
+00:02:36.385 --> 00:02:39.140
+it's just meant to be a gut check of intuition before we dive in.
+
+00:02:39.360 --> 00:02:41.400
+In principle, it's the same task.
+
+00:02:41.680 --> 00:02:44.641
+Finding a needle in a haystack, where you want to discover
+
+00:02:44.641 --> 00:02:47.960
+which value out of many options uniquely triggers some function.
+
+00:02:48.460 --> 00:02:52.560
+I asked this as a YouTube post last month, which 100,000 of you kindly answered.
+
+00:02:52.800 --> 00:02:55.880
+The most recent time I gave it live was to a group of Stanford students.
+
+00:02:56.140 --> 00:02:58.780
+I also posed it to those attending the International Math Olympiad.
+
+00:02:59.020 --> 00:03:03.500
+And in all of these and many other instances, the answer distribution looks very similar.
+
+00:03:03.760 --> 00:03:06.380
+The most common answer is always O of one.
+
+00:03:06.660 --> 00:03:10.320
+And this is wrong, and I'm pretty sure that it stems from that misleading summary.
+
+00:03:10.780 --> 00:03:14.311
+That summary implies that you would put all of the n values that you need
+
+00:03:14.311 --> 00:03:16.536
+to search into this mysterious superposition,
+
+00:03:16.536 --> 00:03:18.907
+and then you would process them all in parallel,
+
+00:03:18.907 --> 00:03:21.180
+and then somehow the answer would be revealed.
+
+00:03:21.800 --> 00:03:25.860
+The second most common answer is typically O of log of n, and this is also wrong.
+
+00:03:26.360 --> 00:03:28.420
+You would call this an exponential speedup.
+
+00:03:28.720 --> 00:03:32.517
+For example, if you increase the size of the list by factors of 10,
+
+00:03:32.517 --> 00:03:37.220
+an O of log n runtime would only tick up by the same additive increment each time.
+
+00:03:37.880 --> 00:03:40.892
+Now this wrong answer I suspect stems from a misconception
+
+00:03:40.892 --> 00:03:43.800
+about how much better quantum computers are in general.
+
+00:03:43.800 --> 00:03:47.920
+There are very certain special problems where you can achieve an exponential speedup.
+
+00:03:48.200 --> 00:03:51.620
+The most famous case is probably Shor's algorithm for factoring large numbers.
+
+00:03:52.020 --> 00:03:53.880
+But most problems are not like that.
+
+00:03:54.220 --> 00:03:56.880
+In this case, the correct answer is O of square root of n.
+
+00:03:57.260 --> 00:03:59.440
+And this is a lot more representative of the typical
+
+00:03:59.440 --> 00:04:01.620
+speedup that you could get with a quantum computer.
+
+00:04:02.260 --> 00:04:05.676
+In 1994, it was proven that a quantum computer could not
+
+00:04:05.676 --> 00:04:09.580
+possibly do any better than O of square root of n on this task.
+
+00:04:09.580 --> 00:04:12.484
+And then two years later, Lav Grover found a specific
+
+00:04:12.484 --> 00:04:15.060
+procedure that actually achieves that runtime.
+
+00:04:15.480 --> 00:04:18.800
+So searching through a bag of a million options takes on the order of a thousand steps.
+
+00:04:19.160 --> 00:04:21.720
+A bag of a trillion options takes on the order of a million.
+
+00:04:22.220 --> 00:04:24.920
+This big O actually hides something that's pretty fun,
+
+00:04:24.920 --> 00:04:27.920
+which is the constant of pi fourths in the precise runtime,
+
+00:04:27.920 --> 00:04:31.620
+and that pi has its own whole fun story to tell, which I'll get to later.
+
+00:04:32.480 --> 00:04:35.404
+You might think that this puzzle with a mystery function
+
+00:04:35.404 --> 00:04:38.120
+triggered by one specific value is super contrived.
+
+00:04:38.460 --> 00:04:42.165
+But I want you to keep in mind this is meant to be a generic stand-in
+
+00:04:42.165 --> 00:04:45.655
+for any problem where you know how to quickly verify a solution,
+
+00:04:45.655 --> 00:04:49.360
+even if you don't know how to find that solution in the first place.
+
+00:04:49.780 --> 00:04:54.540
+This describes an enormous class of problems in computer science known as NP problems.
+
+00:04:55.160 --> 00:04:59.353
+So while a square root speedup is frankly not as earth-shattering as an exponential
+
+00:04:59.353 --> 00:05:03.647
+speedup would be, and while big O runtimes are often a lot less important than other
+
+00:05:03.647 --> 00:05:08.144
+practical considerations, it is thought-provoking that something like Grover's algorithm
+
+00:05:08.144 --> 00:05:12.640
+is even possible at all, providing this catch-all method for speeding up any NP problem.
+
+00:05:13.760 --> 00:05:16.610
+My goal with this lesson is to build up to a step-by-step
+
+00:05:16.610 --> 00:05:18.660
+walkthrough of how that algorithm works.
+
+00:05:18.940 --> 00:05:20.740
+It's actually very geometric and very beautiful.
+
+00:05:21.140 --> 00:05:23.880
+But we need to build up a lot of background in order to get there.
+
+00:05:24.140 --> 00:05:28.070
+The first two-thirds or so of the video will be spent building up the fundamentals
+
+00:05:28.070 --> 00:05:30.514
+of quantum computing, not with a set of analogies,
+
+00:05:30.514 --> 00:05:33.965
+which as we've seen can lead to misconceptions, but as a piece of math,
+
+00:05:33.965 --> 00:05:37.847
+which I think offers you a pair of glasses through which you can see a much more
+
+00:05:37.847 --> 00:05:39.620
+honest depiction of the whole field.
+
+00:05:40.160 --> 00:05:43.506
+This is one of those topics that has a few premises that are just going to feel a
+
+00:05:43.506 --> 00:05:47.100
+little bit strange at first, and I should warn you they take a little getting used to.
+
+00:05:47.520 --> 00:05:50.051
+My current plan is to follow this lesson with another one
+
+00:05:50.051 --> 00:05:52.625
+about some of the underlying physics, which hopefully can
+
+00:05:52.625 --> 00:05:55.600
+help motivate a few of the odd-looking rules that you'll see here.
+
+00:05:56.020 --> 00:06:00.248
+But today the goal is to provide the minimal viable path to seeing a genuine,
+
+00:06:00.248 --> 00:06:01.840
+bona fide quantum algorithm.
+
+00:06:04.440 --> 00:06:08.247
+Let me pull up again that contrast between classical computing and quantum computing,
+
+00:06:08.247 --> 00:06:11.920
+and let's see if we can build up something of a more representative mental model.
+
+00:06:12.240 --> 00:06:15.960
+It is true of course that data in a classical computer looks like a series
+
+00:06:15.960 --> 00:06:19.831
+of ones and zeros, and at a higher layer of abstraction that might represent
+
+00:06:19.831 --> 00:06:24.255
+an actual data type, like an integer or some text, and at a lower layer of abstraction,
+
+00:06:24.255 --> 00:06:27.875
+those ones and zeros represent some actual thing in the physical world,
+
+00:06:27.875 --> 00:06:30.740
+like voltages across a capacitor or something like that.
+
+00:06:30.740 --> 00:06:33.396
+These same layers of abstraction provide a pretty
+
+00:06:33.396 --> 00:06:36.160
+helpful framing when we discuss quantum computing.
+
+00:06:36.600 --> 00:06:39.692
+Over there, there's also some underlying physical measurement,
+
+00:06:39.692 --> 00:06:43.832
+and again you represent the outcome of that measurement with some sequence of ones
+
+00:06:43.832 --> 00:06:48.072
+and zeros, and again this might implement some actual data type that you care about,
+
+00:06:48.072 --> 00:06:48.820
+like a number.
+
+00:06:49.420 --> 00:06:51.780
+This symbol that I'm showing by the way is called a ket.
+
+00:06:52.080 --> 00:06:55.066
+I'll explain it properly in a couple minutes, but for right now just
+
+00:06:55.066 --> 00:06:58.360
+think of it as conveying that something is coming from a quantum computer.
+
+00:06:58.360 --> 00:07:02.345
+Let's start things off with a description of quantum computing through the lens of that
+
+00:07:02.345 --> 00:07:06.146
+middle layer of abstraction, meaning we're going to postpone all of the underlying
+
+00:07:06.146 --> 00:07:10.222
+physics for now, which is a little bit like teaching computer science without discussing
+
+00:07:10.222 --> 00:07:10.680
+hardware.
+
+00:07:11.660 --> 00:07:15.191
+In a classical computer, there's no need to distinguish between the state of
+
+00:07:15.191 --> 00:07:17.329
+memory and what you read out from the memory,
+
+00:07:17.329 --> 00:07:19.884
+both of them just look like the same sequence of bits,
+
+00:07:19.884 --> 00:07:22.440
+but it's a very different story in a quantum computer.
+
+00:07:22.880 --> 00:07:26.791
+Our main job today is going to be to understand something called the state vector,
+
+00:07:26.791 --> 00:07:30.320
+which is continuous, this is the thing the computer actually operates on,
+
+00:07:30.320 --> 00:07:34.278
+but it has a very unusual relationship with the values that you actually read out,
+
+00:07:34.278 --> 00:07:35.900
+those discrete sequences of bits.
+
+00:07:36.240 --> 00:07:39.485
+Before I can define this state vector, you need to know one other key
+
+00:07:39.485 --> 00:07:43.294
+difference from classical computers, which is that this value that you read out,
+
+00:07:43.294 --> 00:07:46.680
+which again just looks like some sequence of ones and zeros, is random.
+
+00:07:47.140 --> 00:07:50.180
+Or to be a little more accurate, I should say it's typically random.
+
+00:07:50.540 --> 00:07:55.008
+The way you can think about this is that if you run a program on a quantum computer,
+
+00:07:55.008 --> 00:07:58.412
+that program doesn't necessarily determine a particular output,
+
+00:07:58.412 --> 00:08:02.560
+instead it determines a probability distribution across all possible outputs.
+
+00:08:03.100 --> 00:08:07.109
+So for the example I'm showing on screen, this would be a very small quantum
+
+00:08:07.109 --> 00:08:10.169
+computer where the thing that you read out has four bits,
+
+00:08:10.169 --> 00:08:13.281
+meaning that there are 2 to the 4, or 16 possible outputs,
+
+00:08:13.281 --> 00:08:17.343
+and the specific program you run determines some kind of distribution across
+
+00:08:17.343 --> 00:08:18.820
+all those possible outputs.
+
+00:08:19.260 --> 00:08:23.434
+Some programs might manage to concentrate more probability on just one of those outputs,
+
+00:08:23.434 --> 00:08:26.660
+but other programs might give a more even spread across everything.
+
+00:08:27.340 --> 00:08:31.066
+This example, by the way, where the thing you read out has four bits,
+
+00:08:31.066 --> 00:08:34.521
+would be called a 4-qubit quantum computer, and more generally,
+
+00:08:34.521 --> 00:08:38.895
+if you have a k-qubit quantum computer, that means there are 2 to the k distinct
+
+00:08:38.895 --> 00:08:42.998
+possible outputs, and any program gives a distribution across all of those,
+
+00:08:42.998 --> 00:08:45.860
+and the thing that you read out has k distinct bits.
+
+00:08:46.560 --> 00:08:48.660
+That word qubit, by the way, is another thing I'm
+
+00:08:48.660 --> 00:08:50.760
+going to define more precisely in just a minute.
+
+00:08:50.760 --> 00:08:53.920
+I do want to emphasize that this distribution is implicit.
+
+00:08:54.240 --> 00:08:56.859
+You never actually see it directly, you instead infer
+
+00:08:56.859 --> 00:08:59.380
+what it must be based on the program that you run.
+
+00:08:59.920 --> 00:09:03.540
+You never see all bit strings coexisting at once in some kind of way.
+
+00:09:03.820 --> 00:09:07.640
+You just see one of them, drawn at random, according to this distribution.
+
+00:09:08.300 --> 00:09:12.526
+At a lower layer of abstraction, what I'm describing as reading out from memory looks
+
+00:09:12.526 --> 00:09:17.000
+like a physical measurement, and the randomness stems from the laws of quantum mechanics.
+
+00:09:17.000 --> 00:09:20.167
+If you're curious about the physics, that lower layer of abstraction,
+
+00:09:20.167 --> 00:09:22.140
+that's exactly what the next video is for.
+
+00:09:22.520 --> 00:09:24.941
+Up in this layer, you just think about probability
+
+00:09:24.941 --> 00:09:27.120
+distributions over all possible bit strings.
+
+00:09:27.860 --> 00:09:32.186
+One more funny rule here, which does bubble up from the underlying quantum mechanics,
+
+00:09:32.186 --> 00:09:36.003
+is that after you read out from memory, and you see some particular value,
+
+00:09:36.003 --> 00:09:39.566
+the underlying state of the computer changes such that now all of the
+
+00:09:39.566 --> 00:09:42.620
+probability is concentrated on whatever value you read out.
+
+00:09:42.860 --> 00:09:45.046
+So if you kept reading out from memory over and over,
+
+00:09:45.046 --> 00:09:46.860
+you would just keep seeing that same value.
+
+00:09:47.420 --> 00:09:50.490
+You might imagine these programs as creating a very delicate and
+
+00:09:50.490 --> 00:09:53.799
+sensitive probability distribution, where the moment you look at it,
+
+00:09:53.799 --> 00:09:57.300
+sampling from that distribution, the whole thing collapses to one value.
+
+00:09:58.060 --> 00:10:00.700
+Now you might be wondering, where does this distribution come from?
+
+00:10:01.020 --> 00:10:03.600
+This is both the most important and the most confusing part.
+
+00:10:03.960 --> 00:10:08.000
+You think of the state of the computer as being described by a big vector.
+
+00:10:08.400 --> 00:10:11.783
+Right now when I say the word vector, you can just think big list of numbers,
+
+00:10:11.783 --> 00:10:14.771
+although as you'll see later on, it can be helpful to think of this
+
+00:10:14.771 --> 00:10:17.100
+as a direction in some super high dimensional space.
+
+00:10:18.420 --> 00:10:21.986
+Each component of this vector corresponds to one of the possible
+
+00:10:21.986 --> 00:10:25.440
+values you might read out, one of those distinct bit strings.
+
+00:10:25.880 --> 00:10:28.672
+So in this example where what you read out has 4 bits,
+
+00:10:28.672 --> 00:10:31.360
+the state vector would have 16 distinct components.
+
+00:10:31.900 --> 00:10:35.221
+The state vector is not the same thing as the probability distribution
+
+00:10:35.221 --> 00:10:38.020
+over all possible outputs, but it is very closely related.
+
+00:10:38.380 --> 00:10:42.255
+The fundamental rule, which I admit is going to look very strange at first,
+
+00:10:42.255 --> 00:10:46.802
+is that if you take the magnitude of each component in that state vector and you square
+
+00:10:46.802 --> 00:10:50.470
+it, that gives you the probability of seeing the corresponding output,
+
+00:10:50.470 --> 00:10:52.020
+the corresponding bit string.
+
+00:10:52.500 --> 00:10:54.519
+Let me just say up front, a lot of people learning
+
+00:10:54.519 --> 00:10:56.700
+quantum computing find this state vector a bit weird.
+
+00:10:57.040 --> 00:11:00.380
+What is it actually, and why are we squaring things to get probability?
+
+00:11:00.860 --> 00:11:03.699
+As it is, for the sake of simplicity, there's a certain important
+
+00:11:03.699 --> 00:11:06.320
+detail that I'm neglecting until the end of the video here.
+
+00:11:06.560 --> 00:11:09.700
+I just want to flag that for most people, this takes a little getting used to.
+
+00:11:10.100 --> 00:11:14.204
+And to be super clear on what I mean with the fundamental rule here,
+
+00:11:14.204 --> 00:11:17.885
+let's suppose that after this program processes this vector,
+
+00:11:17.885 --> 00:11:22.653
+maybe the component of it associated with some specific bit string, like 0011,
+
+00:11:22.653 --> 00:11:23.860
+happened to be 0.5.
+
+00:11:24.180 --> 00:11:27.904
+Then when you square that value, 0.5 squared is 0.25,
+
+00:11:27.904 --> 00:11:33.315
+so the observable implication of this is that when you read out from memory,
+
+00:11:33.315 --> 00:11:37.180
+you have a 25% chance of seeing that bit string, 0011.
+
+00:11:37.840 --> 00:11:41.971
+One thing I'll highlight is that it is perfectly valid for the values in this state
+
+00:11:41.971 --> 00:11:45.803
+vector to be negative, and at first you might think that has no real impact,
+
+00:11:45.803 --> 00:11:48.342
+since flipping the sign doesn't change the square,
+
+00:11:48.342 --> 00:11:50.880
+and therefore all the probabilities stay the same.
+
+00:11:51.340 --> 00:11:53.622
+It is true that the probabilities stay the same,
+
+00:11:53.622 --> 00:11:57.187
+but we absolutely consider this to be a distinct state, and as you'll see,
+
+00:11:57.187 --> 00:12:00.800
+the idea of flipping signs plays a very central role in Grover's algorithm.
+
+00:12:01.940 --> 00:12:05.362
+Here, this example with four qubits has kind of a lot on screen,
+
+00:12:05.362 --> 00:12:07.875
+with not a lot of visualization to back it up,
+
+00:12:07.875 --> 00:12:12.152
+so let's scale things down to the smallest possible case where the computer has
+
+00:12:12.152 --> 00:12:15.200
+just two possible outputs, represented with a 0 and a 1.
+
+00:12:15.980 --> 00:12:20.274
+In this simplest possible case, the state vector would only be two-dimensional,
+
+00:12:20.274 --> 00:12:24.460
+so we can actually represent it geometrically as an arrow inside a 2D space.
+
+00:12:24.860 --> 00:12:27.829
+In this case, the x-coordinate corresponds to the outcome 0,
+
+00:12:27.829 --> 00:12:30.898
+in the sense that the square of that coordinate tells you the
+
+00:12:30.898 --> 00:12:34.560
+probability that when you read out from the computer, you would read a 0.
+
+00:12:34.560 --> 00:12:37.740
+Maybe it's helpful if I add a little bar to show that probability.
+
+00:12:38.260 --> 00:12:41.825
+You'll notice that as the vector points more in the horizontal direction,
+
+00:12:41.825 --> 00:12:44.560
+more of that probability mass is concentrated on the 0.
+
+00:12:45.200 --> 00:12:48.700
+Similarly, the y-coordinate corresponds to a 1 in the same way.
+
+00:12:48.960 --> 00:12:51.395
+A more vertical state vector means you're more likely
+
+00:12:51.395 --> 00:12:53.600
+to see a 1 when you read out from the computer.
+
+00:12:54.220 --> 00:12:58.083
+Now, notice, because the two probabilities should add up to 1, after all,
+
+00:12:58.083 --> 00:13:01.840
+something is going to happen, x squared plus y squared should equal 1.
+
+00:13:02.340 --> 00:13:05.572
+Geometrically, this means that the state vector has a length of 1,
+
+00:13:05.572 --> 00:13:08.560
+so you could think of it as being confined to a unit circle.
+
+00:13:10.280 --> 00:13:14.046
+More generally, the state vector for a quantum computer will always have a length of 1,
+
+00:13:14.046 --> 00:13:17.380
+and you can think of it as living on some very high-dimensional unit sphere.
+
+00:13:18.500 --> 00:13:21.500
+This two-dimensional example has a special name, which I've already mentioned.
+
+00:13:21.720 --> 00:13:24.240
+It's called a qubit, short for quantum bit.
+
+00:13:24.580 --> 00:13:28.278
+The analogy with a classical bit is that when you read out from the computer,
+
+00:13:28.278 --> 00:13:32.360
+you see either a 0 or a 1, but other than that, it is a completely different animal.
+
+00:13:32.800 --> 00:13:36.384
+Mathematically, a qubit is a unit vector in a two-dimensional space,
+
+00:13:36.384 --> 00:13:40.178
+together with a coordinate system where these two perpendicular x and y
+
+00:13:40.178 --> 00:13:44.500
+directions correspond to the two values that you might read out when you measure.
+
+00:13:45.420 --> 00:13:49.072
+You should know there is that added bit of complexity that I'm postponing,
+
+00:13:49.072 --> 00:13:50.800
+but this is 90% of the right idea.
+
+00:13:51.520 --> 00:13:55.483
+And again, you have this funny rule where when you measure the qubit,
+
+00:13:55.483 --> 00:14:00.308
+seeing either a 0 or a 1, the vector then collapses to fall onto that corresponding
+
+00:14:00.308 --> 00:14:00.940
+direction.
+
+00:14:01.500 --> 00:14:05.624
+So unless something is done to prepare that qubit back into a diagonal direction,
+
+00:14:05.624 --> 00:14:09.900
+any follow-on observations that you make are always going to show the same outcome.
+
+00:14:10.820 --> 00:14:14.638
+It's very possible that at this point you're thinking something like, okay, grant,
+
+00:14:14.638 --> 00:14:18.315
+this is a super bizarre set of premises you're asking me to accept, and if so,
+
+00:14:18.315 --> 00:14:19.200
+you are not alone.
+
+00:14:19.400 --> 00:14:21.828
+What I'm describing, as you can no doubt probably tell,
+
+00:14:21.828 --> 00:14:24.080
+are basically the postulates of quantum mechanics.
+
+00:14:24.080 --> 00:14:28.308
+There are many systems throughout physics, like the spin of an electron or the
+
+00:14:28.308 --> 00:14:31.072
+polarization of a photon, that have this property,
+
+00:14:31.072 --> 00:14:33.566
+where the outcome of a measurement is random,
+
+00:14:33.566 --> 00:14:38.119
+and our best laws of physics have us model the state of that system using a vector,
+
+00:14:38.119 --> 00:14:42.780
+just like the one I'm describing here, where squaring the magnitudes of that vector's
+
+00:14:42.780 --> 00:14:46.900
+components give you the probabilities for seeing various possible outcomes.
+
+00:14:47.240 --> 00:14:49.680
+That actually has a special name, it's called the Born rule.
+
+00:14:49.680 --> 00:14:54.111
+This idea of a qubit is basically meant to be an abstraction over many possible
+
+00:14:54.111 --> 00:14:58.654
+systems like this, in just the same way that a bit is meant to be an abstraction
+
+00:14:58.654 --> 00:15:02.860
+over many possible physical systems that can toggle one of two directions.
+
+00:15:03.960 --> 00:15:07.976
+The symbol I've been showing, by the way, is used throughout any subject with
+
+00:15:07.976 --> 00:15:11.940
+the word quantum in its name to refer to a unit vector in this state space.
+
+00:15:12.520 --> 00:15:15.251
+What you put inside that ket is often going to give some
+
+00:15:15.251 --> 00:15:18.080
+kind of readable meaning for what that vector represents.
+
+00:15:18.080 --> 00:15:21.628
+So in our example with a qubit, the unit vector to the right is often
+
+00:15:21.628 --> 00:15:25.227
+shown with a zero inside the ket, because if that's the state vector,
+
+00:15:25.227 --> 00:15:28.620
+it means you deterministically read out a zero from the computer.
+
+00:15:29.060 --> 00:15:31.689
+Likewise, the unit vector in the vertical direction is
+
+00:15:31.689 --> 00:15:34.220
+represented with a ket that has a one inside of it.
+
+00:15:34.580 --> 00:15:38.249
+And if you go on and read more about this, something that you'll very commonly
+
+00:15:38.249 --> 00:15:41.730
+see is that instead of writing down a general qubit with a column vector,
+
+00:15:41.730 --> 00:15:45.446
+the way I've been showing you, a lot of people like to write it as an explicit
+
+00:15:45.446 --> 00:15:48.880
+weighted sum of these two unit vectors in the two coordinate directions.
+
+00:15:49.300 --> 00:15:51.160
+That's a very physicist kind of convention.
+
+00:15:52.460 --> 00:15:55.268
+Now classical computing has this idea of logic gates,
+
+00:15:55.268 --> 00:15:58.818
+certain basic operations like AND, OR, and NOT that you can use to
+
+00:15:58.818 --> 00:16:02.421
+process bits and that you can string together to create arbitrarily
+
+00:16:02.421 --> 00:16:03.640
+complicated functions.
+
+00:16:04.320 --> 00:16:07.179
+Analogously we have what are called quantum gates,
+
+00:16:07.179 --> 00:16:11.582
+which are certain fundamental operations that you can apply to a qubit or to
+
+00:16:11.582 --> 00:16:13.240
+a system of multiple qubits.
+
+00:16:13.240 --> 00:16:17.100
+And they always look like somehow flipping or rotating the state vector.
+
+00:16:17.580 --> 00:16:20.842
+Now I'm not going to delve too deeply into the details of all the different quantum
+
+00:16:20.842 --> 00:16:24.300
+gates, but if you are curious, I'll show you an example of what one of them looks like.
+
+00:16:24.620 --> 00:16:27.280
+Here's a very standard one known as a Hadamard gate.
+
+00:16:27.680 --> 00:16:31.839
+What it does is it maps the unit vector in that horizontal zero direction
+
+00:16:31.839 --> 00:16:35.827
+into the diagonal northeast direction, and it maps the unit vector in
+
+00:16:35.827 --> 00:16:40.100
+the vertical one direction into that kind of diagonal southeast direction.
+
+00:16:40.420 --> 00:16:43.566
+You would very commonly use this to take a deterministic state,
+
+00:16:43.566 --> 00:16:47.912
+something that's either a zero or a one, and turn it into something with a 50-50 equal
+
+00:16:47.912 --> 00:16:49.360
+balance, or vice versa, too.
+
+00:16:49.800 --> 00:16:54.202
+This is just one example, but there are a number of others forming the building blocks
+
+00:16:54.202 --> 00:16:58.757
+for quantum computing, and the art of writing an algorithm in this setting is to somehow
+
+00:16:58.757 --> 00:17:03.209
+compose a bunch of different quantum gates together that will progressively manipulate
+
+00:17:03.209 --> 00:17:07.457
+and flip and massage this vector until it points almost entirely in one particular
+
+00:17:07.457 --> 00:17:11.859
+coordinate direction, presumably one that actually answers a question you care about.
+
+00:17:12.920 --> 00:17:14.963
+Now down with the simplest example of a qubit,
+
+00:17:14.963 --> 00:17:17.362
+you only have two coordinate directions to work with,
+
+00:17:17.362 --> 00:17:20.160
+so you would be constrained to answer simple yes-no questions.
+
+00:17:20.500 --> 00:17:25.302
+And although I can't illustrate a geometric vector with more than three dimensions,
+
+00:17:25.302 --> 00:17:29.062
+in principle, a system with k qubits is going to have 2 to the k
+
+00:17:29.062 --> 00:17:32.360
+distinct coordinate directions, one for each bit string.
+
+00:17:32.700 --> 00:17:35.802
+So if you can somehow manage to coerce this vector to point
+
+00:17:35.802 --> 00:17:38.850
+along just one of those directions, you could potentially
+
+00:17:38.850 --> 00:17:42.320
+answer some more interesting question, carrying more information.
+
+00:17:42.800 --> 00:17:45.524
+Maybe one of them represents a prime divisor in a very large
+
+00:17:45.524 --> 00:17:48.430
+number you're trying to factor, or maybe one of them represents
+
+00:17:48.430 --> 00:17:51.200
+that secret key value from the opening puzzle of this video.
+
+00:17:51.660 --> 00:17:55.905
+Even though the potential power of quantum computers has a long tradition now of
+
+00:17:55.905 --> 00:18:00.362
+being greatly exaggerated, insofar as there really is potentially more power there,
+
+00:18:00.362 --> 00:18:04.660
+one of the key reasons is that the size of the state vector grows exponentially.
+
+00:18:05.020 --> 00:18:10.640
+As few as 100 qubits would already imply a mind-bogglingly massive state vector.
+
+00:18:11.140 --> 00:18:15.260
+But the catch is that you have no direct access to the values inside this vector.
+
+00:18:15.600 --> 00:18:17.140
+It's effectively invisible to you.
+
+00:18:17.460 --> 00:18:22.036
+The only way it can be useful is if you have a way to manipulate it in such a way that
+
+00:18:22.036 --> 00:18:24.589
+all of the probability, or at least most of it,
+
+00:18:24.589 --> 00:18:29.005
+gets concentrated on one single component, and if that component corresponds to an
+
+00:18:29.005 --> 00:18:31.240
+answer to a question that you care about.
+
+00:18:31.760 --> 00:18:35.835
+Grover's algorithm offers us a really great example to actually see how this looks,
+
+00:18:35.835 --> 00:18:37.700
+and it's high time that we get there.
+
+00:18:41.300 --> 00:18:44.080
+Let me offer you a very high-level preview for how it looks.
+
+00:18:44.360 --> 00:18:48.160
+I promise I will explain all of this in more detail, but here's the bird's eye view.
+
+00:18:48.640 --> 00:18:51.956
+It initializes this state vector in such a way that there's
+
+00:18:51.956 --> 00:18:55.440
+an equal balance of probability across all possible outcomes.
+
+00:18:55.880 --> 00:18:59.700
+One of those outcomes is going to be the secret key that you're searching for,
+
+00:18:59.700 --> 00:19:03.422
+and the tool that you'll have available, which I promise to motivate later,
+
+00:19:03.422 --> 00:19:06.360
+is to flip the sign of the state vector at that coordinate.
+
+00:19:07.100 --> 00:19:09.598
+This doesn't immediately affect the probabilities,
+
+00:19:09.598 --> 00:19:12.645
+but when you interleave this with a certain other operation,
+
+00:19:12.645 --> 00:19:15.642
+and you kind of go back and forth between the two of these,
+
+00:19:15.642 --> 00:19:19.938
+what happens is that the probability mass slowly starts to get concentrated over that
+
+00:19:19.938 --> 00:19:23.635
+secret key value, and at a certain point, almost all of it will be there,
+
+00:19:23.635 --> 00:19:27.881
+so when you read out from the computer, you will almost certainly see the secret key
+
+00:19:27.881 --> 00:19:28.880
+you're looking for.
+
+00:19:29.760 --> 00:19:32.840
+Okay, so that's the high level, but let's unpack it in some more detail.
+
+00:19:33.180 --> 00:19:35.965
+The first thing to address is this idea of flipping the
+
+00:19:35.965 --> 00:19:38.700
+sign of the component associated with the secret key.
+
+00:19:39.080 --> 00:19:40.300
+That might feel a little bit weird.
+
+00:19:40.580 --> 00:19:43.260
+Why would we assume that that operation is available to us?
+
+00:19:43.720 --> 00:19:48.306
+Backing up, remember that Grover's algorithm is meant to apply to any problem where you
+
+00:19:48.306 --> 00:19:52.840
+can verify a solution quickly, even if finding a solution in the first place is hard.
+
+00:19:53.240 --> 00:19:56.963
+Examples here would include solving Sudokus, finding a valid coloring of
+
+00:19:56.963 --> 00:19:59.497
+a map where no two border regions share a color,
+
+00:19:59.497 --> 00:20:03.272
+or countless tasks throughout cryptography, where security often depends
+
+00:20:03.272 --> 00:20:07.047
+on a certain value being hard to find, even though for pragmatism it has
+
+00:20:07.047 --> 00:20:08.340
+to be easily verifiable.
+
+00:20:08.800 --> 00:20:12.769
+We began this video with a generic stand-in for all of these problems,
+
+00:20:12.769 --> 00:20:16.285
+where you imagine some function that takes in any number from
+
+00:20:16.285 --> 00:20:19.460
+0 to n-1 and returns true on one and only one of those.
+
+00:20:19.680 --> 00:20:21.842
+In principle, we'll think of such a function as
+
+00:20:21.842 --> 00:20:24.280
+being built out of a bunch of classical logic gates.
+
+00:20:24.580 --> 00:20:28.125
+Those logic gates act on some binary representation of the inputs,
+
+00:20:28.125 --> 00:20:30.220
+and the final output is either 0 or 1.
+
+00:20:30.560 --> 00:20:31.500
+Now here's the key point.
+
+00:20:31.840 --> 00:20:35.344
+Grover knew that given any ensemble of logic gates like this,
+
+00:20:35.344 --> 00:20:40.458
+you can translate it into a system of quantum gates so that if in the classical case the
+
+00:20:40.458 --> 00:20:44.077
+function takes in some binary input and returns a 1, for true,
+
+00:20:44.077 --> 00:20:49.018
+then in the quantum case the effect of all of these gates is to flip the sign of that
+
+00:20:49.018 --> 00:20:52.120
+state, the state associated with the same bit string.
+
+00:20:52.120 --> 00:20:56.675
+Similarly, if in the classical case the function maps some binary input to 0,
+
+00:20:56.675 --> 00:21:00.344
+for false, then in this quantum translation the effect on the
+
+00:21:00.344 --> 00:21:03.420
+corresponding state would be to leave it unchanged.
+
+00:21:03.940 --> 00:21:07.370
+More generally, because all of these quantum operations are linear,
+
+00:21:07.370 --> 00:21:10.954
+if the state is a combination of multiple pure coordinate directions,
+
+00:21:10.954 --> 00:21:15.356
+then the effect is to simply flip the sign for the component associated with whatever
+
+00:21:15.356 --> 00:21:17.660
+bit string triggers that classical function.
+
+00:21:18.060 --> 00:21:22.530
+It means that if you have any NP problem, anything where you can quickly verify
+
+00:21:22.530 --> 00:21:27.227
+solutions, you're able to create an operation on a quantum computer that flips the
+
+00:21:27.227 --> 00:21:31.980
+sign of a state vector at the position corresponding to a solution of that problem.
+
+00:21:32.560 --> 00:21:34.320
+This might feel kind of useless at first.
+
+00:21:34.600 --> 00:21:37.320
+After all, flipping signs doesn't affect the probabilities.
+
+00:21:37.800 --> 00:21:41.372
+But Grover realized that this could be used in conjunction with
+
+00:21:41.372 --> 00:21:45.340
+another step that slowly amplifies the probability of that key value.
+
+00:21:45.900 --> 00:21:48.380
+There's actually a really nice way to visualize his algorithm.
+
+00:21:48.740 --> 00:21:52.100
+To set it up, let's imagine that our state vector has only three dimensions.
+
+00:21:52.600 --> 00:21:56.260
+Obviously in principle it would be way bigger, but this lets me draw the first picture.
+
+00:21:56.620 --> 00:21:59.518
+The three directions here would correspond to the values 0,
+
+00:21:59.518 --> 00:22:02.416
+1, and 2, and the whole problem statement here is that one
+
+00:22:02.416 --> 00:22:05.560
+of those values would be a secret key that we're searching for.
+
+00:22:06.100 --> 00:22:09.692
+Many different quantum algorithms will begin by putting that state vector into
+
+00:22:09.692 --> 00:22:13.100
+a kind of equal balance, where all of the components have the same value.
+
+00:22:13.700 --> 00:22:16.100
+I want to give that equal balance vector a name.
+
+00:22:16.360 --> 00:22:17.000
+Let's call it B.
+
+00:22:17.420 --> 00:22:20.510
+I hope you don't object too much to me simply declaring that this is possible
+
+00:22:20.510 --> 00:22:23.320
+without dwelling on the underlying quantum gates that make it happen.
+
+00:22:23.680 --> 00:22:26.810
+In this case it essentially looks like a big pile of Hadamard gates,
+
+00:22:26.810 --> 00:22:30.860
+but all you need to know is that this equal balance direction is abundantly accessible.
+
+00:22:31.620 --> 00:22:34.860
+So starting from here, the goal is to somehow coerce this
+
+00:22:34.860 --> 00:22:38.100
+vector to instead point up in that secret key direction.
+
+00:22:38.540 --> 00:22:41.944
+And what's very helpful for the visualization purposes here
+
+00:22:41.944 --> 00:22:45.405
+is that throughout Grover's algorithm, the vector only ever
+
+00:22:45.405 --> 00:22:49.040
+moves inside the 2D plane that's spanned by these two vectors.
+
+00:22:49.520 --> 00:22:53.040
+So what I'm going to do is draw everything on that two-dimensional slice.
+
+00:22:53.320 --> 00:22:56.375
+And this is going to give us a faithful representation even when
+
+00:22:56.375 --> 00:22:59.240
+the full dimension is way too big for me to draw literally.
+
+00:22:59.640 --> 00:23:03.813
+The convention I'll use here in drawing that slice will be to put the secret key
+
+00:23:03.813 --> 00:23:06.212
+direction, whatever it is, along this y-axis,
+
+00:23:06.212 --> 00:23:10.541
+and then the x-axis is going to represent something that's an equal balance of all
+
+00:23:10.541 --> 00:23:12.680
+of the other states, the non-key states.
+
+00:23:13.000 --> 00:23:15.570
+So in our very small three-dimensional example,
+
+00:23:15.570 --> 00:23:18.741
+if that secret key was the 2 state up in the z direction,
+
+00:23:18.741 --> 00:23:22.404
+that would mean this perpendicular is an equal balance of 0 and 1,
+
+00:23:22.404 --> 00:23:25.520
+which sits on the xy plane perpendicular to that z-axis.
+
+00:23:26.180 --> 00:23:30.845
+Notice the fully equally balanced state, b, has some component in that secret key
+
+00:23:30.845 --> 00:23:35.740
+direction, since by its definition it has a little bit of that secret key within it.
+
+00:23:35.740 --> 00:23:38.182
+Instead of drawing this slice from three dimensions,
+
+00:23:38.182 --> 00:23:42.220
+here's what it would look like if it was taken from some larger number of dimensions.
+
+00:23:42.720 --> 00:23:46.871
+It's almost identical, but the main difference is that that equal balance state
+
+00:23:46.871 --> 00:23:51.180
+vector gets closer and closer to being perpendicular to the secret key direction.
+
+00:23:51.600 --> 00:23:54.538
+Crucially though, this angle is never quite 90 degrees,
+
+00:23:54.538 --> 00:23:59.240
+since that balance state always has a little bit of that secret key value inside of it.
+
+00:23:59.640 --> 00:24:02.404
+In fact, calculating this angle is going to be essential
+
+00:24:02.404 --> 00:24:05.020
+for understanding the runtime of Grover's algorithm.
+
+00:24:05.020 --> 00:24:07.700
+This is the main bit of math you actually have to do for it.
+
+00:24:07.980 --> 00:24:10.183
+You can find this angle by taking a dot product
+
+00:24:10.183 --> 00:24:12.480
+between the balance state and the key direction.
+
+00:24:13.060 --> 00:24:16.560
+The components of that balance state vector are all going to look like
+
+00:24:16.560 --> 00:24:20.060
+1 divided by the square root of n, since remember it needs to be true
+
+00:24:20.060 --> 00:24:23.460
+that when you add the squares of all of these, it would give you 1.
+
+00:24:24.080 --> 00:24:27.965
+Since the key vector is 0 almost everywhere but 1 in one of the components,
+
+00:24:27.965 --> 00:24:32.420
+it means that the dot product between these two is 1 divided by the square root of n.
+
+00:24:32.420 --> 00:24:35.648
+If you know a little about dot products, you'll know that this
+
+00:24:35.648 --> 00:24:38.720
+is also the cosine of the angle between those two vectors.
+
+00:24:39.440 --> 00:24:42.600
+I'm going to translate this fact a little to make it more useful for our purposes later.
+
+00:24:43.100 --> 00:24:47.029
+This is the same as saying the sine of the complementary angle down over here,
+
+00:24:47.029 --> 00:24:49.800
+which I'll call theta, is 1 over the square root of n.
+
+00:24:50.420 --> 00:24:54.552
+For really small angles, the sine of theta and theta are approximately the same,
+
+00:24:54.552 --> 00:24:58.064
+so if n is very large, we can safely say that this angle is about 1
+
+00:24:58.064 --> 00:25:01.680
+divided by the square root of n, as long as it's measured in radians.
+
+00:25:02.200 --> 00:25:04.674
+This value for theta is ultimately where the square
+
+00:25:04.674 --> 00:25:06.760
+root in the runtime is going to come from.
+
+00:25:07.220 --> 00:25:08.220
+So let's remember it.
+
+00:25:08.320 --> 00:25:09.700
+I'll throw it up in the corner here.
+
+00:25:10.440 --> 00:25:12.659
+Okay, having spent a while setting up the actual picture,
+
+00:25:12.659 --> 00:25:14.060
+let me show you the procedure here.
+
+00:25:14.180 --> 00:25:15.380
+It's surprisingly simple.
+
+00:25:15.760 --> 00:25:18.140
+Remember that key operation we were looking at earlier?
+
+00:25:18.460 --> 00:25:22.008
+The one where you take the verification function for whatever NP problem
+
+00:25:22.008 --> 00:25:25.458
+you're trying to solve, and you translate it into some quantum gates,
+
+00:25:25.458 --> 00:25:28.760
+and the effect is to flip the sign associated with that key value?
+
+00:25:29.180 --> 00:25:31.520
+Well, what does that look like inside our diagram?
+
+00:25:32.240 --> 00:25:37.213
+In this diagram, if you flip the sign for the component associated with the key value,
+
+00:25:37.213 --> 00:25:42.360
+but all other components stay the same, what it looks like is flipping about the x-axis.
+
+00:25:44.620 --> 00:25:48.279
+And the final ingredient you need to know is that it is also possible
+
+00:25:48.279 --> 00:25:51.620
+to flip this state vector around this equal balance direction.
+
+00:25:52.400 --> 00:25:56.435
+I realize it might be a little unsatisfying for me to keep declaring that certain
+
+00:25:56.435 --> 00:25:59.822
+operations are available, but one thing to know is that in general,
+
+00:25:59.822 --> 00:26:03.160
+if you can clearly describe and access one of these state vectors,
+
+00:26:03.160 --> 00:26:05.700
+it's also perfectly possible to reflect around it.
+
+00:26:06.100 --> 00:26:09.366
+There are some quantum gates, they let you flip around this balance direction,
+
+00:26:09.366 --> 00:26:12.422
+but trust me that dwelling on the details of how those look isn't really
+
+00:26:12.422 --> 00:26:15.060
+going to add much clarity or intuition to the whole algorithm.
+
+00:26:15.460 --> 00:26:17.140
+The insight really just comes from geometry.
+
+00:26:17.540 --> 00:26:20.064
+Notice how if you first flip around the x-axis,
+
+00:26:20.064 --> 00:26:22.750
+and then flip around this off-diagonal direction,
+
+00:26:22.750 --> 00:26:26.080
+the state now points slightly more in the vertical direction.
+
+00:26:26.540 --> 00:26:29.690
+If you were to read out from memory now, you would have a slightly
+
+00:26:29.690 --> 00:26:32.840
+larger chance of seeing the secret key value than all the others.
+
+00:26:33.380 --> 00:26:36.061
+Here, maybe it's helpful if I show the actual coordinates,
+
+00:26:36.061 --> 00:26:39.713
+in this case where n equals 100, along with some probability bars based on the
+
+00:26:39.713 --> 00:26:41.100
+squares of those coordinates.
+
+00:26:41.540 --> 00:26:43.995
+Notice how each time I flip around the x-axis,
+
+00:26:43.995 --> 00:26:48.265
+and then flip around this off-diagonal axis, the component associated with that
+
+00:26:48.265 --> 00:26:50.240
+secret key gets a little bit larger.
+
+00:26:50.240 --> 00:26:53.180
+So Grover's algorithm is remarkably simple.
+
+00:26:53.540 --> 00:26:56.442
+All you do is repeat this over and over until the vector
+
+00:26:56.442 --> 00:26:59.500
+points as close as it can get to the secret key direction.
+
+00:27:00.000 --> 00:27:01.969
+The final bit of reasoning you have to do is to
+
+00:27:01.969 --> 00:27:03.980
+figure out how many repetitions that should be.
+
+00:27:04.660 --> 00:27:08.981
+A wonderful fact from geometry is that if you successively flip about two
+
+00:27:08.981 --> 00:27:13.302
+different lines like this, the overall effect is the same as a rotation,
+
+00:27:13.302 --> 00:27:17.860
+more specifically a rotation by two times the angle between those two lines.
+
+00:27:18.480 --> 00:27:23.052
+So in our case, applying the two operations we have available one after the other,
+
+00:27:23.052 --> 00:27:26.676
+the net effect is to rotate the state vector by two times theta,
+
+00:27:26.676 --> 00:27:30.411
+where again theta is that little angle that we calculated earlier,
+
+00:27:30.411 --> 00:27:32.920
+approximately one over the square root of n.
+
+00:27:33.320 --> 00:27:37.310
+The ultimate goal is to rotate our initial state a little under 90 degrees,
+
+00:27:37.310 --> 00:27:38.800
+or about pi halves radians.
+
+00:27:39.380 --> 00:27:44.084
+This means the optimal number of repetitions looks like pi halves divided by two theta,
+
+00:27:44.084 --> 00:27:47.220
+which is pi fourths times one over theta, and critically,
+
+00:27:47.220 --> 00:27:50.464
+because theta is about one divided by the square root of n,
+
+00:27:50.464 --> 00:27:55.060
+it means the total number of steps looks like pi fourths times the square root of n.
+
+00:27:55.700 --> 00:28:00.382
+So what Grover's algorithm says is first find whatever whole number is closest to
+
+00:28:00.382 --> 00:28:05.180
+this value and then repeat your two available flips that specific number of times.
+
+00:28:05.580 --> 00:28:08.900
+As a concrete example, let's say that n was two to the power of twenty,
+
+00:28:08.900 --> 00:28:12.360
+meaning you're searching for a secret key out of about a million options.
+
+00:28:12.360 --> 00:28:15.429
+You would be running this on a computer with at least twenty qubits,
+
+00:28:15.429 --> 00:28:18.950
+and what the algorithm would say is first compute pi fourths times the square
+
+00:28:18.950 --> 00:28:21.703
+root of this number, which is around eight hundred and four,
+
+00:28:21.703 --> 00:28:24.592
+meaning you now repeat those two operations you have available,
+
+00:28:24.592 --> 00:28:28.113
+the one flipping the sign of the key state and the one that's flipping around
+
+00:28:28.113 --> 00:28:30.460
+the balance direction eight hundred and four times.
+
+00:28:30.860 --> 00:28:33.560
+Now remember, this state vector is invisible to you.
+
+00:28:33.720 --> 00:28:36.840
+There is nothing that you can do that will read out the values that it has.
+
+00:28:37.140 --> 00:28:41.103
+You instead have to infer where it must be through reasoning, and in this case,
+
+00:28:41.103 --> 00:28:45.416
+through all the geometric reasoning, you can conclude that after this specific number
+
+00:28:45.416 --> 00:28:49.680
+of times, the vector should be pointed almost entirely in that secret key direction.
+
+00:28:50.080 --> 00:28:52.237
+So when you read out from the computer, you are
+
+00:28:52.237 --> 00:28:54.440
+almost guaranteed to see that secret key value.
+
+00:28:55.200 --> 00:28:57.380
+Now to be clear, you're not guaranteed to see it.
+
+00:28:57.560 --> 00:28:59.679
+There is some small chance that after reading out,
+
+00:28:59.679 --> 00:29:01.840
+you would see something that's not the secret key.
+
+00:29:02.180 --> 00:29:05.680
+So to be sure, you could always quickly verify the answer, since after all,
+
+00:29:05.680 --> 00:29:09.880
+the whole premise of this situation is that you have some quick way of verifying answers.
+
+00:29:09.880 --> 00:29:11.900
+You can just do that on a classical computer.
+
+00:29:12.480 --> 00:29:15.205
+Worst case, if you got unlucky and sampled a different number,
+
+00:29:15.205 --> 00:29:18.151
+you run the whole thing again, and it becomes vanishingly unlikely
+
+00:29:18.151 --> 00:29:21.140
+that you would ever need to run this more than just a couple times.
+
+00:29:22.460 --> 00:29:25.630
+To wrap up, I want to come clean about a lie that I've been telling you,
+
+00:29:25.630 --> 00:29:28.535
+and also reflect a little bit about where this speedup came from,
+
+00:29:28.535 --> 00:29:30.340
+and then highlight a surprising analogy.
+
+00:29:30.920 --> 00:29:33.632
+Before I do, now might be as good a time as any to say a
+
+00:29:33.632 --> 00:29:36.440
+thanks to the community of channel supporters on Patreon.
+
+00:29:36.740 --> 00:29:40.340
+Putting together visualized lessons like this takes an enormous amount of time.
+
+00:29:40.700 --> 00:29:44.685
+As you probably know, most YouTubers monetize their content with in-video sponsorships,
+
+00:29:44.685 --> 00:29:47.800
+but for many years now that's something that I've opted to decline.
+
+00:29:48.180 --> 00:29:52.560
+I think it makes the videos better, and the only reason it's not a wildly costly decision
+
+00:29:52.560 --> 00:29:56.940
+is that enough viewers who agree with that directly support the channel through Patreon.
+
+00:29:57.400 --> 00:29:59.904
+In exchange, I offer supporters early views of new content,
+
+00:29:59.904 --> 00:30:03.640
+which is actually very helpful for developing it, and there's other perks in there too.
+
+00:30:03.640 --> 00:30:05.603
+In general though, if you like this content, it
+
+00:30:05.603 --> 00:30:07.440
+would mean a lot if you considered joining.
+
+00:30:07.780 --> 00:30:10.660
+No pressure though, one of the big values is that the content can be free.
+
+00:30:12.060 --> 00:30:14.000
+Anyway, back to those three finishing points.
+
+00:30:14.540 --> 00:30:16.420
+The lie is a lie by omission.
+
+00:30:16.940 --> 00:30:21.007
+I've been showing these state vectors with positive and negative real number values,
+
+00:30:21.007 --> 00:30:23.960
+but more generally, these components can be complex numbers.
+
+00:30:24.400 --> 00:30:27.880
+Now my hope is to motivate why that's the case in the follow-on video about physics.
+
+00:30:28.180 --> 00:30:31.164
+The general idea is that any time you're working with waves,
+
+00:30:31.164 --> 00:30:34.248
+you care about both amplitude and phase, and a complex number
+
+00:30:34.248 --> 00:30:37.580
+is a really elegant way to encode an amplitude and phase together.
+
+00:30:38.060 --> 00:30:41.157
+So if you look at one of the components inside the state vector,
+
+00:30:41.157 --> 00:30:44.786
+the fuller picture for how to think about it is that it has some magnitude
+
+00:30:44.786 --> 00:30:45.560
+and some phase.
+
+00:30:45.900 --> 00:30:49.021
+The magnitude is the thing that you square to get the probability,
+
+00:30:49.021 --> 00:30:51.810
+and the phase is essentially a more general version of our
+
+00:30:51.810 --> 00:30:54.600
+whole discussion here around positive and negative values.
+
+00:30:54.940 --> 00:30:57.747
+Changing phase doesn't immediately affect the probabilities,
+
+00:30:57.747 --> 00:31:01.724
+but it does affect the state, which in turn affects how it gets processed and how it
+
+00:31:01.724 --> 00:31:02.940
+interacts with the world.
+
+00:31:03.440 --> 00:31:06.132
+Now needless to say, throwing in a bunch of complex numbers adds
+
+00:31:06.132 --> 00:31:08.740
+a lot of potential confusion to an already complicated topic.
+
+00:31:08.960 --> 00:31:10.040
+That's why I avoided it.
+
+00:31:10.240 --> 00:31:14.332
+But we were safe to ignore complex values for the purposes of Grover's algorithm,
+
+00:31:14.332 --> 00:31:16.655
+since very mercifully, during that algorithm,
+
+00:31:16.655 --> 00:31:19.080
+you only ever see positive and negative values.
+
+00:31:19.440 --> 00:31:23.364
+I want you to know, though, that this availability of complex values plays a
+
+00:31:23.364 --> 00:31:27.340
+crucial role in other quantum algorithms, like Shor's for factoring numbers.
+
+00:31:27.340 --> 00:31:31.801
+Next, even if you understood everything that I described with this whole algorithm,
+
+00:31:31.801 --> 00:31:35.240
+it's not easy to summarize where exactly the speedup came from.
+
+00:31:35.700 --> 00:31:38.924
+The fact that you begin by applying a certain operation to this
+
+00:31:38.924 --> 00:31:42.353
+equal balance state makes it very tempting to say that the speedup
+
+00:31:42.353 --> 00:31:45.680
+comes from parallelizing the operation over all possible inputs.
+
+00:31:46.020 --> 00:31:48.948
+But like I mentioned at the start, that summary, at least to me,
+
+00:31:48.948 --> 00:31:52.380
+just really doesn't feel right, and it definitely leads to misconceptions.
+
+00:31:52.980 --> 00:31:57.520
+As you now know, that step, on its own, does nothing to reveal the key value.
+
+00:31:57.860 --> 00:32:01.618
+I'll leave it up to your interpretation whether it feels apt to describe this
+
+00:32:01.618 --> 00:32:04.644
+first step as applying a function to many inputs in parallel,
+
+00:32:04.644 --> 00:32:08.499
+or if it feels better to say that the balance state is just its own new thing,
+
+00:32:08.499 --> 00:32:12.209
+and the function we have always applies to individual inputs one at a time,
+
+00:32:12.209 --> 00:32:13.380
+never multiple at once.
+
+00:32:13.600 --> 00:32:16.040
+It's just that those inputs are now a new kind of thing.
+
+00:32:16.600 --> 00:32:19.815
+In my view, for this algorithm, if you want the one-word summary for
+
+00:32:19.815 --> 00:32:23.360
+where the speedup comes from, I think a better choice would be Pythagoras.
+
+00:32:23.720 --> 00:32:28.029
+As a loose analogy, if you want to get from one corner of a unit square to the opposite,
+
+00:32:28.029 --> 00:32:32.240
+if you're limited to move only in the x and y directions, you have to walk two units.
+
+00:32:32.640 --> 00:32:36.100
+But if you're allowed to move diagonally, you can get there in the square root of two.
+
+00:32:36.420 --> 00:32:38.758
+And more generally, if you're up in n dimensions,
+
+00:32:38.758 --> 00:32:42.574
+you would have to walk n units to get from one corner of a cube to the opposite
+
+00:32:42.574 --> 00:32:46.009
+one if you can only move along the edges, but if you can go diagonally,
+
+00:32:46.009 --> 00:32:48.060
+you can get there in the square root of n.
+
+00:32:48.620 --> 00:32:52.737
+In the worldview of quantum mechanics, different observable states
+
+00:32:52.737 --> 00:32:56.480
+all represent perpendicular directions in some state space.
+
+00:32:56.940 --> 00:33:00.774
+So viewed from this framework, what the classical deterministic world looks
+
+00:33:00.774 --> 00:33:04.660
+like is one where you only have access to these pure coordinate directions.
+
+00:33:05.220 --> 00:33:07.946
+If you think about it, anytime you're doing computation,
+
+00:33:07.946 --> 00:33:11.353
+your computer is somehow walking through a series of different states
+
+00:33:11.353 --> 00:33:14.420
+that are available to it, and algorithmic runtime is all about
+
+00:33:14.420 --> 00:33:18.460
+understanding how many steps you have to walk in the space of all possible states.
+
+00:33:18.920 --> 00:33:22.982
+So from this quantum worldview, where classical states look like pure coordinate
+
+00:33:22.982 --> 00:33:27.044
+directions, the key difference with quantum computing is that you now also have
+
+00:33:27.044 --> 00:33:31.360
+available to you a panoply of additional diagonal directions that you can work with.
+
+00:33:32.100 --> 00:33:35.320
+Now, to be clear, the analogy is not too literal, you should take it with a grain of salt.
+
+00:33:35.620 --> 00:33:38.187
+It's not like runtime necessarily looks like a distance
+
+00:33:38.187 --> 00:33:40.380
+travelled through this particular state space.
+
+00:33:40.680 --> 00:33:45.018
+But it is true that if you follow the state vector throughout Grover's algorithm,
+
+00:33:45.018 --> 00:33:49.141
+what it's doing is slowly walking along a quarter circle arc from an initial
+
+00:33:49.141 --> 00:33:53.050
+condition to the target condition, tracing a path that would be entirely
+
+00:33:53.050 --> 00:33:57.120
+unavailable if you were limited to move only in pure coordinate directions.
+
+00:33:57.440 --> 00:34:00.580
+And the effect is to provide this square root-sized shortcut.
+
+00:34:01.240 --> 00:34:03.412
+And as the very last point before I let you go,
+
+00:34:03.412 --> 00:34:07.432
+regular viewers will know that one of my reasons for covering this topic is because of
+
+00:34:07.432 --> 00:34:11.082
+a promised analogy between this algorithm and something we covered last video,
+
+00:34:11.082 --> 00:34:13.300
+about two colliding blocks that can compute pi.
+
+00:34:13.800 --> 00:34:17.730
+In that video, we are also studying a point in a certain two-dimensional state
+
+00:34:17.730 --> 00:34:21.509
+space bouncing around a circle, and in fact, the series of bounces that it
+
+00:34:21.509 --> 00:34:25.540
+took is essentially identical to what we just saw here with Grover's algorithm.
+
+00:34:25.960 --> 00:34:28.964
+The story here is that when a physicist friend of mine, Adam Brown,
+
+00:34:28.964 --> 00:34:32.193
+saw the first version of that video, he had recently been reading up on
+
+00:34:32.193 --> 00:34:35.780
+Grover's algorithm and immediately realized that both processes were identical.
+
+00:34:35.780 --> 00:34:38.718
+Now I had this whole cockamamie plan for this video where I was
+
+00:34:38.718 --> 00:34:41.749
+going to explain quantum computing and Grover's algorithm in the
+
+00:34:41.749 --> 00:34:45.060
+context of that analogy, but it turned out to be just a terrible idea.
+
+00:34:45.300 --> 00:34:48.659
+The whole thing only really made sense if you already understood Grover's algorithm.
+
+00:34:49.199 --> 00:34:52.072
+So instead, now that you have seen both topics in isolation,
+
+00:34:52.072 --> 00:34:55.280
+what I'll do is leave up a rough outline of how the analogy looks.
+
+00:34:55.580 --> 00:34:57.700
+Think of this as an open-ended homework puzzle,
+
+00:34:57.700 --> 00:35:00.180
+where the task is to draw the connection for yourself.
+
+00:35:00.560 --> 00:35:03.936
+As an answer key of sorts, I will link to the very delightful paper
+
+00:35:03.936 --> 00:35:07.160
+by Adam Brown outlining precisely what that analogy looks like.
+
+00:35:08.020 --> 00:35:11.079
+If you want to learn more of the fundamentals of quantum computing,
+
+00:35:11.079 --> 00:35:15.052
+several years ago two very smart friends of mine, Andy Matuszczak and Michael Nielsen,
+
+00:35:15.052 --> 00:35:17.791
+put together a really nice resource for learning the topic,
+
+00:35:17.791 --> 00:35:21.261
+offering a pretty unique approach to making sure that you actually remember
+
+00:35:21.261 --> 00:35:22.220
+it in the long term.
+
+00:35:22.640 --> 00:35:24.781
+To learn some of the fundamental quantum mechanics,
+
+00:35:24.781 --> 00:35:27.258
+Mithina Yoganathan from the channel Looking Glass Universe
+
+00:35:27.258 --> 00:35:30.280
+has been putting together a very beginner-friendly course on the topic.
+
+00:35:30.640 --> 00:35:34.278
+She was actually the one to teach me how Grover's algorithm works many years ago,
+
+00:35:34.278 --> 00:35:38.275
+and honestly I owe a lot of the content of this video to many helpful conversations with
+
+00:35:38.275 --> 00:35:38.500
+her.
+
+00:35:39.080 --> 00:35:42.320
+And as a very last note to end on, one of the conversations I had
+
+00:35:42.320 --> 00:35:44.762
+while making this video was with Scott Aaronson,
+
+00:35:44.762 --> 00:35:48.700
+a very widely respected researcher and utterly delightful author on the topic.
+
+00:35:48.900 --> 00:35:50.884
+I recorded the Zoom call for notes, and there's one
+
+00:35:50.884 --> 00:35:53.140
+little piece of it which I just wanted to share with you.
+
+00:35:53.320 --> 00:35:58.016
+You know, I have this dream of writing a science fiction novel where I know
+
+00:35:58.016 --> 00:36:02.649
+it's going to be the climactic scene, where the heroes will be, you know,
+
+00:36:02.649 --> 00:36:07.220
+running Grover's algorithm to try to find this cryptographic key, right?
+
+00:36:07.440 --> 00:36:10.920
+The whole fate of the world will depend on whether they can find it, OK?
+
+00:36:11.180 --> 00:36:16.400
+The bad guys have surrounded their base, you know, they're bashing down the walls.
+
+00:36:16.780 --> 00:36:20.355
+But Grover's algorithm is still running, and it has only like a
+
+00:36:20.355 --> 00:36:24.100
+30 percent probability of giving you the solution if you measure.
+
+00:36:24.220 --> 00:36:28.080
+So the question is, like, do you measure now or do you let it run for another minute?
+
+00:36:28.480 --> 00:36:28.640
+Right?
+
+00:36:29.080 --> 00:36:32.920
+And if you measure now, you know, and you don't get it, then you've lost everything.
+
+00:36:32.920 --> 00:36:34.760
+Then you have to restart from the beginning.
+
+00:36:35.600 --> 00:36:39.420
+So this is this is not a plot that you could have with any classical algorithm.
+
+00:36:39.700 --> 00:36:40.140
+Right.
+

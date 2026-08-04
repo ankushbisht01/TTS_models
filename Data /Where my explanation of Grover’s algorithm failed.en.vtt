@@ -1,0 +1,853 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.608
+Last week I put up a video introducing quantum computing,
+
+00:00:02.608 --> 00:00:06.680
+and in the final section we were stepping through something known as Grover's algorithm.
+
+00:00:07.140 --> 00:00:10.958
+And based on the comments that I saw, I think there was a very common point of confusion
+
+00:00:10.958 --> 00:00:14.560
+that reveals I clearly could have done a better job explaining a core piece of it.
+
+00:00:14.820 --> 00:00:16.800
+Right here I wanted to throw together a very quick
+
+00:00:16.800 --> 00:00:18.860
+supplement in the hopes of adding a bit of clarity.
+
+00:00:19.520 --> 00:00:23.670
+The premise was to have a function which is somehow triggered by a unique value
+
+00:00:23.670 --> 00:00:27.768
+out of a big bag of options, and the puzzle is basically to figure out how do
+
+00:00:27.768 --> 00:00:31.760
+you find that unique value just by applying the function on various inputs.
+
+00:00:32.259 --> 00:00:35.171
+Now in a classical setting, it's not a very interesting question,
+
+00:00:35.171 --> 00:00:38.934
+the best you can do is guess and check, but what we walked through was a completely
+
+00:00:38.934 --> 00:00:42.474
+different approach that you can take that becomes possible in the setting of a
+
+00:00:42.474 --> 00:00:43.280
+quantum computer.
+
+00:00:44.100 --> 00:00:46.387
+When we did this, there was a certain key step where,
+
+00:00:46.387 --> 00:00:49.581
+if I'm understanding the comments correctly, it looked to a lot of people
+
+00:00:49.581 --> 00:00:52.731
+like in order to apply this key step, you would have to already know the
+
+00:00:52.731 --> 00:00:55.838
+value that you're searching for, which would of course defeat the whole
+
+00:00:55.838 --> 00:00:56.960
+purpose of the algorithm.
+
+00:00:57.280 --> 00:01:00.935
+More specifically, we had this very high dimensional vector space,
+
+00:01:00.935 --> 00:01:05.697
+and one of the axes in that space corresponded to the value that we're searching for,
+
+00:01:05.697 --> 00:01:09.518
+and this step of the algorithm looked like flipping along that axis,
+
+00:01:09.518 --> 00:01:13.560
+multiplying any component of a vector in that direction by negative one.
+
+00:01:14.280 --> 00:01:16.622
+Now viewers were essentially asking, whoa whoa whoa,
+
+00:01:16.622 --> 00:01:19.729
+how could you know how to do that without already knowing which axis
+
+00:01:19.729 --> 00:01:20.720
+you're searching for?
+
+00:01:21.040 --> 00:01:24.494
+I genuinely tried to forestall that objection, but I think I failed,
+
+00:01:24.494 --> 00:01:27.897
+so backing up, I think the whole discussion might be clearer if we
+
+00:01:27.897 --> 00:01:31.300
+focus on a very concrete example, something like solving a sudoku.
+
+00:01:31.780 --> 00:01:35.991
+On your normal classical computer, it's not hard to write a function that checks
+
+00:01:35.991 --> 00:01:40.360
+whether a proposed solution follows all of the sudoku rules and solves the puzzle.
+
+00:01:40.900 --> 00:01:44.240
+You know, it would check the rows, the columns, squares for duplicates, things like that.
+
+00:01:44.720 --> 00:01:48.971
+If you have written this function, just because you know how to verify a solution,
+
+00:01:48.971 --> 00:01:52.340
+it's not at all obvious what the solution is in the first place.
+
+00:01:52.340 --> 00:01:55.100
+This is, after all, why a sudoku is a puzzle.
+
+00:01:55.580 --> 00:01:57.700
+The rules alone don't reveal the answer.
+
+00:01:58.380 --> 00:02:01.780
+There are other situations where this is actually a much stronger assumption.
+
+00:02:02.380 --> 00:02:06.780
+The function SHA-256, for example, is what's called a cryptographic hash function.
+
+00:02:07.100 --> 00:02:11.094
+That basically means if you want to find what input gives you a particular output,
+
+00:02:11.094 --> 00:02:14.211
+it is strongly believed that you really can't gain much insight
+
+00:02:14.211 --> 00:02:16.500
+by looking at how the function is implemented.
+
+00:02:17.140 --> 00:02:20.365
+If someone could reverse engineer it, they would be mining all of the
+
+00:02:20.365 --> 00:02:23.730
+bitcoin in the world and breaking numerous other cryptographic schemes.
+
+00:02:24.290 --> 00:02:26.795
+But it's believed that the best thing you can do when you're
+
+00:02:26.795 --> 00:02:29.050
+searching for a particular output is guess and check.
+
+00:02:29.550 --> 00:02:34.056
+So it's not that the key value is like hiding inside the function behind some curtain,
+
+00:02:34.056 --> 00:02:38.090
+it's more of a difficult-to-find emergent phenomenon of the function itself.
+
+00:02:38.650 --> 00:02:42.487
+Now the idea with Grover's algorithm is that if you have this sort of verifier
+
+00:02:42.487 --> 00:02:46.078
+function for some hard problem and you translate it into the language of
+
+00:02:46.078 --> 00:02:49.767
+quantum computing, there is a method for sifting out valid solutions which
+
+00:02:49.767 --> 00:02:53.850
+requires fewer steps than simple guessing and checking over all the possibilities.
+
+00:02:54.470 --> 00:02:58.140
+Now to be clear, it is not dramatically faster, it's only a quadratic speedup,
+
+00:02:58.140 --> 00:03:00.915
+and given the overheads for making quantum computing work,
+
+00:03:00.915 --> 00:03:02.750
+this frankly has questionable utility.
+
+00:03:03.110 --> 00:03:05.610
+In fact, let's talk a little bit more about that at the end.
+
+00:03:06.250 --> 00:03:10.001
+First, to the clarification, if you have this Sudoku verifying function,
+
+00:03:10.001 --> 00:03:12.970
+it's not like you can just run it on a quantum computer.
+
+00:03:13.410 --> 00:03:16.350
+After all, quantum computers speak an entirely different language,
+
+00:03:16.350 --> 00:03:20.046
+it's a totally different framework for computing that looks a lot more like vector
+
+00:03:20.046 --> 00:03:20.670
+manipulation.
+
+00:03:21.570 --> 00:03:25.078
+The first step to port over this verification function into the
+
+00:03:25.078 --> 00:03:28.363
+new context is to imagine that we've kind of compiled your
+
+00:03:28.363 --> 00:03:32.150
+verifier into a bunch of logic gates, things like AND, OR, and NOT.
+
+00:03:32.750 --> 00:03:37.026
+So for any proposed Sudoku solution, you would represent it all in binary,
+
+00:03:37.026 --> 00:03:40.781
+all of those bits would be processed by your web of logic gates,
+
+00:03:40.781 --> 00:03:44.306
+and the output would be a 1 if it's a valid Sudoku solution,
+
+00:03:44.306 --> 00:03:46.270
+and a 0 for all the invalid ones.
+
+00:03:46.850 --> 00:03:50.103
+And again, being able to assemble these logic gates does not
+
+00:03:50.103 --> 00:03:53.410
+require knowing ahead of time which input solves the puzzle.
+
+00:03:53.730 --> 00:03:56.790
+The logic gates distill the rules of the game, but not the strategy.
+
+00:03:57.950 --> 00:04:00.711
+Now I'm assuming everyone has watched the main video,
+
+00:04:00.711 --> 00:04:04.619
+in particular the core section about the fundamentals of the state vector,
+
+00:04:04.619 --> 00:04:08.214
+but as a quick recap, the upshot is that you think of every possible
+
+00:04:08.214 --> 00:04:12.590
+bit string as a unit vector along a coordinate axis in some high dimensional space.
+
+00:04:12.970 --> 00:04:15.263
+In the language of linear algebra, you would call
+
+00:04:15.263 --> 00:04:17.649
+these the basis vectors of your coordinate system.
+
+00:04:18.290 --> 00:04:22.826
+For example, with a 2-qubit quantum computer, you would have 4 possible bit strings,
+
+00:04:22.826 --> 00:04:26.930
+and these would all look like basis directions in some 4-dimensional space.
+
+00:04:27.670 --> 00:04:29.930
+These state vectors get very big very fast.
+
+00:04:30.290 --> 00:04:34.980
+If you have a k-qubit quantum computer, that gives you 2 to the k possible bit strings,
+
+00:04:34.980 --> 00:04:38.538
+and you think of each one of them as being a coordinate direction
+
+00:04:38.538 --> 00:04:40.910
+in some very high dimensional vector space.
+
+00:04:41.550 --> 00:04:44.167
+Now operations on a quantum computer don't spit out true
+
+00:04:44.167 --> 00:04:46.690
+or false the way you can see on a classical computer.
+
+00:04:47.210 --> 00:04:50.201
+Instead they take in a vector and spit out a new vector,
+
+00:04:50.201 --> 00:04:52.230
+both of which live in the same space.
+
+00:04:52.790 --> 00:04:55.403
+And like I said last video, you often think about them as
+
+00:04:55.403 --> 00:04:57.970
+somehow flipping or rotating the vectors in that space.
+
+00:04:58.730 --> 00:05:00.170
+Now here's the crux of the confusion.
+
+00:05:00.510 --> 00:05:03.762
+I mentioned how if you have this classical verifier function,
+
+00:05:03.762 --> 00:05:06.906
+something like a Sudoku checker that spits out a 1 or a 0,
+
+00:05:06.906 --> 00:05:10.957
+it is possible to translate it into an operation on a quantum computer that
+
+00:05:10.957 --> 00:05:12.450
+has the following behavior.
+
+00:05:12.810 --> 00:05:16.603
+If a bit string returns 1 for true up in the classical case,
+
+00:05:16.603 --> 00:05:20.521
+then down in the quantum case, the corresponding basis vector
+
+00:05:20.521 --> 00:05:24.630
+gets multiplied by negative 1, effectively flipping 180 degrees.
+
+00:05:24.970 --> 00:05:28.722
+And then if in the classical case a bit string outputs 0 for false,
+
+00:05:28.722 --> 00:05:33.090
+then in the quantum translation, the corresponding basis vector is unchanged.
+
+00:05:33.670 --> 00:05:37.390
+Now I can see three reasons that this step might have caused some confusion.
+
+00:05:38.090 --> 00:05:40.430
+First of all, I didn't explain how it actually works.
+
+00:05:40.570 --> 00:05:41.870
+I didn't step through the translation.
+
+00:05:42.530 --> 00:05:46.037
+Now my hope with that video was that it's just not too huge a leap to
+
+00:05:46.037 --> 00:05:49.442
+have you accept that in principle there exists this correspondence
+
+00:05:49.442 --> 00:05:52.644
+between returning true and false up in the classical world and
+
+00:05:52.644 --> 00:05:56.710
+multiplying by negative 1 or positive 1 down in the quantum world with vectors.
+
+00:05:57.070 --> 00:05:58.030
+Now maybe that is a leap.
+
+00:05:58.210 --> 00:06:00.650
+I could preview for you what that translation looks like.
+
+00:06:00.650 --> 00:06:04.397
+The relevant search term here is quantum compilation, but I'm going to be honest,
+
+00:06:04.397 --> 00:06:08.099
+I don't think it would add much clarity, in the same way that knowing the logic
+
+00:06:08.099 --> 00:06:12.170
+gates that implement addition don't really teach you much about how to add two numbers.
+
+00:06:12.670 --> 00:06:16.690
+Now it's not exactly like this, but loosely speaking, every time you see an AND gate,
+
+00:06:16.690 --> 00:06:20.190
+you translate it into a quantum operation that looks kind of like an AND.
+
+00:06:20.490 --> 00:06:22.410
+Every time you see a NOT gate, there's a quantum
+
+00:06:22.410 --> 00:06:24.370
+analogue that does something kind of like a NOT.
+
+00:06:24.990 --> 00:06:29.721
+I suspect the real cause of confusion originates not from a lack of low-level detail,
+
+00:06:29.721 --> 00:06:32.170
+but from how I had framed the entire setup.
+
+00:06:32.510 --> 00:06:36.363
+I opened that video by having you imagine that there was some mystery number that
+
+00:06:36.363 --> 00:06:39.455
+we're searching for, and as one commenter helpfully pointed out,
+
+00:06:39.455 --> 00:06:43.070
+this made it seem like the computer kind of knows the answer ahead of time,
+
+00:06:43.070 --> 00:06:44.450
+it's just hiding it from us.
+
+00:06:44.690 --> 00:06:47.572
+And this is almost certainly exacerbated by me briefly flashing
+
+00:06:47.572 --> 00:06:50.179
+an example function that just checks if the input is 12,
+
+00:06:50.179 --> 00:06:53.290
+and saying that we were going to treat the function as a black box.
+
+00:06:53.630 --> 00:06:54.250
+That's on me.
+
+00:06:54.410 --> 00:06:56.010
+That's a misleading way to open things.
+
+00:06:56.010 --> 00:06:59.223
+What I wanted to foreshadow is how, with Grover's algorithm,
+
+00:06:59.223 --> 00:07:03.346
+the only way you use the new quantum function is by trying it out on inputs,
+
+00:07:03.346 --> 00:07:05.970
+as opposed to maybe like reverse engineering it.
+
+00:07:06.290 --> 00:07:08.750
+So in that sense, it's treated as a black box.
+
+00:07:09.170 --> 00:07:13.394
+But to be clear, in order to translate the classical verifier into the quantum version,
+
+00:07:13.394 --> 00:07:16.210
+you absolutely need to get into the guts of the function.
+
+00:07:16.530 --> 00:07:18.724
+And if this is going to be a compelling example,
+
+00:07:18.724 --> 00:07:22.381
+it would be very silly if the only thing the function did was just check if the
+
+00:07:22.381 --> 00:07:23.890
+input equals some hidden number.
+
+00:07:23.890 --> 00:07:27.162
+The Sudoku example is much better, and a cryptographic
+
+00:07:27.162 --> 00:07:29.950
+hash like SHA-256 would be much better still.
+
+00:07:30.290 --> 00:07:33.466
+In these contexts, there is one value that will trigger the function,
+
+00:07:33.466 --> 00:07:37.010
+and we don't know what it is, but the computer also doesn't know what it is.
+
+00:07:37.230 --> 00:07:40.130
+It's not like the key value is just hiding in the source code.
+
+00:07:40.390 --> 00:07:42.838
+Whether we're up here in the classical setting,
+
+00:07:42.838 --> 00:07:47.213
+where triggering the function means returning true, or down in the quantum setting,
+
+00:07:47.213 --> 00:07:50.598
+where triggering the function means multiplying by negative one,
+
+00:07:50.598 --> 00:07:54.296
+which specific key input does this is a difficult to find and emergent
+
+00:07:54.296 --> 00:07:55.910
+property of those logic gates.
+
+00:07:56.270 --> 00:07:58.330
+It's not something that's baked in ahead of time.
+
+00:07:58.730 --> 00:08:01.480
+The other potential source of confusion, I suspect,
+
+00:08:01.480 --> 00:08:04.930
+is that I didn't appropriately emphasize the idea of linearity.
+
+00:08:05.310 --> 00:08:09.596
+In fact, this is a central enough feature of quantum computing and quantum mechanics that
+
+00:08:09.596 --> 00:08:13.930
+half of my reason for making this whole follow-up video is as an excuse to talk about it.
+
+00:08:14.310 --> 00:08:17.184
+So most vectors don't look like a pure basis direction,
+
+00:08:17.184 --> 00:08:20.790
+they look like some weighted sum of all the different basis vectors.
+
+00:08:21.310 --> 00:08:24.033
+One way you can represent this is with a column vector,
+
+00:08:24.033 --> 00:08:28.490
+where we think of each component as being associated with one of the possible bitstrings.
+
+00:08:28.910 --> 00:08:33.023
+The more common convention among physicists is to write general vectors as an
+
+00:08:33.023 --> 00:08:37.510
+explicit weighted sum of all the basis directions, each one represented with a ket.
+
+00:08:37.970 --> 00:08:42.717
+When the state vector for a computer looks like this, you say that it's in superposition,
+
+00:08:42.717 --> 00:08:47.250
+meaning it has some non-zero component associated with multiple distinct bitstrings.
+
+00:08:47.810 --> 00:08:50.686
+It's a lot like saying if someone is walking northeast,
+
+00:08:50.686 --> 00:08:53.458
+their velocity is a superposition of north and east,
+
+00:08:53.458 --> 00:08:56.230
+they're travelling both directions at the same time.
+
+00:08:56.650 --> 00:08:59.780
+A core idea from the last video is that you never actually see
+
+00:08:59.780 --> 00:09:02.910
+the coordinates of a state vector in superposition like this.
+
+00:09:03.250 --> 00:09:08.002
+When you read out from the computer, all you see is one of the bitstrings at random,
+
+00:09:08.002 --> 00:09:12.133
+and the probability of seeing it is equal to the square of the magnitude
+
+00:09:12.133 --> 00:09:15.810
+of the component of the state vector associated with that value.
+
+00:09:15.810 --> 00:09:19.708
+I'm saying magnitude here with the absolute value signs, because in general,
+
+00:09:19.708 --> 00:09:22.836
+these components can be complex numbers, but for simplicity,
+
+00:09:22.836 --> 00:09:24.990
+I'm only going to be showing real values.
+
+00:09:25.790 --> 00:09:29.141
+When I say that operations in quantum computers are linear,
+
+00:09:29.141 --> 00:09:33.060
+what I mean is that if you pass in one of these weighted sums of the
+
+00:09:33.060 --> 00:09:36.524
+different basis directions, that is to say, a superposition,
+
+00:09:36.524 --> 00:09:39.364
+then the output looks like the same weighted sum,
+
+00:09:39.364 --> 00:09:42.090
+but of the transformed versions of each vector.
+
+00:09:42.570 --> 00:09:44.130
+So here's a very small example.
+
+00:09:44.490 --> 00:09:47.670
+On a single qubit, there's an operation that we call a z-gate.
+
+00:09:48.170 --> 00:09:51.346
+What it does is it leaves the 0 direction unchanged,
+
+00:09:51.346 --> 00:09:54.950
+but it multiplies that vertical 1 direction by negative 1.
+
+00:09:55.490 --> 00:09:58.572
+These are only two out of the infinitely many possible state vectors,
+
+00:09:58.572 --> 00:10:00.090
+but they're all you need to know.
+
+00:10:00.570 --> 00:10:04.015
+If you pass in a superposition of those two, something that has a
+
+00:10:04.015 --> 00:10:07.620
+little bit of 0 plus a little bit of 1, what you do is look at what
+
+00:10:07.620 --> 00:10:11.330
+the z-gate does to each part separately, and then add those together.
+
+00:10:11.330 --> 00:10:12.890
+Again, with the same components.
+
+00:10:13.410 --> 00:10:17.290
+In this case, that means flipping the sign associated with the 1 component.
+
+00:10:17.730 --> 00:10:20.851
+Geometrically, when you draw this vector in a 2D space,
+
+00:10:20.851 --> 00:10:24.370
+the action of a z-gate looks like flipping around the x-axis.
+
+00:10:24.890 --> 00:10:28.062
+The z-gate is simple enough that just by looking at the definition,
+
+00:10:28.062 --> 00:10:30.430
+you can clearly see which direction gets flipped.
+
+00:10:30.950 --> 00:10:33.821
+But keep in mind, for more complicated functions,
+
+00:10:33.821 --> 00:10:37.570
+the definition alone might not so easily reveal how it behaves.
+
+00:10:38.190 --> 00:10:43.201
+Take a look back at the Sudoku verification function and its translation onto a quantum
+
+00:10:43.201 --> 00:10:48.211
+computer, and then say that the state of your computer is not one of those clean basis
+
+00:10:48.211 --> 00:10:51.782
+directions, but it is a combination of all the basis vectors,
+
+00:10:51.782 --> 00:10:56.908
+a superposition of every possible bit string in this context representing every possible
+
+00:10:56.908 --> 00:10:58.290
+solution to the Sudoku.
+
+00:10:58.890 --> 00:11:02.116
+To figure out what our verifier does to this new vector,
+
+00:11:02.116 --> 00:11:05.918
+what you do is look at what it would do to each basis separately,
+
+00:11:05.918 --> 00:11:09.950
+and then the output is going to be the same scaled sum of the result.
+
+00:11:10.530 --> 00:11:14.155
+In this case, most parts of that sum stay unchanged, but one of them,
+
+00:11:14.155 --> 00:11:18.358
+the one that's associated with the key input that represents a Sudoku solution,
+
+00:11:18.358 --> 00:11:20.670
+that part is going to have it sign flipped.
+
+00:11:21.250 --> 00:11:25.411
+When you do this, it's very tempting to look at it and say that the function is acting
+
+00:11:25.411 --> 00:11:29.330
+on every possible basis vector at once in parallel, and then adding the results.
+
+00:11:29.710 --> 00:11:32.346
+Now that might be true, but I invite you to reflect on
+
+00:11:32.346 --> 00:11:35.030
+whether that's necessarily a fair way to summarize it.
+
+00:11:35.290 --> 00:11:37.995
+As an analogy, if a hiker is walking northeast,
+
+00:11:37.995 --> 00:11:42.370
+and you tell him to rotate 90 degrees, that rotation is a linear operation.
+
+00:11:42.730 --> 00:11:47.616
+In other words, the final direction is the same as what you would get by rotating the
+
+00:11:47.616 --> 00:11:52.790
+north vector 90 degrees, rotating the east vector 90 degrees, and adding the two results.
+
+00:11:53.210 --> 00:11:55.623
+But that doesn't mean that you have to perform two
+
+00:11:55.623 --> 00:11:58.470
+separate rotations in parallel in order to move the hiker.
+
+00:11:58.770 --> 00:12:01.506
+The linearity is a property of the transformation,
+
+00:12:01.506 --> 00:12:04.790
+it's not necessarily a set of instructions on how to do it.
+
+00:12:05.310 --> 00:12:06.530
+It's very similar over here.
+
+00:12:07.010 --> 00:12:10.545
+The effect of the quantum translation for our verifier looks like
+
+00:12:10.545 --> 00:12:14.351
+adding together what its effect would be on all of the basis vectors,
+
+00:12:14.351 --> 00:12:17.995
+but I will leave it to your interpretation whether this means that
+
+00:12:17.995 --> 00:12:21.910
+it is necessarily acting on all 2 to the k possible bitstrings at once.
+
+00:12:22.370 --> 00:12:25.241
+Here, I've been writing the vector the physicist way,
+
+00:12:25.241 --> 00:12:27.840
+but if I write it with a column vector instead,
+
+00:12:27.840 --> 00:12:31.631
+what this operation looks like is taking one component of that vector
+
+00:12:31.631 --> 00:12:35.260
+and multiplying it by negative 1, specifically whichever component
+
+00:12:35.260 --> 00:12:37.210
+corresponds to the sudoku solution.
+
+00:12:38.130 --> 00:12:40.475
+So stepping back, hopefully this helps clear up
+
+00:12:40.475 --> 00:12:43.070
+some of the confusion there was in that last video.
+
+00:12:43.490 --> 00:12:47.937
+The starting point of Grover's algorithm is to assume that you're given a function
+
+00:12:47.937 --> 00:12:52.330
+that flips one component of a vector like this, though you don't know which one.
+
+00:12:52.630 --> 00:12:56.640
+The puzzle is to somehow figure out which direction is getting flipped,
+
+00:12:56.640 --> 00:13:01.666
+where all you're allowed to do is apply this function to some well-chosen set of inputs,
+
+00:13:01.666 --> 00:13:05.676
+and in Grover's case, it involves interleaving it with a certain other
+
+00:13:05.676 --> 00:13:08.330
+operation in the toolkit of quantum computing.
+
+00:13:08.750 --> 00:13:11.370
+I get it, that is a really weird place to start from.
+
+00:13:11.570 --> 00:13:14.370
+And it doesn't help that this is a famously confusing topic.
+
+00:13:14.570 --> 00:13:17.932
+If you find it weird to work with a state vector whose components
+
+00:13:17.932 --> 00:13:21.139
+you never actually observe and which instead acts like a kind
+
+00:13:21.139 --> 00:13:24.450
+of square root of a probability distribution, you're not alone.
+
+00:13:24.450 --> 00:13:26.490
+Everyone finds that very weird.
+
+00:13:26.990 --> 00:13:29.967
+At this point I genuinely can't tell if I'm overexplaining things
+
+00:13:29.967 --> 00:13:32.944
+or still under-explaining them, but there is one final aspect of
+
+00:13:32.944 --> 00:13:36.150
+the explanation from last time that may have added to this confusion.
+
+00:13:36.630 --> 00:13:40.284
+When we visualized the algorithm, we chose to view everything on a
+
+00:13:40.284 --> 00:13:43.993
+certain two-dimensional slice of the enormous n-dimensional vector
+
+00:13:43.993 --> 00:13:48.034
+space where all these state vectors live, and this slice, by definition,
+
+00:13:48.034 --> 00:13:52.130
+included the axis associated with that mystery value we're searching for.
+
+00:13:52.130 --> 00:13:55.706
+Now, in case that left anyone with the impression that part of the
+
+00:13:55.706 --> 00:13:59.390
+algorithm was to choose that slice, let me be very clear, it's not.
+
+00:13:59.690 --> 00:14:01.990
+The algorithm is just doing what it's going to do.
+
+00:14:02.210 --> 00:14:04.610
+It interleaves two operations that go back and forth.
+
+00:14:04.890 --> 00:14:08.230
+It doesn't have a care in the world how you and I choose to visualize it.
+
+00:14:08.470 --> 00:14:12.718
+The fact that the state vector stays confined to this particular plane,
+
+00:14:12.718 --> 00:14:15.770
+that's a happy emergent property of the algorithm.
+
+00:14:16.090 --> 00:14:19.610
+It is in no way part of the instruction set that we're giving to the computer.
+
+00:14:20.350 --> 00:14:23.979
+One very final thing that I do think deserves some added reflection is how
+
+00:14:23.979 --> 00:14:28.050
+Grover's algorithm, while very thought-provoking, is maybe just not really useful.
+
+00:14:28.550 --> 00:14:29.570
+Take the Sudoku example.
+
+00:14:29.910 --> 00:14:33.577
+The number of possible solutions will depend on how many of those 81
+
+00:14:33.577 --> 00:14:37.730
+squares start off blank, but let's call it something like 9 to the power 60.
+
+00:14:38.190 --> 00:14:43.034
+If you tried to use your classical verifier function to find a solution by brute force,
+
+00:14:43.034 --> 00:14:45.930
+there are way, way too many possibilities to check.
+
+00:14:45.930 --> 00:14:48.933
+But even if you had a fully functioning quantum computer,
+
+00:14:48.933 --> 00:14:52.884
+sitting on your desk right now with ample qubits and no issues maintaining
+
+00:14:52.884 --> 00:14:55.518
+coherence and all that, using Grover's algorithm,
+
+00:14:55.518 --> 00:14:59.733
+this would still take around 9 to the 30 steps, which is a much smaller number,
+
+00:14:59.733 --> 00:15:01.050
+but it's still enormous.
+
+00:15:01.530 --> 00:15:05.470
+In this case, there's obviously many smarter ways to solve a Sudoku than
+
+00:15:05.470 --> 00:15:08.862
+a brute force search, but if you take something like SHA-256,
+
+00:15:08.862 --> 00:15:13.130
+inverting it by brute force takes 2 to the 256 steps on a classical computer.
+
+00:15:13.510 --> 00:15:16.406
+Using Grover's algorithm, that becomes 2 to the 128,
+
+00:15:16.406 --> 00:15:19.970
+at least up to that pi-fourths constant that we saw last video.
+
+00:15:20.450 --> 00:15:24.296
+So even in some sci-fi future where quantum computers are as far along as
+
+00:15:24.296 --> 00:15:28.510
+today's classical computers, that is still an infeasibly large number of steps.
+
+00:15:29.050 --> 00:15:31.075
+The way some people write about quantum computing,
+
+00:15:31.075 --> 00:15:32.978
+it makes it sound like the moment they arrive,
+
+00:15:32.978 --> 00:15:35.650
+everything is going to change and all of cryptography will break.
+
+00:15:36.110 --> 00:15:40.067
+And it's true that there are specific problems that have exponential speedups,
+
+00:15:40.067 --> 00:15:43.567
+and especially with RSA, some of those are relevant to cryptography,
+
+00:15:43.567 --> 00:15:45.190
+but that's not true in general.
+
+00:15:45.450 --> 00:15:49.490
+This quadratic speedup is much more representative of what you get for most problems.
+
+00:15:49.730 --> 00:15:52.032
+It's really cool, and the math is just beautiful,
+
+00:15:52.032 --> 00:15:55.273
+and there continues to be lots of interesting research in the field,
+
+00:15:55.273 --> 00:15:58.655
+but one of my hopes with this whole project is that you now have enough
+
+00:15:58.655 --> 00:16:01.803
+background to maybe see through some of the hyperbole that certain
+
+00:16:01.803 --> 00:16:02.930
+outlets are so fond of.
+
+00:16:22.730 --> 00:16:22.810
+Thank you.
+

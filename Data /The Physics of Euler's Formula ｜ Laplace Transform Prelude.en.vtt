@@ -1,0 +1,1418 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.240 --> 00:00:04.882
+[Submit subtitle corrections at criblate.com]
+This is the first video in a trilogy aimed at demystifying the Laplace transform,
+
+00:00:04.882 --> 00:00:07.920
+a powerful tool for studying differential equations.
+
+00:00:08.400 --> 00:00:12.965
+Although we won't dig into the Laplace transform itself until the next two chapters,
+
+00:00:12.965 --> 00:00:17.367
+everything that we cover here sets up the mental frameworks and the prerequisite
+
+00:00:17.367 --> 00:00:21.280
+knowledge that make understanding that transform as easy as I know how.
+
+00:00:21.680 --> 00:00:24.400
+This video is a lot more than just preamble, though.
+
+00:00:24.400 --> 00:00:27.901
+It's a very fun lesson in its own right about how one of the most
+
+00:00:27.901 --> 00:00:31.295
+famous equations in all of math is enables a bizarre trick for
+
+00:00:31.295 --> 00:00:34.850
+solving an equation that is used ubiquitously throughout physics.
+
+00:00:35.650 --> 00:00:40.996
+The main characters throughout this chapter and the next two are exponential functions,
+
+00:00:40.996 --> 00:00:44.191
+and I'm always going to be writing these as e^(st).
+
+00:00:44.191 --> 00:00:49.229
+Here we think of t as being time and then s as just some number determining which
+
+00:00:49.229 --> 00:00:51.810
+specific exponential we're talking about.
+
+00:00:52.210 --> 00:00:57.114
+One of the big aims of this video is to motivate using physics why it's useful to
+
+00:00:57.114 --> 00:01:02.260
+give s the freedom to take on not only real number values, but complex ones as well.
+
+00:01:02.820 --> 00:01:07.220
+But wait a minute, what does it even mean to shove a complex number into an exponent?
+
+00:01:07.380 --> 00:01:09.940
+Here I imagine there's a bit of a divide in the audience.
+
+00:01:10.260 --> 00:01:14.330
+You see, there's some regular viewers of math videos online for whom the
+
+00:01:14.330 --> 00:01:18.740
+specific case of plugging in π times i is a little bit cliched by this point.
+
+00:01:18.740 --> 00:01:23.323
+It is amply covered by many videos on YouTube, but on the other hand,
+
+00:01:23.323 --> 00:01:27.640
+most students find this to be an understandably baffling notion.
+
+00:01:27.640 --> 00:01:30.819
+Given how absolutely fundamental this is to everything that follows,
+
+00:01:30.819 --> 00:01:34.699
+even if you fall into that first camp, I hope you'll agree that it's worth kicking
+
+00:01:34.699 --> 00:01:38.672
+things off here by reviewing a very beautiful and visual way to understand what this
+
+00:01:38.672 --> 00:01:39.560
+idea is all about.
+
+00:01:40.040 --> 00:01:43.356
+The nice part is that what follows doubles as a gentle warm
+
+00:01:43.356 --> 00:01:46.840
+up for visualizing and thinking about differential equations.
+
+00:01:51.970 --> 00:01:55.330
+You start with the fact that e to the t is its own derivative.
+
+00:01:55.570 --> 00:01:58.844
+And really, you should think of this as what defines the number e.
+
+00:01:58.844 --> 00:02:03.259
+Exponentials with other bases will have derivatives that are proportional to themselves,
+
+00:02:03.259 --> 00:02:06.930
+but e is the special number such that that proportionality constant is 1.
+
+00:02:07.090 --> 00:02:11.370
+Now, very often in a calculus class, you visualize derivatives as slopes of graphs.
+
+00:02:11.370 --> 00:02:13.450
+That's all well and good, but it's not the only way.
+
+00:02:13.450 --> 00:02:15.890
+You should get in the habit of flexing your mind a bit more.
+
+00:02:16.240 --> 00:02:18.943
+For example, let's say you think of this as telling you the
+
+00:02:18.943 --> 00:02:21.920
+position of some point on the number line as a function of time.
+
+00:02:22.160 --> 00:02:26.122
+Then what the derivative expression is telling you is that at every
+
+00:02:26.122 --> 00:02:30.320
+moment the velocity vector must look identical to the position vector.
+
+00:02:30.400 --> 00:02:33.880
+And more specifically, because you know that e^0 equals 1,
+
+00:02:33.880 --> 00:02:37.480
+anything to the 0 is 1, you also have an initial condition.
+
+00:02:37.480 --> 00:02:39.600
+It's telling you you start at the number 1.
+
+00:02:39.760 --> 00:02:44.080
+So at the very first moment, the velocity is also 1, meaning it's pointed to the right.
+
+00:02:44.360 --> 00:02:47.960
+But the farther to the right the position gets, the faster it must move.
+
+00:02:48.360 --> 00:02:52.482
+So even if you had never heard of the function e^t or exponential growth,
+
+00:02:52.482 --> 00:02:56.209
+this property alone is enough to give you a very visceral feeling
+
+00:02:56.209 --> 00:02:59.880
+for how it gives a value that grows and at an accelerating rate.
+
+00:03:00.280 --> 00:03:04.360
+But what if there was some constant in that exponent like e^(2t)?
+
+00:03:04.520 --> 00:03:09.000
+Well, by the chain rule, the derivative is then two times the function itself.
+
+00:03:09.160 --> 00:03:11.959
+And reading this dynamically, it's telling you the
+
+00:03:11.959 --> 00:03:15.150
+velocity vector is always two times the position vector.
+
+00:03:15.310 --> 00:03:18.670
+Again, the farther to the right the position gets, the faster it must move.
+
+00:03:18.750 --> 00:03:22.270
+But this time the feeling is that that growth gets out of hand all the more quickly.
+
+00:03:22.750 --> 00:03:26.350
+What if that constant was negative, say negative 0.5?
+
+00:03:26.750 --> 00:03:30.030
+Well, once again, by the chain rule, the derivative of
+
+00:03:30.030 --> 00:03:33.310
+this function is minus 0.5 times the function itself.
+
+00:03:33.550 --> 00:03:38.140
+So at every moment in time, that velocity vector looks like a 180 degree
+
+00:03:38.140 --> 00:03:42.730
+rotation of the position vector, but scaled down to be half its length.
+
+00:03:42.810 --> 00:03:46.770
+This means you start moving to the left, but as you approach zero with a
+
+00:03:46.770 --> 00:03:50.730
+smaller position vector, that velocity must get proportionally smaller.
+
+00:03:50.890 --> 00:03:53.690
+So it approaches zero, but at an ever slowing pace.
+
+00:03:54.010 --> 00:03:56.170
+This, of course, is exponential decay.
+
+00:03:56.730 --> 00:03:59.370
+But now for the fun part, why we're here in the first place.
+
+00:03:59.530 --> 00:04:04.250
+What if that constant was an imaginary number i, the square root of negative one?
+
+00:04:04.650 --> 00:04:07.209
+Again, the chain rule tells us that the derivative of
+
+00:04:07.209 --> 00:04:10.010
+this function is going to be i times the function itself.
+
+00:04:10.550 --> 00:04:14.252
+Geometrically multiplying by i acts like a 90 degree rotation,
+
+00:04:14.252 --> 00:04:18.790
+so this is telling you velocity always has to be perpendicular to position.
+
+00:04:19.110 --> 00:04:23.137
+For anyone who's a little bit rusty or needs a quick review with complex numbers,
+
+00:04:23.137 --> 00:04:25.822
+let's say you have an arbitrary complex value a + bi,
+
+00:04:25.822 --> 00:04:27.910
+which you typically draw in the 2D plane.
+
+00:04:27.910 --> 00:04:30.892
+Like this, the easiest way to think about multiplying
+
+00:04:30.892 --> 00:04:33.030
+by i is to go component-by-component.
+
+00:04:33.030 --> 00:04:36.470
+a times i ends up on this vertical imaginary line.
+
+00:04:36.950 --> 00:04:41.750
+And then bi times i is b(i^2), which is -b.
+
+00:04:41.750 --> 00:04:44.630
+This is where you actually use the defining property of i.
+
+00:04:44.870 --> 00:04:48.870
+You'll notice each of those two individual components is rotated 90 degrees.
+
+00:04:48.950 --> 00:04:52.230
+So the sum as a whole also has to get rotated 90 degrees.
+
+00:04:52.630 --> 00:04:54.953
+Looking back at the equation, where this time,
+
+00:04:54.953 --> 00:04:58.790
+evidently we must be thinking about position as being in the complex plane.
+
+00:04:58.870 --> 00:05:02.422
+Even if you had never heard of raising e to an imaginary number,
+
+00:05:02.422 --> 00:05:06.140
+and even if it's not clear at first what that would actually mean,
+
+00:05:06.140 --> 00:05:10.414
+the expression is telling you that this value has to move in such a way that
+
+00:05:10.414 --> 00:05:14.577
+the velocity vector is always locked to be a 90 degree rotated copy of the
+
+00:05:14.577 --> 00:05:15.520
+position vector.
+
+00:05:15.760 --> 00:05:20.240
+The only motion that satisfies this criterion is rotation around a circle,
+
+00:05:20.240 --> 00:05:24.115
+and you can be more specific because the initial position is 1,
+
+00:05:24.115 --> 00:05:26.960
+that velocity vector always has a unit length.
+
+00:05:26.960 --> 00:05:28.880
+So this tells you how fast you have to move.
+
+00:05:29.150 --> 00:05:32.361
+Your point wanders around that circle in such a way that
+
+00:05:32.361 --> 00:05:35.630
+it traces one unit of arc length for every unit of time.
+
+00:05:35.870 --> 00:05:39.740
+For example, to get one of the most famous equations in all of math,
+
+00:05:39.740 --> 00:05:44.350
+if you wait for π units of time, you end up precisely halfway around the circle.
+
+00:05:44.350 --> 00:05:47.550
+This is why e^(πi) is -1.
+
+00:05:48.270 --> 00:05:51.367
+One thing that's always worth emphasizing to any students initially
+
+00:05:51.367 --> 00:05:54.510
+confused by this expression is just how misleading the notation is.
+
+00:05:54.880 --> 00:05:58.734
+When you input a complex value, the expression really has very little
+
+00:05:58.734 --> 00:06:01.527
+to do with repeated multiplication, and honestly,
+
+00:06:01.527 --> 00:06:05.437
+not that much to do with the number e. The computation that it refers
+
+00:06:05.437 --> 00:06:10.240
+to is plugging in the input into this infinite polynomial, the Taylor series for e^x.
+
+00:06:10.799 --> 00:06:14.970
+It's actually very fun, I think, to take a moment to interpret the literal meaning
+
+00:06:14.970 --> 00:06:19.040
+of plugging in something like π times i for each one of these polynomial terms.
+
+00:06:19.120 --> 00:06:24.478
+As you take a higher power, each extra factor of i rotates you another 90 degrees,
+
+00:06:24.478 --> 00:06:27.484
+and then the π^n / (n!) terms initially grow,
+
+00:06:27.484 --> 00:06:30.947
+but then they shrink as that denominator takes over,
+
+00:06:30.947 --> 00:06:35.390
+and you end up with this spiraling sum that converges to minus one.
+
+00:06:35.550 --> 00:06:39.863
+Now, that said, it is not at all obvious, just looking at this infinite polynomial,
+
+00:06:39.863 --> 00:06:42.876
+that if you change the value t in the expression e^(i*t),
+
+00:06:42.876 --> 00:06:45.630
+you're going to end up walking around a unit circle.
+
+00:06:45.710 --> 00:06:48.866
+This is why focusing on the property of being its own derivative
+
+00:06:48.866 --> 00:06:52.170
+is a lot more helpful than focusing on the underlying computation.
+
+00:06:52.650 --> 00:06:57.343
+In practice, people get used to using the expression e^x as a notational shorthand here,
+
+00:06:57.343 --> 00:06:59.050
+and really think nothing of it.
+
+00:06:59.690 --> 00:07:03.872
+Throughout this lesson, I'm going to be pulling up a complex plane representing
+
+00:07:03.872 --> 00:07:07.524
+possible values for this number s. And for each point on this plane,
+
+00:07:07.524 --> 00:07:11.970
+I want you to be able to think about the corresponding exponential function e^(st).
+
+00:07:11.970 --> 00:07:15.358
+We were just talking through what happens when s is equal to i.
+
+00:07:15.358 --> 00:07:19.010
+On the lower right I can show you how that output changes with time.
+
+00:07:19.170 --> 00:07:23.607
+And then on the top right, I might show a graph where, in order to fit it on the screen,
+
+00:07:23.607 --> 00:07:27.490
+I'll typically only graph the real part of that output with respect to time.
+
+00:07:27.570 --> 00:07:29.810
+In this case, it looks like a cosine wave.
+
+00:07:29.890 --> 00:07:33.383
+If s is a different imaginary number, something like two i,
+
+00:07:33.383 --> 00:07:35.810
+it means you rotate at a different rate.
+
+00:07:35.970 --> 00:07:37.690
+And on the one hand, this is obvious.
+
+00:07:37.690 --> 00:07:41.170
+Throwing in a 2 in front of the time obviously moves you twice as fast.
+
+00:07:41.450 --> 00:07:43.693
+But again, I think it's kind of fun to read what the
+
+00:07:43.693 --> 00:07:45.850
+derivative expression is telling you dynamically.
+
+00:07:46.010 --> 00:07:50.301
+In this case, you can read it as saying the velocity is always a copy of
+
+00:07:50.301 --> 00:07:54.890
+the position vector rotated 90 degrees, but stretched to have a length of 2.
+
+00:07:55.210 --> 00:07:59.793
+More generally, it's common to label this imaginary part with the Greek letter omega,
+
+00:07:59.793 --> 00:08:02.650
+which describes the angular frequency of the motion.
+
+00:08:02.810 --> 00:08:05.378
+In other words, how many radians of arc length
+
+00:08:05.378 --> 00:08:08.170
+does it traverse around the circle per unit time?
+
+00:08:08.810 --> 00:08:10.650
+This is just the imaginary axis.
+
+00:08:10.650 --> 00:08:13.930
+But what about when s has both a real and an imaginary part?
+
+00:08:14.010 --> 00:08:16.810
+Something like minus 0.5 plus i.
+
+00:08:17.530 --> 00:08:20.075
+On the one hand, you can split up the exponential,
+
+00:08:20.075 --> 00:08:23.690
+and this part here is telling you that the magnitude decays over time.
+
+00:08:23.850 --> 00:08:26.570
+And then this part is telling you that there's rotation.
+
+00:08:26.890 --> 00:08:29.560
+That's all well and good, but for fun, another way that you
+
+00:08:29.560 --> 00:08:32.410
+can think about it is to continue with the previous intuition.
+
+00:08:32.650 --> 00:08:36.324
+To understand what multiplication by any complex number looks like,
+
+00:08:36.324 --> 00:08:40.053
+you can ask what combination of rotation and stretching would place
+
+00:08:40.053 --> 00:08:43.453
+the vector at 1 onto this new value s. For this example here,
+
+00:08:43.453 --> 00:08:48.059
+that would look like rotating a little over 90 degrees and stretching it out a bit.
+
+00:08:48.219 --> 00:08:51.129
+So the derivative expression is telling you this is always
+
+00:08:51.129 --> 00:08:54.139
+the relationship between the position and velocity vectors.
+
+00:08:54.299 --> 00:08:57.242
+And I think geometrically, this gives you a very visceral
+
+00:08:57.242 --> 00:08:59.979
+way to see why the motion must be spiraling inwards.
+
+00:09:00.379 --> 00:09:03.566
+You'll sometimes hear engineers refer to this as the S plane,
+
+00:09:03.566 --> 00:09:08.007
+and which essentially means you should think of each point on that plane as encoding
+
+00:09:08.007 --> 00:09:09.470
+the entire function e^(st).
+
+00:09:10.350 --> 00:09:12.963
+The imaginary part of s is always telling you how
+
+00:09:12.963 --> 00:09:15.950
+rapidly the function oscillates and in which direction.
+
+00:09:16.110 --> 00:09:20.590
+And then the real part of s is telling you whether the magnitude grows or shrinks.
+
+00:09:20.590 --> 00:09:23.470
+Positive real parts corresponding to exponential growth,
+
+00:09:23.470 --> 00:09:26.350
+negative real parts corresponding to exponential decay.
+
+00:09:28.110 --> 00:09:32.560
+This key equation telling us that velocity is some modified version of position.
+
+00:09:32.710 --> 00:09:35.350
+Is basically a differential equation.
+
+00:09:35.670 --> 00:09:39.426
+And for you and me, having just seen how an intuition for reading
+
+00:09:39.426 --> 00:09:43.990
+off a differential equation like this can explain what complex exponents mean,
+
+00:09:43.990 --> 00:09:47.110
+at least if you want e^x to retain its core property.
+
+00:09:47.190 --> 00:09:50.559
+Let's flip this around to get back to our core question and see
+
+00:09:50.559 --> 00:09:53.928
+how a different set of differential equations can motivate why
+
+00:09:53.928 --> 00:09:57.350
+you would ever care about complex exponents in the first place.
+
+00:09:57.830 --> 00:10:01.560
+The easiest case to show you what I mean by this is a very central example
+
+00:10:01.560 --> 00:10:05.290
+used all throughout physics, where you imagine having a mass on a spring.
+
+00:10:05.450 --> 00:10:09.770
+We're going to describe the position of this mass as x, which will change over time.
+
+00:10:10.010 --> 00:10:12.970
+The value 0 is going to correspond to the equilibrium position.
+
+00:10:13.530 --> 00:10:16.133
+The derivative of this position versus time function,
+
+00:10:16.133 --> 00:10:18.490
+of course, gives you the velocity of that mass.
+
+00:10:18.570 --> 00:10:21.842
+And then the second derivative, the rate of change of the velocity,
+
+00:10:21.842 --> 00:10:23.210
+gives you its acceleration.
+
+00:10:23.610 --> 00:10:28.193
+The key feature of this spring setup is that the more you pull that spring to one side,
+
+00:10:28.193 --> 00:10:32.250
+the more strongly it accelerates the mass towards that equilibrium position.
+
+00:10:33.030 --> 00:10:38.086
+More specifically, we say that the force which is equal to mass times acceleration,
+
+00:10:38.086 --> 00:10:42.960
+that's Newton's second law, is often well approximated as k times the position.
+
+00:10:42.960 --> 00:10:46.310
+K here is just some positive proportionality constant.
+
+00:10:46.310 --> 00:10:47.990
+It tells you how strong the spring is.
+
+00:10:47.990 --> 00:10:51.510
+And this whole equation is telling you force is proportional to position.
+
+00:10:51.830 --> 00:10:54.637
+Now, the reason this example is used all throughout physics
+
+00:10:54.637 --> 00:10:57.302
+is because there are lots of other situations where you
+
+00:10:57.302 --> 00:11:00.490
+approximate a force and being proportional to some kind of offset.
+
+00:11:00.490 --> 00:11:03.319
+Often it's not exactly that, but as a first order approximation,
+
+00:11:03.319 --> 00:11:05.530
+it really helps you model what's going to happen.
+
+00:11:06.330 --> 00:11:09.690
+It's also common to include a term here proportional to the velocity.
+
+00:11:09.690 --> 00:11:11.210
+We call it a damping term.
+
+00:11:11.450 --> 00:11:15.050
+This Greek letter mu is representing another positive coefficient.
+
+00:11:15.130 --> 00:11:19.008
+And the negative sign is telling you the faster this mass is moving,
+
+00:11:19.008 --> 00:11:20.890
+the stronger that damping force.
+
+00:11:21.050 --> 00:11:23.930
+Maybe you think of it as friction, maybe you think of it as air resistance.
+
+00:11:24.290 --> 00:11:27.048
+I remember as a physics student, always being bothered by the fact
+
+00:11:27.048 --> 00:11:29.890
+that neither friction nor air resistance actually behave like this.
+
+00:11:29.890 --> 00:11:33.622
+But the better way to view it is that, again, this is a first order
+
+00:11:33.622 --> 00:11:37.410
+approximation of whatever the slowing forces might be on this mass.
+
+00:11:38.450 --> 00:11:40.810
+The point is, we now have a differential equation.
+
+00:11:40.810 --> 00:11:43.154
+The position over time is an unknown function,
+
+00:11:43.154 --> 00:11:45.650
+but we know it has to adhere to this constraint.
+
+00:11:45.650 --> 00:11:48.276
+And your physical intuition probably tells you loosely
+
+00:11:48.276 --> 00:11:50.610
+what you expect the solution to look like here.
+
+00:11:50.950 --> 00:11:53.490
+There's going to be some oscillation back and forth,
+
+00:11:53.490 --> 00:11:56.762
+and then as it loses energy to whatever those damping effects are,
+
+00:11:56.762 --> 00:11:59.350
+the amplitude of that oscillation is going to decay.
+
+00:11:59.510 --> 00:12:02.190
+I'm going to go ahead and take this equation and move everything to
+
+00:12:02.190 --> 00:12:04.950
+one side of it so that we're setting a bunch of stuff equal to zero.
+
+00:12:05.270 --> 00:12:07.688
+As a quick reminder, with differential equations,
+
+00:12:07.688 --> 00:12:10.550
+there's not one specific function that solves it, per se.
+
+00:12:10.550 --> 00:12:13.662
+For different initial positions where this mass might be,
+
+00:12:13.662 --> 00:12:17.430
+you're going to get distinct functions that also solve the equation.
+
+00:12:18.130 --> 00:12:21.817
+And that's actually only one out of two free parameters that we can change here,
+
+00:12:21.817 --> 00:12:25.090
+because all of these are solutions where the initial velocity is zero.
+
+00:12:25.330 --> 00:12:29.808
+But you could also imagine that the mass starts out with some other non-zero velocity,
+
+00:12:29.808 --> 00:12:33.973
+and every one of these combinations of an initial position and initial velocity
+
+00:12:33.973 --> 00:12:37.410
+corresponds to a distinct function that also solves the equation.
+
+00:12:37.730 --> 00:12:41.650
+So to solve this, really you're looking for a family of functions that solve it.
+
+00:12:41.730 --> 00:12:45.090
+And preferably, you'd like some way to be able to narrow down which
+
+00:12:45.090 --> 00:12:48.600
+member of that family solves it for your specific initial conditions.
+
+00:12:49.400 --> 00:12:50.600
+So how do you solve it?
+
+00:12:50.760 --> 00:12:55.329
+Well, there's this one very bizarre trick which I remember really bothered me when I was
+
+00:12:55.329 --> 00:12:59.743
+a calculus student who first saw it, which is where you simply guess that the answer
+
+00:12:59.743 --> 00:13:02.339
+looks like e^(st), where s is just some constant,
+
+00:13:02.339 --> 00:13:04.520
+something that you're going to solve for.
+
+00:13:04.760 --> 00:13:07.857
+The reason this really bothered me is that guessing and checking like this
+
+00:13:07.857 --> 00:13:11.080
+sort of just feels like asking the student to know the answer ahead of time.
+
+00:13:11.530 --> 00:13:14.746
+And also your physical intuition is telling you that an exponential
+
+00:13:14.746 --> 00:13:17.530
+is probably not really how this mass on a spring behaves.
+
+00:13:17.850 --> 00:13:20.130
+And yes, this is, frankly, unsystematic.
+
+00:13:20.130 --> 00:13:22.917
+But the point I want to make is that a desire to make this
+
+00:13:22.917 --> 00:13:25.799
+trick more systematic and more generalizable is going to be
+
+00:13:25.799 --> 00:13:28.970
+one of the things that leads you and me to the Laplace transform.
+
+00:13:28.970 --> 00:13:32.010
+Right here, let's just run forward and see what it gives us.
+
+00:13:32.090 --> 00:13:35.733
+If that position versus time really did look like e^(st),
+
+00:13:35.733 --> 00:13:38.290
+then when you take its derivative, you.
+
+00:13:38.360 --> 00:13:41.989
+You get the same function, but by the chain rule, you multiply it by s,
+
+00:13:41.989 --> 00:13:45.413
+and then the second derivative again looks like the same function,
+
+00:13:45.413 --> 00:13:49.809
+but it's picked up another factor of s. And then all of the other constants just kind
+
+00:13:49.809 --> 00:13:51.240
+of come along for the ride.
+
+00:13:51.480 --> 00:13:55.363
+What's very nice here is that you can factor out that e^(st),
+
+00:13:55.363 --> 00:14:00.200
+and now everything that depends on time is tied up in this term right here.
+
+00:14:00.360 --> 00:14:03.400
+And moreover, exponentials will never equal zero.
+
+00:14:04.050 --> 00:14:06.677
+So if this equation is going to be true, it means
+
+00:14:06.677 --> 00:14:09.090
+that this part right here has to equal zero.
+
+00:14:09.490 --> 00:14:11.650
+So what you're left with is a piece of algebra.
+
+00:14:11.730 --> 00:14:15.075
+Solve this quadratic equation, one that looks kind of like a
+
+00:14:15.075 --> 00:14:18.642
+mirror image of the original differential equation that we had.
+
+00:14:18.642 --> 00:14:22.210
+The easiest case here is if we ignore that damping coefficient.
+
+00:14:22.370 --> 00:14:27.787
+Basically setting mu equal to zero with a little bit of rearrangement and taking a square
+
+00:14:27.787 --> 00:14:32.900
+root, what you find is that s is going to be plus or minus the square root of -k/m.
+
+00:14:32.900 --> 00:14:37.919
+Now, k and m are both positive numbers, so that means, whether you wanted it or not,
+
+00:14:37.919 --> 00:14:41.580
+i, the square root of negative one, has now entered the game.
+
+00:14:42.140 --> 00:14:46.460
+This square root of k/m term is something that I'm going to give the suggestive
+
+00:14:46.460 --> 00:14:50.780
+shorthand name omega. And rolling back, remember what it is that s represents.
+
+00:14:51.020 --> 00:14:56.325
+We were exploring the possibility that a solution to this equation looks like e^(st).
+
+00:14:56.325 --> 00:15:00.320
+If we plug in these values for s, you now know what that means.
+
+00:15:00.480 --> 00:15:03.276
+Plugging in a purely imaginary term like this
+
+00:15:03.276 --> 00:15:06.320
+corresponds to oscillation in the complex plane.
+
+00:15:06.560 --> 00:15:10.212
+Now, on the one hand, that is very weird because obviously our mass on
+
+00:15:10.212 --> 00:15:13.760
+a spring needs a real valued solution, not these complex functions.
+
+00:15:13.920 --> 00:15:17.920
+But on the other hand, the idea of oscillating kind of matches what you want to find.
+
+00:15:18.240 --> 00:15:20.160
+And it matches it quantitatively too.
+
+00:15:20.160 --> 00:15:24.200
+Imagine that you increase that value k, meaning you have a stronger spring.
+
+00:15:24.280 --> 00:15:25.880
+Well, then omega goes up.
+
+00:15:25.880 --> 00:15:27.960
+So that corresponds to faster oscillation.
+
+00:15:27.960 --> 00:15:29.920
+And your physical intuition backs that up.
+
+00:15:29.920 --> 00:15:32.920
+A stronger spring probably would give you faster oscillation.
+
+00:15:34.280 --> 00:15:38.680
+Even still, the result, frankly, feels bizarre, if not obviously nonsense.
+
+00:15:38.840 --> 00:15:42.440
+I mean, the position of the mass on a spring is clearly a real number.
+
+00:15:42.760 --> 00:15:47.465
+And if you zoom out, really what's going on here is that we found for the pure
+
+00:15:47.465 --> 00:15:50.421
+mathematical equation divorced from any physics,
+
+00:15:50.421 --> 00:15:55.307
+there exists a complex valued function that solves it, namely e^(i * omega * t).
+
+00:15:55.307 --> 00:15:59.891
+To connect this pure mathland answer to something that's actually physical,
+
+00:15:59.891 --> 00:16:03.390
+you need to squeeze out a real valued solution from this.
+
+00:16:03.790 --> 00:16:07.310
+And the animation on screen kind of gives you one indication of how you could do this.
+
+00:16:07.310 --> 00:16:10.443
+You could just ignore the imaginary part, only consider the
+
+00:16:10.443 --> 00:16:13.470
+real component of this solution that does actually work.
+
+00:16:13.630 --> 00:16:17.406
+But a better way to think about it, which will line up with the overall
+
+00:16:17.406 --> 00:16:21.023
+story I want to tell here that navigates towards Laplace transforms
+
+00:16:21.023 --> 00:16:24.640
+is to add up the two distinct complex solutions that we just found.
+
+00:16:25.360 --> 00:16:27.882
+When you add these rotating vectors tip to tail,
+
+00:16:27.882 --> 00:16:30.720
+the result stays constrained to the real number line.
+
+00:16:30.800 --> 00:16:35.016
+And in fact, the way that it oscillates on that number line over time looks
+
+00:16:35.016 --> 00:16:39.288
+like the function two times the cosine of that same frequency term times T.
+
+00:16:39.288 --> 00:16:43.616
+Now, the reason that you're allowed to just add two different solutions like
+
+00:16:43.616 --> 00:16:48.000
+this to get another solution is based on a critical property of our equation.
+
+00:16:48.280 --> 00:16:51.802
+It's what we call a linear equation, which means if you have two
+
+00:16:51.802 --> 00:16:55.763
+distinct functions that solve it, then when you add up those functions,
+
+00:16:55.763 --> 00:16:59.560
+that sum of the two functions also solves the differential equation.
+
+00:17:00.200 --> 00:17:02.440
+And actually you have more flexibility than that.
+
+00:17:02.520 --> 00:17:06.840
+If you scale each one of those functions by some constant and you add them up,
+
+00:17:06.840 --> 00:17:09.720
+that scaled sum is also a solution of the equation.
+
+00:17:10.440 --> 00:17:12.960
+Remember, in solving an equation like this, we're not
+
+00:17:12.960 --> 00:17:15.480
+just looking for one function or even two functions.
+
+00:17:15.770 --> 00:17:18.125
+We're looking for a family of a whole bunch of
+
+00:17:18.125 --> 00:17:20.890
+solutions that will depend on the initial conditions.
+
+00:17:21.210 --> 00:17:24.461
+In this case, when we tried our admittedly random looking guess,
+
+00:17:24.461 --> 00:17:28.423
+and the math came back to us with two distinct functions because it's linear,
+
+00:17:28.423 --> 00:17:32.436
+you can scale each one of those functions by some constant, add them together,
+
+00:17:32.436 --> 00:17:34.570
+and get a valid solution to the equation.
+
+00:17:34.890 --> 00:17:37.770
+And those scaling coefficients don't have to be real numbers.
+
+00:17:37.770 --> 00:17:40.501
+Those could also be complex numbers, which in this case
+
+00:17:40.501 --> 00:17:43.530
+affects the initial angle of each of those rotating vectors.
+
+00:17:44.330 --> 00:17:48.031
+The family of all possible functions you can get by tuning these two
+
+00:17:48.031 --> 00:17:52.330
+coefficients is the family of all possible solutions to the original equation.
+
+00:17:52.570 --> 00:17:55.450
+And most of these solutions are complex valued functions.
+
+00:17:55.610 --> 00:17:58.410
+But the real valued solutions are a special case of those.
+
+00:17:58.490 --> 00:18:00.970
+And which one you want depends on the initial conditions.
+
+00:18:01.290 --> 00:18:05.648
+For example, if the initial position is supposed to be 2 and the initial velocity is
+
+00:18:05.648 --> 00:18:10.006
+supposed to be 0, then you get a valid answer by setting both of these coefficients
+
+00:18:10.006 --> 00:18:14.260
+to be 1, basically meaning you're just adding the two solutions we found earlier.
+
+00:18:14.580 --> 00:18:16.802
+If the initial position is something different,
+
+00:18:16.802 --> 00:18:19.780
+then you simply scale both those constants by the same amount.
+
+00:18:21.620 --> 00:18:25.585
+Now, as presented so far, if this is supposed to be an example of why complex
+
+00:18:25.585 --> 00:18:29.860
+exponents are a natural and desirable thing, one of you could rightfully complain.
+
+00:18:30.020 --> 00:18:32.020
+This is all just needlessly complicated!
+
+00:18:32.100 --> 00:18:36.065
+If the so-called strategy is to just guess some function with a free parameter,
+
+00:18:36.065 --> 00:18:40.481
+it's not like it's hard to guess for this situation that a cosine or a sine would solve
+
+00:18:40.481 --> 00:18:44.848
+the equation, and you could have that frequency term be the free parameter that you're
+
+00:18:44.848 --> 00:18:45.500
+solving for.
+
+00:18:45.820 --> 00:18:48.540
+What you would find if you knew to make this guess,
+
+00:18:48.540 --> 00:18:51.900
+is that either cosine or sine can totally solve this equation,
+
+00:18:51.900 --> 00:18:56.113
+as long as you set that frequency to be the square root of k over m. And then,
+
+00:18:56.113 --> 00:18:58.833
+just as before, because this is a linear equation,
+
+00:18:58.833 --> 00:19:03.207
+you can get the full family of solutions by scaling both of these and adding them
+
+00:19:03.207 --> 00:19:03.740
+together.
+
+00:19:03.900 --> 00:19:07.260
+And this is another valid way to describe the family of solutions.
+
+00:19:07.690 --> 00:19:10.330
+Essentially, we're describing it with an alternate coordinate system.
+
+00:19:10.410 --> 00:19:13.142
+And you could argue this is a way more sensible coordinate
+
+00:19:13.142 --> 00:19:15.450
+system to use when we care about real solutions.
+
+00:19:15.690 --> 00:19:18.827
+Because in this case, all the real solutions are what you get
+
+00:19:18.827 --> 00:19:22.170
+simply by setting those scaling coefficients to be real numbers.
+
+00:19:22.330 --> 00:19:24.130
+Isn't this just way more sensible?
+
+00:19:24.130 --> 00:19:26.410
+Why complicate things with complex numbers?
+
+00:19:26.650 --> 00:19:29.363
+The value of putting exponentials front and center makes
+
+00:19:29.363 --> 00:19:31.930
+itself clear as soon as we try to generalize things.
+
+00:19:32.730 --> 00:19:36.225
+So far, when we solved for s, we got these two different values
+
+00:19:36.225 --> 00:19:39.830
+in the complex plane that are constrained to the imaginary line.
+
+00:19:40.070 --> 00:19:43.150
+And as you change what the constants k and m look like,
+
+00:19:43.150 --> 00:19:46.902
+you end up with different imaginary values that for your solution,
+
+00:19:46.902 --> 00:19:50.710
+correspond to distinct frequencies in the oscillation that you get.
+
+00:19:50.710 --> 00:19:54.570
+But think about what it means if we reintroduce that damping coefficient mu,
+
+00:19:54.570 --> 00:19:57.110
+setting it to something that's not equal to zero.
+
+00:19:57.430 --> 00:20:01.510
+Well, in this case, solving the equation looks like applying the quadratic formula.
+
+00:20:01.590 --> 00:20:04.470
+And you don't really need to dwell on the details of the algebra here.
+
+00:20:04.780 --> 00:20:08.362
+I'm just going to go ahead and show you what it looks like if
+
+00:20:08.362 --> 00:20:12.003
+I increase the value of that coefficient mu, and we see where
+
+00:20:12.003 --> 00:20:15.820
+the two corresponding solutions for S land in the complex plane.
+
+00:20:16.300 --> 00:20:19.012
+The salient feature is that they have not only
+
+00:20:19.012 --> 00:20:21.900
+an imaginary but also a negative real component.
+
+00:20:21.980 --> 00:20:25.717
+And just a few minutes ago, we talked all about what it looks like if you
+
+00:20:25.717 --> 00:20:29.813
+want to exponentiate something with a negative real part and an imaginary part,
+
+00:20:29.813 --> 00:20:34.216
+it both does decays and oscillates, where the real part tells you how much it decays,
+
+00:20:34.216 --> 00:20:36.930
+the imaginary part tells you how much it oscillates.
+
+00:20:37.010 --> 00:20:40.957
+In this case, what I'll do is graph for you the real component of that exponential,
+
+00:20:40.957 --> 00:20:43.810
+and it kind of matches what you would expect of the spring.
+
+00:20:43.970 --> 00:20:47.820
+One thing that's actually pretty fun here is how if you increase that damping
+
+00:20:47.820 --> 00:20:51.920
+coefficient mu enough, eventually the solutions no longer have any imaginary part
+
+00:20:51.920 --> 00:20:55.970
+and they only have a real component, meaning the solution just looks like decay.
+
+00:20:56.240 --> 00:20:58.960
+And when this happens, you call the spring overdamped.
+
+00:20:59.360 --> 00:21:02.200
+This whole example is called the damped harmonic oscillator.
+
+00:21:02.200 --> 00:21:04.931
+Like I said, it's very fundamental throughout physics,
+
+00:21:04.931 --> 00:21:08.320
+so just understanding it in its own right is a worthy enough task.
+
+00:21:08.880 --> 00:21:11.840
+But how far does this dumb little trick actually take us?
+
+00:21:12.079 --> 00:21:16.032
+The straightforward way that you can generalize it is for any equation that looks
+
+00:21:16.032 --> 00:21:19.351
+like this, where you're taking a bunch of higher order derivatives,
+
+00:21:19.351 --> 00:21:22.425
+you're scaling each one by some constant, you add them all up,
+
+00:21:22.425 --> 00:21:24.280
+and you set the result equal to zero.
+
+00:21:24.680 --> 00:21:28.280
+In that case, everything we just did works essentially the same way.
+
+00:21:28.360 --> 00:21:33.494
+If you substitute e^(st) for x, then all of these derivative terms look just like that,
+
+00:21:33.494 --> 00:21:36.386
+but each one picks up an additional factor of s.
+
+00:21:36.386 --> 00:21:39.631
+This lets you factor out all of the exponential parts,
+
+00:21:39.631 --> 00:21:43.880
+leaving you with a certain polynomial in s that you want to equal zero.
+
+00:21:44.520 --> 00:21:48.537
+One of the most fundamental facts in algebra, literally called the
+
+00:21:48.537 --> 00:21:53.102
+fundamental theorem of algebra, is that polynomials can always be factored
+
+00:21:53.102 --> 00:21:56.937
+into linear terms like this, exposing n roots to the equation,
+
+00:21:56.937 --> 00:22:02.050
+as long as you give those roots the freedom to maybe take on complex number values.
+
+00:22:02.370 --> 00:22:05.369
+So, for example, if this was some fifth degree equation,
+
+00:22:05.369 --> 00:22:08.690
+your solutions might look something like this in the S-plane.
+
+00:22:08.770 --> 00:22:13.112
+Just like the oscillator example, this is basically the math telling you, hey,
+
+00:22:13.112 --> 00:22:17.845
+e^(st) can absolutely be a valid solution as long as you set s equal to one of these
+
+00:22:17.845 --> 00:22:18.290
+values.
+
+00:22:18.830 --> 00:22:21.390
+And just as before, this is a linear equation.
+
+00:22:21.790 --> 00:22:24.592
+So you can find the family of all solutions by scaling
+
+00:22:24.592 --> 00:22:27.550
+each one of these exponentials and adding them together.
+
+00:22:27.950 --> 00:22:31.870
+All of these constants are like knobs and dials that you can tune to your heart's content.
+
+00:22:32.030 --> 00:22:34.910
+They can be real or they can be complex, allowing them to
+
+00:22:34.910 --> 00:22:37.790
+influence both the amplitude and the phase of each term.
+
+00:22:37.950 --> 00:22:40.830
+The specific values will depend on your initial conditions.
+
+00:22:41.150 --> 00:22:44.564
+I am glossing over a certain nuance when it comes to repeated roots,
+
+00:22:44.564 --> 00:22:46.070
+but this is the general idea.
+
+00:22:46.710 --> 00:22:51.110
+Unfortunately, most real world equations are not simple linear ones like this.
+
+00:22:51.350 --> 00:22:55.205
+For example, the equation for a damped harmonic oscillator has actually come
+
+00:22:55.205 --> 00:22:59.110
+up on this channel before in a video about optics, but it came with a twist.
+
+00:22:59.430 --> 00:23:03.479
+We were studying why light appears to slow down in a medium like glass,
+
+00:23:03.479 --> 00:23:04.790
+causing it to refract.
+
+00:23:04.950 --> 00:23:09.005
+And the key question was to understand why this depends on the color of that light,
+
+00:23:09.005 --> 00:23:10.470
+giving the effect of a prism.
+
+00:23:10.970 --> 00:23:13.535
+Now, I'm not going to recount all the details here,
+
+00:23:13.535 --> 00:23:16.251
+but what you need to know is that deep in that video,
+
+00:23:16.251 --> 00:23:19.168
+we were modeling charges inside the material, like glass,
+
+00:23:19.168 --> 00:23:21.130
+as little damped harmonic oscillators.
+
+00:23:21.450 --> 00:23:24.652
+These little charges wiggling about some equilibrium position,
+
+00:23:24.652 --> 00:23:27.647
+were being influenced by an external force, in this case,
+
+00:23:27.647 --> 00:23:31.210
+an incoming light wave, which oscillated up and down as a sine wave.
+
+00:23:31.290 --> 00:23:34.726
+And critically, the frequency of that incoming light would in general
+
+00:23:34.726 --> 00:23:38.410
+have nothing to do with the natural resonant frequency of the oscillator.
+
+00:23:39.020 --> 00:23:41.326
+So, in short, we were studying the same equation,
+
+00:23:41.326 --> 00:23:44.620
+but with this added term that looks like a certain cosine expression.
+
+00:23:44.940 --> 00:23:48.135
+Now, unlike the linear case, the family of solutions here does not
+
+00:23:48.135 --> 00:23:51.282
+look as simple as a linear combination of exponentials where you
+
+00:23:51.282 --> 00:23:54.380
+can freely tune all of those constants to your heart's content.
+
+00:23:54.780 --> 00:23:58.940
+And this dumb trick of just guessing e^(st) certainly is not going to work.
+
+00:23:59.260 --> 00:24:01.508
+However, everything that we've discussed here does
+
+00:24:01.508 --> 00:24:03.980
+actually bring you a lot closer than you might expect.
+
+00:24:04.560 --> 00:24:07.789
+The solutions in this more complicated case do happen to
+
+00:24:07.789 --> 00:24:10.960
+look like a combination of four specific exponentials.
+
+00:24:11.040 --> 00:24:15.040
+It's just that, unlike the linear case, you can't freely tune all of the coefficients.
+
+00:24:15.200 --> 00:24:16.480
+It's a lot more constrained.
+
+00:24:16.800 --> 00:24:21.149
+In fact, the whole substance of that prism example comes down to understanding
+
+00:24:21.149 --> 00:24:26.000
+exactly how big these coefficients are as a function of that incoming light frequency.
+
+00:24:26.240 --> 00:24:29.580
+This is a surprisingly common outcome where the solutions to some
+
+00:24:29.580 --> 00:24:32.972
+differential equation that pops up in the real world looks like a
+
+00:24:32.972 --> 00:24:36.620
+certain combination of exponentials, but with particular coefficients.
+
+00:24:36.940 --> 00:24:41.801
+This ubiquity of exponentials is why engineers benefit from an intuitive understanding
+
+00:24:41.801 --> 00:24:46.380
+of points on the S-plane and how they can encode growth, decay, and oscillation.
+
+00:24:47.900 --> 00:24:53.180
+You can kind of think about these functions, e^(st) as being like the atoms of calculus.
+
+00:24:53.340 --> 00:24:56.012
+What I mean by that is that complicated functions that
+
+00:24:56.012 --> 00:24:58.980
+describe our world can often be broken up into these parts.
+
+00:24:58.980 --> 00:25:02.273
+And as long as you give s the freedom to take on complex values,
+
+00:25:02.273 --> 00:25:06.390
+and by breaking it up that way, they become simpler to understand and to study.
+
+00:25:06.630 --> 00:25:10.748
+This becomes especially true if you allow for infinite combinations,
+
+00:25:10.748 --> 00:25:15.350
+potentially over a continuum of values for s rather than some discrete set.
+
+00:25:15.590 --> 00:25:19.510
+We're going to go deep with that idea, and it is hard to overstate how powerful it is.
+
+00:25:19.830 --> 00:25:23.209
+The key question is, given some unknown function and a differential
+
+00:25:23.209 --> 00:25:26.638
+equation describing it, even if you assume it can be broken up into
+
+00:25:26.638 --> 00:25:30.470
+exponential parts like this, how do you actually find what those parts are?
+
+00:25:31.030 --> 00:25:33.430
+Taking the forced harmonic oscillator, for example:
+
+00:25:33.590 --> 00:25:37.550
+How would you know that the solution is built out of four specific exponentials?
+
+00:25:37.550 --> 00:25:40.950
+How would you solve for the appropriate values of s in the exponents?
+
+00:25:41.029 --> 00:25:43.289
+And how would you solve for the corresponding
+
+00:25:43.289 --> 00:25:45.750
+coefficients for a particular initial condition?
+
+00:25:46.230 --> 00:25:50.002
+There is a tool for this job, and as you may have guessed by this point,
+
+00:25:50.002 --> 00:25:52.360
+it's something known as a Laplace Transform.
+
+00:25:52.910 --> 00:25:55.956
+If you watched the earlier chapter about Fourier series,
+
+00:25:55.956 --> 00:25:59.763
+a lot of what I'm saying here is probably ringing all kinds of bells:
+
+00:25:59.763 --> 00:26:04.440
+Imaginary exponentials as describing a kind of rotation breaking up general functions
+
+00:26:04.440 --> 00:26:06.670
+as a sum of those rotating exponentials.
+
+00:26:06.750 --> 00:26:08.910
+And there is absolutely a connection here.
+
+00:26:08.910 --> 00:26:12.483
+A big part of the story I want to tell is how this Laplace transform
+
+00:26:12.483 --> 00:26:16.845
+we are building up to extends the notion of Fourier series and Fourier transforms,
+
+00:26:16.845 --> 00:26:19.630
+applying to a much more general family of functions.
+
+00:26:20.350 --> 00:26:23.268
+We're going to go into much more detail in the next two chapters,
+
+00:26:23.268 --> 00:26:24.750
+but here's a high level preview.
+
+00:26:24.990 --> 00:26:28.544
+When you use a Laplace transform to solve a differential equation,
+
+00:26:28.544 --> 00:26:33.390
+it actually ends up looking remarkably similar to that dumb trick of substituting e^(st).
+
+00:26:34.270 --> 00:26:37.937
+In the context of our dumb trick, the differential equation turned
+
+00:26:37.937 --> 00:26:41.549
+into algebra basically because the act of taking a derivative is
+
+00:26:41.549 --> 00:26:45.550
+the same as multiplication by s, at least for these specific functions.
+
+00:26:46.660 --> 00:26:49.582
+That same thing happens when you use a Laplace transform,
+
+00:26:49.582 --> 00:26:51.940
+and it's for essentially the same reason too.
+
+00:26:52.020 --> 00:26:56.880
+What that operation does is translate functions into a new language where
+
+00:26:56.880 --> 00:27:01.540
+these terms e^(st), the atoms of calculus, are the fundamental units.
+
+00:27:01.859 --> 00:27:06.362
+Then again, the fact that differentiation in time looks like multiplication by
+
+00:27:06.362 --> 00:27:09.306
+s for these terms means that in this new language,
+
+00:27:09.306 --> 00:27:12.365
+derivatives start to look a lot like multiplication,
+
+00:27:12.365 --> 00:27:15.540
+and differential equations start to look like algebra.
+
+00:27:16.260 --> 00:27:21.017
+To see how exactly this transform is defined, how you can visualize what it's doing,
+
+00:27:21.017 --> 00:27:24.415
+and how to use it to concretely solve a nonlinear equation,
+
+00:27:24.415 --> 00:27:26.340
+come join me in the next chapter.
+
+00:27:27.620 --> 00:27:30.521
+At the time I'm publishing this, an early view for that next
+
+00:27:30.521 --> 00:27:33.567
+chapter is available on Patreon, and my plan is to incorporate
+
+00:27:33.567 --> 00:27:36.420
+the feedback and get a finalized version out by next week.
+
+00:27:36.580 --> 00:27:37.300
+See you then.
+
